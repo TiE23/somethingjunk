@@ -183,10 +183,20 @@
        <property name="title">
         <string>GroupBox</string>
        </property>
+       <widget class="QWidget" name="widget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>311</width>
+          <height>71</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushButtonGo">
        <property name="text">
         <string>Go!</string>
        </property>
@@ -206,6 +216,20 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGo">
+   <property name="text">
+    <string>Go!</string>
+   </property>
+   <property name="toolTip">
+    <string>Do it!</string>
+   </property>
+   <property name="shortcut">
+    <string>Return</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

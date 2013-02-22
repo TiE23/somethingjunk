@@ -5,8 +5,6 @@ Created on Feb 21, 2013
 '''
 
 import util # utility module
-import sys
-sys.path.append(r"c:\Python27\Lib")
 
 from PyQt4 import QtGui, QtCore, uic
 
