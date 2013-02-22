@@ -233,7 +233,6 @@
      <string>File</string>
     </property>
     <addaction name="actionGo"/>
-    <addaction name="actionHalt"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -250,14 +249,6 @@
    </property>
    <property name="priority">
     <enum>QAction::NormalPriority</enum>
-   </property>
-  </action>
-  <action name="actionHalt">
-   <property name="text">
-    <string>Halt!</string>
-   </property>
-   <property name="shortcut">
-    <string>Backspace</string>
    </property>
   </action>
  </widget>
