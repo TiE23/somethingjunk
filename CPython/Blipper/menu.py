@@ -6,13 +6,15 @@ Created on Feb 21, 2013
 
 import util # utility module
 
+import sys
 import threading
 from time import sleep
 
 # GUI system
 from PyQt4 import QtGui, QtCore, QtXml, uic
 
-# .NET API calls
+# .NET API calls support provided by Python for .NET
+sys.path.append(util.buildResPath('PyNET'))
 import clr
 from System.Diagnostics import PerformanceCounter
 from System import InvalidOperationException
@@ -20,14 +22,17 @@ from System import InvalidOperationException
 
 class MainWindowMenu(QtGui.QMainWindow):
     def __init__(self):
+        
+        
         QtGui.QMainWindow.__init__(self)
         
         uic.loadUi(util.buildResPath('ui/blipper.ui'), self)   # Load window UI
         self.actionGo.triggered.connect(self.go)
         self.actionHalt.triggered.connect(self.halt)
         
-        
         self.progressBarCycles.hide()
+        
+        
         
         print "__init__"
     
