@@ -5,7 +5,7 @@ Created on Feb 22, 2013
 '''
 
 import sys
-from PyQt4 import QtGui # Figuring out why Eclipse is all bitchy about this line.
+from PyQt4 import QtGui
 from subsExtract import MainSubsExtract
 
 
