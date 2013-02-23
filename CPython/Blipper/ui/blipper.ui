@@ -259,7 +259,7 @@
      <string>File</string>
     </property>
     <addaction name="actionGo"/>
-    <addaction name="actionUpdate_Action_List"/>
+    <addaction name="actionUpdate_Process_List"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -278,9 +278,9 @@
     <enum>QAction::NormalPriority</enum>
    </property>
   </action>
-  <action name="actionUpdate_Action_List">
+  <action name="actionUpdate_Process_List">
    <property name="text">
-    <string>Update Action List</string>
+    <string>Update Process List</string>
    </property>
    <property name="shortcut">
     <string>F5</string>
