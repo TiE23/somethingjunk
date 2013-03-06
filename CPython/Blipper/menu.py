@@ -31,7 +31,7 @@ class MainWindowMenu(QtGui.QMainWindow):
 
         self.populateCurrentProcessesList()
 
-        self.progressBarCycles.hide()
+        #self.progressBarCycles.hide()
     
     def onGoClick(self):
         self.runPerformanceCounter()
@@ -47,19 +47,19 @@ class MainWindowMenu(QtGui.QMainWindow):
         print "Doing it for %s" % self.process
         
         try:
-            self.progressBarCycles.show()
+            #self.progressBarCycles.show()
             pc = Diagnostics.PerformanceCounter(self.category, self.counter, self.process)
             cycles = int(self.runTime/self.interval)
             
             for x in range(cycles):  
                 print pc.NextValue()
-                self.progressBarCycles.setValue( int( 100*(x/cycles) ) ) # Update progress bar!
+                #self.progressBarCycles.setValue( int( 100*(x/cycles) ) ) # Update progress bar!
                 sleep(self.interval)
                 
         except InvalidOperationException:
             print "Could not find process \"%(process)s\"!" % {'process':self.process}
 
-        self.progressBarCycles.hide()
+        #self.progressBarCycles.hide()
         
         
     def fromOptions(self):
