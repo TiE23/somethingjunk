@@ -1,8 +1,8 @@
 $(document).ready(function()
 {
 
-  // Select all text when you click.
-  $("input.outputtext").click(function(){
+  // Select all text when you click an input element.
+  $("input").click(function(){
     this.select();
   });
 
@@ -12,11 +12,8 @@ $(document).ready(function()
     var textVal = $("input[name=textinput]").val().trim();
     if (textVal.length > 0)
     {
-      $(".outputtext").val(googler(textVal));
-    }
-    else
-    {
-      $(".outtputext").val("Enter in a value!");
+      $(".textoutput").val(googler(textVal));
+      $(".textoutput").click(); // Immediately focus
     }
   });
 });
