@@ -1,31 +1,32 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from optparse import OptionParser
+from time import strftime, strptime
 
-def findDay(day):
-  for x in range(len(days)):
-    if days[x].lower() == day.lower():
-      return x
-
-  print "Don't recognize \"%s\", spell right!" % (day)
-  quit(-1)
-
-
+currentYear = strftime("%Y")
+currentMonth = strftime("%m")
 
 parser = OptionParser()
-parser.add_option("-d", "--firstday", help="Enter the first day of the month", metavar="Day", default="Sunday")
-parser.add_option("-m", "--month", help="Month (number)", metavar="int", default=1)
-parser.add_option("-c", "--count", help="Days of the month (def: 31)", metavar="Int", default=31)
-parser.add_option("-y", "--year", help="Year (def: 2016)", metavar="Int", default=2016)
+parser.add_option("-m", "--month", help="Month (number, def: %s)" % currentMonth , metavar="int", default=currentMonth)
+parser.add_option("-y", "--year", help="Year (def: %s)" % currentYear, metavar="Int", default=currentYear)
 
 (options, args) = parser.parse_args()
 
+options.month = int(options.month)
+options.year = int(options.year)
 
-# For different starting weekdays
-# Monday 0, Tuesday 1, Wednesday 2, Thursday 3, Friday 4, Saturday 5, Sunday 6
-days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+if options.month > 12 or options.month < 1:
+  print("Put in a good month, dude!")
+  quit(-1)
 
-offset = findDay(options.firstday)
+calculatedWeekDay = strptime("%s %s" % (options.year, options.month), "%Y %m")[6]
+days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-for x in range(1, int(options.count) + 1):
-  print "%s-%s-%s %s\n" % (str(options.year), str(options.month).zfill(2), str(x).zfill(2), days[(x-1 + offset) % 7])
+# Yeah, I know I could just use calendar.isleap() but whatever
+leapyear = options.year % 4 and (options.year % 100 != 0 or options.year % 400 == 0)
+counts = [31, 29 if leapyear else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+for x in range(1, counts[options.month - 1] + 1):
+  print("%s-%s-%s %s\n" % (str(options.year), \
+    str(options.month).zfill(2), str(x).zfill(2), \
+    days[(x-1 + calculatedWeekDay) % 7]))
