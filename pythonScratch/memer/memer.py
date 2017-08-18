@@ -59,7 +59,7 @@ class memer:
       "captions_attributes": [
         {
           "text": sTopText,
-          "top_left_x_pct": 0,
+          "top_left_x_pct": 0.05,
           "top_left_y_pct": 0,
           "width_pct": 0.9,
           "height_pct": 0.25
