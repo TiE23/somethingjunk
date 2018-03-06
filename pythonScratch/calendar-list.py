@@ -23,7 +23,7 @@ calculatedWeekDay = strptime("%s %s" % (options.year, options.month), "%Y %m")[6
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 # Yeah, I know I could just use calendar.isleap() but whatever
-leapyear = options.year % 4 and (options.year % 100 != 0 or options.year % 400 == 0)
+leapyear = not(options.year % 4 and (options.year % 100 != 0 or options.year % 400 == 0))
 counts = [31, 29 if leapyear else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 for x in range(1, counts[options.month - 1] + 1):
