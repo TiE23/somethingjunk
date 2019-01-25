@@ -297,6 +297,10 @@ class Node {
     this.data = data;
     this.next = next;
   }
+
+  toString() {
+    return String(this.data);
+  }
 }
 
 class LinkedList {
@@ -352,6 +356,24 @@ class LinkedList {
     }
 
     return false;
+  }
+
+  getNthNode(targetIndex) {
+    if (targetIndex < 0) return null;
+
+    let currentNode = this.head;
+    let currentIndex = 0;
+
+    while (currentIndex !== targetIndex && currentNode.next) {
+      currentNode = currentNode.next;
+      ++currentIndex;
+    }
+
+    if (currentIndex === targetIndex) {
+      return currentNode;
+    } else {
+      return null;
+    }
   }
 
   toString() {
@@ -532,3 +554,43 @@ class LinkedList2_2 extends LinkedList {
 // console.log("After: ", String(list2_2)); // After:  B
 // list2_2.deleteFromLast(0);
 // console.log("After: ", String(list2_2)); // After:  (Blank)
+
+
+// 2.3 /////////////////////////////////////////////////////////////////////////////////////////////
+// Implement an algorithm to delete a node in the middle of a singly-linked list given only access
+// to that node.
+class LinkedList2_3 extends LinkedList {
+  deleteNodeByNumber(index) {
+    const targetNode = this.getNthNode(index);
+    this.deleteNodeDirectly(targetNode);
+  }
+
+  // Looking at the
+  deleteNodeDirectly(node) {
+    if (!node) return false;
+
+    while (node && node.next) {
+      node.data = node.next.data;
+      node.next = node.next.next;
+      node = node.next;
+    }
+
+    return true;
+  }
+}
+
+// const list2_3 = new LinkedList2_3();
+// list2_3.insertAtEnd("A");
+// list2_3.insertAtEnd("B");
+// list2_3.insertAtEnd("C");
+// console.log(String(list2_3.getNthNode(0)));   // A
+// console.log(String(list2_3.getNthNode(1)));   // B
+// console.log(String(list2_3.getNthNode(2)));   // C
+// console.log(String(list2_3.getNthNode(99)));  // null
+// console.log(String(list2_3));                 // A, B, C
+// list2_3.deleteNodeByNumber(1);
+// console.log(String(list2_3));                 // A, C
+// list2_3.deleteNodeByNumber(2);
+// console.log(String(list2_3));                 // A, C
+// list2_3.deleteNodeByNumber(0);  // Deleting the head doesn't work, which I believe is acceptable.
+// console.log(String(list2_3));                 // C
