@@ -842,15 +842,145 @@ class Queue3_5 {
   }
 }
 
-const queue3_5 = new Queue3_5();
-queue3_5.enqueue("A");
-queue3_5.enqueue("B");
-queue3_5.enqueue("C");
-console.log(String(queue3_5));
-queue3_5.dequeue();
-console.log(String(queue3_5));
-queue3_5.dequeue();
-console.log(String(queue3_5));
-queue3_5.dequeue();
-console.log(String(queue3_5));
-queue3_5.dequeue();
+// const queue3_5 = new Queue3_5();
+// queue3_5.enqueue("A");
+// queue3_5.enqueue("B");
+// queue3_5.enqueue("C");
+// console.log(String(queue3_5));
+// queue3_5.dequeue();
+// console.log(String(queue3_5));
+// queue3_5.dequeue();
+// console.log(String(queue3_5));
+// queue3_5.dequeue();
+// console.log(String(queue3_5));
+// queue3_5.dequeue();
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+// Chapter 4 - Trees and Graphs
+// https://code.tutsplus.com/articles/data-structures-with-javascript-tree--cms-23393
+class TreeNode {
+  constructor(data) {
+    this.visited = false;
+    this.data = data;
+    this.parent = null;
+    this.children = [];
+  }
+
+  toString() {
+    return `[TN - parent: "${this.parent && this.parent.data}" > data: "${this.data}"; children#: ${this.children.length}; visited: "${this.visited}"]`;
+  }
+}
+
+class Tree {
+  constructor(data) {
+    this.root = new TreeNode(data);
+  }
+
+  traverseDF(callback) {
+    // This is an IIFE (Immediately Invoked Function Expression) and is a fairly typical way to
+    // construct a recursive function.
+    (function recurse(currentNode) {
+      // Step 2 (self-terminating)
+      for (let i = 0, { length } = currentNode.children; i < length; ++i) {
+        // Step 3 (self-invoking)
+        recurse(currentNode.children[i]);
+      }
+
+      // Step 4 (callback - do whatever with the current node)
+      callback(currentNode);
+
+      // Step 1 (immediately invoke this function)
+    }(this.root));
+  }
+
+  traverseBF(callback) {
+    const queue = new Queue();
+
+    queue.enqueue(this.root);
+
+    let currentNode = queue.dequeue();
+
+    while (currentNode) {
+      for (let i = 0, { length } = currentNode.data.children; i < length; ++i) {
+        queue.enqueue(currentNode.data.children[i]);
+      }
+
+      callback(currentNode.data);
+      currentNode = queue.dequeue();
+    }
+  }
+
+  contains(callback, traversal) {
+    // Call traversal function in the scope of this. That's why we use .call()
+    traversal.call(this, callback);
+  }
+
+  find(targetData, traversal = this.traverseBF) {
+    let targetNode = null;
+
+    this.contains((node) => {
+      // This sucks as it will stop on the first found node but will continue to traverse all nodes.
+      if (targetNode === null && node.data === targetData) {
+        targetNode = node;
+      }
+    }, traversal);
+
+    return targetNode;
+  }
+
+  add(newData, targetParentData, traversal = this.traverseBF) {
+    const newChild = new TreeNode(newData);
+    const parent = this.find(targetParentData, traversal);
+
+    if (parent) {
+      newChild.parent = parent;
+      parent.children.push(newChild);
+    } else {
+      throw new Error(`Parent "${targetParentData}" not found!`);
+    }
+  }
+
+  remove(targetData, traversal = this.traverseBF) {
+    const targetChild = this.find(targetData, traversal);
+    const { parent } = targetChild;
+
+    let removedChild = null;
+
+    if (parent) {
+      let childIndex = null;
+
+      // Find the index of the target node in its children array
+      parent.children.forEach((child, index) => {
+        if (childIndex === null && child.data === targetData) {
+          childIndex = index;
+        }
+      });
+
+      if (childIndex === null) {
+        throw new Error(`Node "${targetData}" does not exist!`);
+      } else {
+        removedChild = parent.children.splice(childIndex, 1);
+      }
+    } else {
+      throw new Error(`Node "${targetData}" does not have a parent and cannot be removed!`);
+    }
+
+    return removedChild;
+  }
+}
+
+const tree = new Tree("A");
+tree.root.children.push(new TreeNode("B"));
+tree.root.children[0].parent = tree.root;
+tree.root.children.push(new TreeNode("C"));
+tree.root.children[1].parent = tree.root;
+tree.root.children[0].children.push(new TreeNode("D"));
+tree.root.children[0].children[0].parent = tree.root.children[0];
+console.log(String(tree.find("A")));
+console.log(String(tree.find("D")));
+tree.add("E", "B", tree.traverseBF);
+console.log(String(tree.find("E")));
+console.log(String(tree.find("B")));
+tree.remove("E");
+console.log(String(tree.find("B")));
