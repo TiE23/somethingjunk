@@ -292,7 +292,7 @@ function q1_8(needle, haystack) {
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Chapter 2 - Linked Lists
-class Node {
+class SLLNode {
   constructor(data, next = null) {
     this.data = data;
     this.next = next;
@@ -309,7 +309,7 @@ class LinkedList {
   }
 
   insertAtBeginning(data) {
-    const newNode = new Node(data);
+    const newNode = new SLLNode(data);
     newNode.next = this.head;
     this.head = newNode;
 
@@ -317,7 +317,7 @@ class LinkedList {
   }
 
   insertAtEnd(data) {
-    const newNode = new Node(data);
+    const newNode = new SLLNode(data);
 
     if (!this.head) {
       this.head = newNode;
@@ -385,7 +385,7 @@ class LinkedList {
       currentNode = currentNode.next;
     }
 
-    return data.join(", ");
+    return `[${data.join(", ")}]`;
   }
 }
 
@@ -594,3 +594,263 @@ class LinkedList2_3 extends LinkedList {
 // console.log(String(list2_3));                 // A, C
 // list2_3.deleteNodeByNumber(0);  // Deleting the head doesn't work, which I believe is acceptable.
 // console.log(String(list2_3));                 // C
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+// Chapter 3 - Stacks and Queues
+class StackQueueNode {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+
+  toString() {
+    return String(this.data);
+  }
+}
+
+class Stack {
+  constructor() {
+    this.top = null;
+  }
+
+  push(data) {
+    const newNode = new StackQueueNode(data);
+    newNode.next = this.top;
+    this.top = newNode;
+  }
+
+  pop() {
+    if (this.top) {
+      const poppedNode = this.top;
+      this.top = this.top.next;
+
+      return poppedNode;
+    }
+
+    return null;
+  }
+
+  peek() {
+    return this.top;
+  }
+
+  toString() {
+    const data = [];
+    let currentNode = this.top;
+
+    while (currentNode) {
+      data.push(currentNode.data);
+      currentNode = currentNode.next;
+    }
+
+    return `[${data.join(", ")}]`;
+  }
+}
+
+// const stack = new Stack();
+// stack.push("A");
+// stack.push("B");
+// stack.push("C");
+// console.log(String(stack));         // C, B, A
+// console.log(String(stack.pop()));   // C
+// console.log(String(stack.pop()));   // B
+// console.log(String(stack.peek()));  // A
+// console.log(String(stack.pop()));   // A
+// console.log(String(stack.pop()));   // null
+
+
+class Queue {
+  constructor() {
+    this.first = null;
+    this.last = null;
+  }
+
+  enqueue(data) {
+    const newNode = new StackQueueNode(data);
+
+    if (!this.first) {  // Starting the line
+      this.first = newNode;
+      this.last = this.first;
+    } else {  // Adding to the end of the line
+      this.last.next = newNode;
+      this.last = this.last.next;
+    }
+  }
+
+  dequeue() {
+    if (this.first) {
+      const node = this.first;
+      this.first = this.first.next;
+      return node;
+    }
+
+    return null;
+  }
+
+  toString() {
+    const data = [];
+    let currentNode = this.first;
+
+    while (currentNode) {
+      data.push(currentNode.data);
+      currentNode = currentNode.next;
+    }
+
+    return `[${data.join(", ")}]`;
+  }
+}
+
+// const queue = new Queue();
+// queue.enqueue("A");
+// queue.enqueue("B");
+// queue.enqueue("C");
+// console.log(String(queue));           // [A, B, C]
+// console.log(String(queue.dequeue())); // A
+// console.log(String(queue));           // [B, C]
+// console.log(String(queue.dequeue())); // B
+// console.log(String(queue));           // [C]
+// console.log(String(queue.dequeue())); // C
+// console.log(String(queue));           // []
+// console.log(String(queue.dequeue())); // null
+
+
+// 3.1 /////////////////////////////////////////////////////////////////////////////////////////////
+// Describe how you could use a single array to implement three stacks.
+/*
+  This is pretty simple. Just place each element at alternating indexes.
+  Stack 1 would get index * 3. Stack 2 would get (index * 3) + 1. Stack 3 would get (index * 3) + 2.
+  The beginning of the array would be the bottom of the stack.
+  To save some time, the index of each stack's bottom could be kept (to save time from having to
+  traverse the entire array each time the stack is manipulated).
+ */
+
+// 3.2 /////////////////////////////////////////////////////////////////////////////////////////////
+// How would you design a stack which, in addition to push and pop, also has a function min which
+// returns the minimum element? Push, pop, and min should all operate in O(1) time.
+/*
+  Well, since I don't see how it would be possible to do O(1) finding the minimum data value I
+  assume they mean the bottom of the stack. It's easy, just define a bottom class variable.
+  I wrote down an implementation down below. I had to write updates to push and pop
+ */
+class Stack3_2 extends Stack {
+  constructor() {
+    super();
+    this.bottom = null;
+  }
+
+  min() {
+    return this.bottom;
+  }
+
+  push(data) {
+    const newNode = new StackQueueNode(data);
+
+    if (!this.bottom) {
+      this.bottom = newNode;
+    }
+
+    newNode.next = this.top;
+    this.top = newNode;
+  }
+
+  pop() {
+    if (this.top) {
+      const poppedNode = this.top;
+      this.top = this.top.next;
+
+      // We popped the top! Bottom is also empty now.
+      if (!this.top) {
+        this.bottom = null;
+      }
+
+      return poppedNode;
+    }
+
+    return null;
+  }
+}
+
+// const stack3_2 = new Stack3_2();
+// stack3_2.push("A");
+// stack3_2.push("B");
+// stack3_2.push("C");
+// console.log(String(stack3_2));         // C, B, A
+// console.log(String(stack3_2.min()));   // A
+// console.log(String(stack3_2.pop()));   // C
+// console.log(String(stack3_2.pop()));   // B
+// console.log(String(stack3_2.peek()));  // A
+// console.log(String(stack3_2.pop()));   // A
+// console.log(String(stack3_2.pop()));   // null
+// console.log(String(stack3_2.peek()));  // mull
+// console.log(String(stack3_2.min()));   // null
+
+
+// 3.5 /////////////////////////////////////////////////////////////////////////////////////////////
+// Implement a queue using two stacks.
+// My theory is that when you want to get to the bottom of a stack (the first of a queue) you just
+// pop every element of the stack onto another stack, then pop off the top of that second stack,
+// and finally return all the elements back onto the first stack.
+class Queue3_5 {
+  constructor() {
+    this.stackA = new Stack();
+    this.stackB = new Stack();
+  }
+
+  enqueue(data) {
+    this.stackA.push(data);
+  }
+
+  dequeue() {
+    let peel = this.stackA.pop();
+
+    while (peel) {
+      this.stackB.push(peel);
+      peel = this.stackA.pop();
+    }
+
+    const bottom = this.stackB.pop();
+
+    peel = this.stackB.pop();
+
+    while (peel) {
+      this.stackA.push(peel);
+      peel = this.stackB.pop();
+    }
+
+    return bottom;
+  }
+
+  toString() {
+    const data = [];
+
+    let peel = this.stackA.pop();
+
+    while (peel) {
+      data.push(peel.data);
+      this.stackB.push(peel);
+      peel = this.stackA.pop();
+    }
+
+    peel = this.stackB.pop();
+    while (peel) {
+      this.stackA.push(peel);
+      peel = this.stackB.pop();
+    }
+
+    return `[${data.join(", ")}]`;
+  }
+}
+
+const queue3_5 = new Queue3_5();
+queue3_5.enqueue("A");
+queue3_5.enqueue("B");
+queue3_5.enqueue("C");
+console.log(String(queue3_5));
+queue3_5.dequeue();
+console.log(String(queue3_5));
+queue3_5.dequeue();
+console.log(String(queue3_5));
+queue3_5.dequeue();
+console.log(String(queue3_5));
+queue3_5.dequeue();
