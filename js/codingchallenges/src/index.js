@@ -1,4 +1,9 @@
 /* eslint-disable no-console, camelcase */
+// To confirm that ES6 import syntax works.
+// import { findIndex } from "lodash";
+//
+// const abc = ["A", "B", "C"];
+// console.log(findIndex(abc, o => o === "B"));
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Chapter 1 - Arrays and Strings
@@ -984,3 +989,4 @@ console.log(String(tree.find("E")));
 console.log(String(tree.find("B")));
 tree.remove("E");
 console.log(String(tree.find("B")));
+// tree.remove("A");
