@@ -1049,6 +1049,7 @@ class BSTNode {
     return `Data: ${data}; Left: ${left ? left.data : "-"}; Right: ${right ? right.data : "-"}`;
   }
 }
+
 class BinarySearchTree {
   constructor() {
     this.root = null;
@@ -1246,3 +1247,81 @@ badBsTree.printOut(badBsTree.inOrderTraversal);
 console.log("badBsTree", badBsTree.validBST() ? "Yes" : "No");
 console.log("bsTree", bsTree.validBST() ? "Yes" : "No");
 console.log("bsTree2", bsTree2.validBST() ? "Yes" : "No");
+
+class HuffmanNode {
+  constructor(character, value) {
+    this.character = character;
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class HuffmanTree {
+  constructor() {
+    this.root = null;
+  }
+
+  decode(code) {
+    let decode = "";
+    let currentNode = this.root;
+    for (let index = 0; index < code.length; ++index) {
+      if (code[index] === "0") {
+        currentNode = currentNode.left;
+      } else if (code[index] === "1") {
+        currentNode = currentNode.right;
+      }
+
+      if (!currentNode) return "ERROR, possibly malformed tree.";
+
+      if (currentNode.character !== null) {
+        decode += currentNode.character;  // We found a character
+        currentNode = this.root; // Back to the top
+      }
+    }
+
+    return decode;
+  }
+}
+
+const huff_abracadabra = new HuffmanTree();
+huff_abracadabra.root = new HuffmanNode(null, 11);
+huff_abracadabra.root.left = new HuffmanNode("A", 5);
+huff_abracadabra.root.right = new HuffmanNode(null, 6);
+huff_abracadabra.root.right.left = new HuffmanNode("R", 2);
+huff_abracadabra.root.right.right = new HuffmanNode(null, 4);
+huff_abracadabra.root.right.right.left = new HuffmanNode(null, 2);
+huff_abracadabra.root.right.right.right = new HuffmanNode("B", 2);
+huff_abracadabra.root.right.right.left.left = new HuffmanNode("C", 1);
+huff_abracadabra.root.right.right.left.right = new HuffmanNode("D", 1);
+
+/*
+       (-,1)
+       /   \
+      0     1
+     /       \
+   (A,5)     (-,6)
+             /   \
+            0     1
+           /       \
+         (R,2)     (-,4)
+                   /   \
+                  0     1
+                 /       \
+               (-,2)     (B,2)
+               /   \
+              0     1
+             /       \
+          (C,1)      (D,1)
+ */
+// A - 0
+// B - 111
+// C - 1100
+// D - 1101
+// R - 10
+
+console.log(huff_abracadabra.decode("01111001100011010111100"));
+console.log(huff_abracadabra.decode("011000111"));
+console.log(huff_abracadabra.decode("011111001101"));
+console.log(huff_abracadabra.decode("00"));
+console.log(huff_abracadabra.decode(""));
