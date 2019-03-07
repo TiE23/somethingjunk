@@ -5,6 +5,11 @@
 // const abc = ["A", "B", "C"];
 // console.log(findIndex(abc, o => o === "B"));
 
+// let a = ["A", "B", "C"];
+// let b = ["D", "E", "F"];
+// console.log([...a, ...b]);
+// console.log(3 ** 3);
+
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Chapter 1 - Arrays and Strings
 // 1.1 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -975,18 +980,269 @@ class Tree {
   }
 }
 
-const tree = new Tree("A");
-tree.root.children.push(new TreeNode("B"));
-tree.root.children[0].parent = tree.root;
-tree.root.children.push(new TreeNode("C"));
-tree.root.children[1].parent = tree.root;
-tree.root.children[0].children.push(new TreeNode("D"));
-tree.root.children[0].children[0].parent = tree.root.children[0];
-console.log(String(tree.find("A")));
-console.log(String(tree.find("D")));
-tree.add("E", "B", tree.traverseBF);
-console.log(String(tree.find("E")));
-console.log(String(tree.find("B")));
-tree.remove("E");
-console.log(String(tree.find("B")));
-// tree.remove("A");
+// const tree = new Tree("A");
+// tree.root.children.push(new TreeNode("B"));
+// tree.root.children[0].parent = tree.root;
+// tree.root.children.push(new TreeNode("C"));
+// tree.root.children[1].parent = tree.root;
+// tree.root.children[0].children.push(new TreeNode("D"));
+// tree.root.children[0].children[0].parent = tree.root.children[0];
+// console.log(String(tree.find("A")));
+// console.log(String(tree.find("D")));
+// tree.add("E", "B", tree.traverseBF);
+// console.log(String(tree.find("E")));
+// console.log(String(tree.find("B")));
+// tree.remove("E");
+// console.log(String(tree.find("B")));
+
+
+function sockMerchant(n, ar) {
+  const sockPairs = [];
+
+  ar.forEach((sock) => {
+    if (!sockPairs[sock]) {
+      sockPairs[sock] = 1;
+    } else {
+      ++sockPairs[sock];
+    }
+  });
+
+  console.log(sockPairs);
+  return sockPairs.reduce((accumulator, pair) => accumulator + (Math.floor(pair / 2) || 0), 0);
+}
+
+// console.log(sockMerchant(0, [1, 1, 1, 1, 2, 3, 4, 4]));
+const d = [8, 45, 35, 84, 79, 12, 74, 92, 81, 82, 61, 32, 36, 1, 65, 44, 89, 40, 28, 20, 97, 90, 22, 87, 48, 26, 56, 18, 49, 71, 23, 34, 59, 54, 14, 16, 19, 76, 83, 95, 31, 30, 69, 7, 9, 60, 66, 25, 52, 5, 37, 27, 63, 80, 24, 42, 3, 50, 6, 11, 64, 10, 96, 47, 38, 57, 2, 88, 100, 4, 78, 85, 21, 29, 75, 94, 43, 77, 33, 86, 98, 68, 73, 72, 13, 91, 70, 41, 17, 15, 67, 93, 62, 39, 53, 51, 55, 58, 99, 46];
+
+function minimumSwaps(arr) {
+  let outOfOrder = 0;
+  const swapped = {};
+
+  arr.forEach((item, index) => {
+    if (item !== index + 1) {
+
+      if (!swapped[item]) {
+        swapped[item] = index + 1;
+        swapped[index + 1] = item;
+        ++outOfOrder;
+      } else if (swapped[index + 1] !== item) {
+        ++outOfOrder;
+      }
+    }
+  });
+
+  return outOfOrder - 1;
+}
+
+// console.log(minimumSwaps(d));
+
+// Binary Tree (For HackerRank)
+class BSTNode {
+  constructor(data) {
+    this.data = data;
+    this.left = null;
+    this.right = null;
+  }
+
+  toString() {
+    const { data, left, right } = this;
+    return `Data: ${data}; Left: ${left ? left.data : "-"}; Right: ${right ? right.data : "-"}`;
+  }
+}
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+
+  push(data) {
+    // First push to root? Set as root and we're done.
+    if (!this.root) {
+      this.root = new BSTNode(data);
+      return;
+    }
+
+    const newNode = new BSTNode(data);
+
+    let currentNode = this.root;
+
+    while (currentNode) {
+      if (data < currentNode.data) {
+        if (!currentNode.left) {
+          currentNode.left = newNode;
+          break;
+        } else {
+          currentNode = currentNode.left;
+        }
+      } else {
+        if (!currentNode.right) {
+          currentNode.right = newNode;
+          break;
+        } else {
+          currentNode = currentNode.right;
+        }
+      }
+    }
+  }
+
+  inOrderTraversal(callback) {
+    (function recurse(node) {
+      if (node) {
+        recurse(node.left);
+        callback(node);
+        recurse(node.right);
+      }
+    }(this.root));
+  }
+
+  preOrderTraversal(callback) {
+    (function recurse(node) {
+      if (node) {
+        callback(node);
+        recurse(node.left);
+        recurse(node.right);
+      }
+    }(this.root));
+  }
+
+  postOrderTraversal(callback) {
+    (function recurse(node) {
+      if (node) {
+        recurse(node.left);
+        recurse(node.right);
+        callback(node);
+      }
+    }(this.root));
+  }
+
+  printOut(traversal = this.inOrderTraversal) {
+    // Using .call() to provide _this_ to the function.
+    traversal.call(this, (node) => {
+      console.log(node.toString());
+    });
+  }
+
+  height() {
+    // IIFE
+    // return (function recurse(node) {
+    //   if (!node) return 0;
+    //   const leftHeight = recurse(node.left);
+    //   const rightHeight = recurse(node.right);
+    //
+    //   return Math.max(leftHeight, rightHeight) + 1;
+    // }(this.root));
+
+    // Normal arrow function
+    const recurse = (node) => {
+      if (!node) return 0;
+      const leftHeight = recurse(node.left);
+      const rightHeight = recurse(node.right);
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+
+    return recurse(this.root);
+  }
+
+  contains(data) {
+    const recurse = (node) => {
+      if (!node) return false;
+      if (data === node.data) return true;
+      if (data < node.data) {
+        return recurse(node.left);
+      } else {
+        return recurse(node.right);
+      }
+    };
+
+    return recurse(this.root);
+  }
+
+  lowestCommonAncestor(n1, n2) {
+    // Basically this searches around for a node that is between (or equal) to either number.
+    const recurse = (num1, num2, node) => {
+      if (!node) return null;
+      if (num1 < node.data && num2 < node.data) {
+        return recurse(num1, num2, node.left);
+      }
+      if (num1 > node.data && num2 > node.data) {
+        return recurse(num1, num2, node.right);
+      }
+
+      return node.data;
+    };
+
+    const lca = recurse(n1, n2, this.root);
+
+    if (lca === null) {
+      return `LCA of ${n1} and ${n2} does not exist!`;
+    } else {
+      return `LCA of ${n1} and ${n2} is ${lca}`;
+    }
+  }
+
+  validBST() {
+    const recurse = (node, parentData = null, shouldBeGreater = null) => {
+      if (!node) return true;
+
+      if (parentData && (
+        (shouldBeGreater && parentData < node.data) || (!shouldBeGreater && parentData > node.data)
+      )) {
+        return false;
+      }
+
+      const leftResult = recurse(node.left, node.data, true);
+      const rightResult = recurse(node.right, node.data, false);
+
+      return leftResult && rightResult;
+    };
+
+    return recurse(this.root);
+  }
+}
+
+const bsTree = new BinarySearchTree();
+bsTree.push(3);
+bsTree.push(2);
+bsTree.push(4);
+bsTree.push(1);
+bsTree.push(5);
+bsTree.push(6);
+console.log("inOrder");
+bsTree.printOut();
+console.log("preOrder");
+bsTree.printOut(bsTree.preOrderTraversal);
+console.log("postOrder");
+bsTree.printOut(bsTree.postOrderTraversal);
+console.log("Height:", bsTree.height());
+console.log(bsTree.contains(0));
+console.log(bsTree.contains(5));
+console.log(bsTree.lowestCommonAncestor(1, 5));
+console.log(bsTree.lowestCommonAncestor(1, 2));
+console.log(bsTree.lowestCommonAncestor(3, 5));
+
+const bsTree2 = new BinarySearchTree();
+bsTree2.push(10);
+bsTree2.push(5);
+bsTree2.push(15);
+bsTree2.push(1);
+bsTree2.push(4);
+bsTree2.push(13);
+bsTree2.push(17);
+console.log("Height:", bsTree2.height());
+console.log(bsTree2.contains(0));
+console.log(bsTree2.lowestCommonAncestor(1, 4));
+console.log(bsTree2.lowestCommonAncestor(4, 13));
+console.log(bsTree2.lowestCommonAncestor(5, 4));
+console.log(bsTree2.lowestCommonAncestor(2, 3));
+console.log(bsTree2.lowestCommonAncestor(1, 9999));
+console.log(bsTree2.lowestCommonAncestor(0, 9999));
+
+const badBsTree = new BinarySearchTree();
+badBsTree.push(5);
+badBsTree.root.left = new BSTNode(2);
+badBsTree.root.left.left = new BSTNode(3); // Bad
+badBsTree.root.right = new BSTNode(10);
+badBsTree.printOut(badBsTree.inOrderTraversal);
+console.log("badBsTree", badBsTree.validBST() ? "Yes" : "No");
+console.log("bsTree", bsTree.validBST() ? "Yes" : "No");
+console.log("bsTree2", bsTree2.validBST() ? "Yes" : "No");
