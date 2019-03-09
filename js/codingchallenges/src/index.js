@@ -887,6 +887,11 @@ class Tree {
     this.root = new TreeNode(data);
   }
 
+  /*
+    Depth first traversal of a tree. Depth first means that it navigates through the tree
+    going left until it reaches the end using recursion. So on a tree it's kinda like a
+    left-to-right sweep of the entire tree.
+   */
   traverseDF(callback) {
     // This is an IIFE (Immediately Invoked Function Expression) and is a fairly typical way to
     // construct a recursive function.
@@ -904,6 +909,12 @@ class Tree {
     }(this.root));
   }
 
+  /*
+    Breadth first traversal of a tree. Instead of using recursion this instead uses a simple
+    while loop and a queue. The use of a queue is the key to this style. It does a top-to-bottom
+    sweep of the entire tree. It does this by looking at the current node and puts all its kids
+    into a queue (FIFO). So while it reads everyone's children
+   */
   traverseBF(callback) {
     const queue = new Queue();
 
@@ -1201,52 +1212,52 @@ class BinarySearchTree {
   }
 }
 
-const bsTree = new BinarySearchTree();
-bsTree.push(3);
-bsTree.push(2);
-bsTree.push(4);
-bsTree.push(1);
-bsTree.push(5);
-bsTree.push(6);
-console.log("inOrder");
-bsTree.printOut();
-console.log("preOrder");
-bsTree.printOut(bsTree.preOrderTraversal);
-console.log("postOrder");
-bsTree.printOut(bsTree.postOrderTraversal);
-console.log("Height:", bsTree.height());
-console.log(bsTree.contains(0));
-console.log(bsTree.contains(5));
-console.log(bsTree.lowestCommonAncestor(1, 5));
-console.log(bsTree.lowestCommonAncestor(1, 2));
-console.log(bsTree.lowestCommonAncestor(3, 5));
+// const bsTree = new BinarySearchTree();
+// bsTree.push(3);
+// bsTree.push(2);
+// bsTree.push(4);
+// bsTree.push(1);
+// bsTree.push(5);
+// bsTree.push(6);
+// console.log("inOrder");
+// bsTree.printOut();
+// console.log("preOrder");
+// bsTree.printOut(bsTree.preOrderTraversal);
+// console.log("postOrder");
+// bsTree.printOut(bsTree.postOrderTraversal);
+// console.log("Height:", bsTree.height());
+// console.log(bsTree.contains(0));
+// console.log(bsTree.contains(5));
+// console.log(bsTree.lowestCommonAncestor(1, 5));
+// console.log(bsTree.lowestCommonAncestor(1, 2));
+// console.log(bsTree.lowestCommonAncestor(3, 5));
 
-const bsTree2 = new BinarySearchTree();
-bsTree2.push(10);
-bsTree2.push(5);
-bsTree2.push(15);
-bsTree2.push(1);
-bsTree2.push(4);
-bsTree2.push(13);
-bsTree2.push(17);
-console.log("Height:", bsTree2.height());
-console.log(bsTree2.contains(0));
-console.log(bsTree2.lowestCommonAncestor(1, 4));
-console.log(bsTree2.lowestCommonAncestor(4, 13));
-console.log(bsTree2.lowestCommonAncestor(5, 4));
-console.log(bsTree2.lowestCommonAncestor(2, 3));
-console.log(bsTree2.lowestCommonAncestor(1, 9999));
-console.log(bsTree2.lowestCommonAncestor(0, 9999));
+// const bsTree2 = new BinarySearchTree();
+// bsTree2.push(10);
+// bsTree2.push(5);
+// bsTree2.push(15);
+// bsTree2.push(1);
+// bsTree2.push(4);
+// bsTree2.push(13);
+// bsTree2.push(17);
+// console.log("Height:", bsTree2.height());
+// console.log(bsTree2.contains(0));
+// console.log(bsTree2.lowestCommonAncestor(1, 4));
+// console.log(bsTree2.lowestCommonAncestor(4, 13));
+// console.log(bsTree2.lowestCommonAncestor(5, 4));
+// console.log(bsTree2.lowestCommonAncestor(2, 3));
+// console.log(bsTree2.lowestCommonAncestor(1, 9999));
+// console.log(bsTree2.lowestCommonAncestor(0, 9999));
 
-const badBsTree = new BinarySearchTree();
-badBsTree.push(5);
-badBsTree.root.left = new BSTNode(2);
-badBsTree.root.left.left = new BSTNode(3); // Bad
-badBsTree.root.right = new BSTNode(10);
-badBsTree.printOut(badBsTree.inOrderTraversal);
-console.log("badBsTree", badBsTree.validBST() ? "Yes" : "No");
-console.log("bsTree", bsTree.validBST() ? "Yes" : "No");
-console.log("bsTree2", bsTree2.validBST() ? "Yes" : "No");
+// const badBsTree = new BinarySearchTree();
+// badBsTree.push(5);
+// badBsTree.root.left = new BSTNode(2);
+// badBsTree.root.left.left = new BSTNode(3); // Bad
+// badBsTree.root.right = new BSTNode(10);
+// badBsTree.printOut(badBsTree.inOrderTraversal);
+// console.log("badBsTree", badBsTree.validBST() ? "Yes" : "No");
+// console.log("bsTree", bsTree.validBST() ? "Yes" : "No");
+// console.log("bsTree2", bsTree2.validBST() ? "Yes" : "No");
 
 class HuffmanNode {
   constructor(character, value) {
@@ -1284,16 +1295,16 @@ class HuffmanTree {
   }
 }
 
-const huff_abracadabra = new HuffmanTree();
-huff_abracadabra.root = new HuffmanNode(null, 11);
-huff_abracadabra.root.left = new HuffmanNode("A", 5);
-huff_abracadabra.root.right = new HuffmanNode(null, 6);
-huff_abracadabra.root.right.left = new HuffmanNode("R", 2);
-huff_abracadabra.root.right.right = new HuffmanNode(null, 4);
-huff_abracadabra.root.right.right.left = new HuffmanNode(null, 2);
-huff_abracadabra.root.right.right.right = new HuffmanNode("B", 2);
-huff_abracadabra.root.right.right.left.left = new HuffmanNode("C", 1);
-huff_abracadabra.root.right.right.left.right = new HuffmanNode("D", 1);
+// const huff_abracadabra = new HuffmanTree();
+// huff_abracadabra.root = new HuffmanNode(null, 11);
+// huff_abracadabra.root.left = new HuffmanNode("A", 5);
+// huff_abracadabra.root.right = new HuffmanNode(null, 6);
+// huff_abracadabra.root.right.left = new HuffmanNode("R", 2);
+// huff_abracadabra.root.right.right = new HuffmanNode(null, 4);
+// huff_abracadabra.root.right.right.left = new HuffmanNode(null, 2);
+// huff_abracadabra.root.right.right.right = new HuffmanNode("B", 2);
+// huff_abracadabra.root.right.right.left.left = new HuffmanNode("C", 1);
+// huff_abracadabra.root.right.right.left.right = new HuffmanNode("D", 1);
 
 /*
        (-,1)
@@ -1320,8 +1331,58 @@ huff_abracadabra.root.right.right.left.right = new HuffmanNode("D", 1);
 // D - 1101
 // R - 10
 
-console.log(huff_abracadabra.decode("01111001100011010111100"));
-console.log(huff_abracadabra.decode("011000111"));
-console.log(huff_abracadabra.decode("011111001101"));
-console.log(huff_abracadabra.decode("00"));
-console.log(huff_abracadabra.decode(""));
+// console.log(huff_abracadabra.decode("01111001100011010111100"));
+// console.log(huff_abracadabra.decode("011000111"));
+// console.log(huff_abracadabra.decode("011111001101"));
+// console.log(huff_abracadabra.decode("00"));
+// console.log(huff_abracadabra.decode(""));
+
+// Facebook one character away check.
+// Checks two strings against each other and will tell you they would match if:
+// If you added one character anywhere (including at the start and end)
+// If you took away and one character anywhere
+// If you swapped out any one character anywhere.
+const fbChecker = (target, candidate) => {
+  // If their lengths are too different or they're identical, then no.
+  if (Math.abs(target.length - candidate.length) > 1 || target === candidate) return false;
+
+  if (target.length === candidate.length) {
+    // Swap out one character
+    for (let x = 0; x < target.length; ++x) {
+      const pattern = `${target.slice(0, x)}.${target.slice(x + 1)}`;
+      if (candidate.match(new RegExp(pattern))) {
+        return true;
+      }
+    }
+    return false;
+  } else if (target.length > candidate.length) {
+    // Remove one character
+    for (let x = 0; x < target.length; ++x) {
+      if (target.slice(0, x) + target.slice(x + 1) === candidate) {
+        return true;
+      }
+    }
+    return false;
+  } else if (target.length < candidate.length) {
+    // Add one character (note the <= in for loop)
+    for (let x = 0; x <= target.length; ++x) {
+      const pattern = `${target.slice(0, x)}.${target.slice(x)}`;
+      if (candidate.match(new RegExp(pattern))) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return false;
+};
+// True
+console.log(fbChecker("bat", "cat"));   // Swap
+console.log(fbChecker("scar", "car"));  // Remove
+console.log(fbChecker("cat", "cats"));  // Add
+console.log(fbChecker("a", ""));        // Remove
+console.log(fbChecker("", "a"));        // Add
+// False
+console.log(fbChecker("", ""));
+console.log(fbChecker("a", "a"));
+console.log(fbChecker("car", "scars"));
+console.log(fbChecker("car", "car"));
