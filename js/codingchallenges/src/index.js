@@ -1455,3 +1455,68 @@ let isPalindrome = function (s, start, end) {
 // console.log(longestPalindromeAlt("a"));
 // console.log(longestPalindromeAlt("ac"));
 // console.log(longestPalindromeAlt("bb"));
+
+// ZigZag question
+// https://leetcode.com/problems/zigzag-conversion
+// There is another solution that does it in-place but the logic seems impossible to come up with
+// in a short amount of time. If this was a big data problem then yeah, do that instead.
+// I got 104ms (73.22%) and 42.2MB (35.39%)
+// This one is weird. Make "PAYPALISHIRING", 3 become:
+/*
+  P   A   H   N
+  A P L S I I G
+  Y   I   R
+ */
+// And then read left to right, top to bottom in order to become:
+// "PAHNAPLSIIGYIR"
+
+// Or "PAYPALISHIRING", 4 become:
+/*
+  P     I     N
+  A   L S  I G
+  Y A   H R
+  P     I
+ */
+// Which becomes "PINALSIGYAHRPI"
+
+/**
+ * @param {string} s
+ * @param {number} numRows
+ * @return {string}
+ */
+let zigZagConvert = function (s, numRows) {
+  const zigZag = putIntoZigZag(s, numRows);
+  return zigZagToString(zigZag);
+};
+
+let putIntoZigZag = function (s, numRows) {
+  const zigZag = [];
+  let rowNum = 0;
+  let increasing = false;
+  for (let index = 0; index < s.length; ++index) {
+    if (!zigZag[rowNum]) {
+      zigZag[rowNum] = [s[index]];
+    } else {
+      zigZag[rowNum].push(s[index]);
+    }
+    if (rowNum === numRows - 1 || rowNum === 0) {
+      increasing = !increasing;
+    }
+    rowNum += increasing ? 1 : -1;
+  }
+  return zigZag;
+};
+
+let zigZagToString = function (zigZag) {
+  let result = "";
+  zigZag.forEach((row) => {
+    row.forEach((character) => {
+      result += character;
+    });
+  });
+
+  return result;
+};
+
+console.log(zigZagConvert("PAYPALISHIRING", 3));
+console.log(zigZagConvert("PAYPALISHIRING", 4));
