@@ -1376,13 +1376,82 @@ const fbChecker = (target, candidate) => {
   return false;
 };
 // True
-console.log(fbChecker("bat", "cat"));   // Swap
-console.log(fbChecker("scar", "car"));  // Remove
-console.log(fbChecker("cat", "cats"));  // Add
-console.log(fbChecker("a", ""));        // Remove
-console.log(fbChecker("", "a"));        // Add
-// False
-console.log(fbChecker("", ""));
-console.log(fbChecker("a", "a"));
-console.log(fbChecker("car", "scars"));
-console.log(fbChecker("car", "car"));
+// console.log(fbChecker("bat", "cat"));   // Swap
+// console.log(fbChecker("scar", "car"));  // Remove
+// console.log(fbChecker("cat", "cats"));  // Add
+// console.log(fbChecker("a", ""));        // Remove
+// console.log(fbChecker("", "a"));        // Add
+// // False
+// console.log(fbChecker("", ""));
+// console.log(fbChecker("a", "a"));
+// console.log(fbChecker("car", "scars"));
+// console.log(fbChecker("car", "car"));
+
+// https://leetcode.com/problems/longest-palindromic-substring
+// Got 328ms (42.77%) and 35.1 MB (96.55%) on LeetCode
+let longestPalindrome = function (s) {
+  if (s.length <= 1) return s;
+
+  let palindrome = s[0];
+
+  for (let left = 0; left < s.length; ++left) {
+    if (palindrome.length >= s.length - left) {
+      break; // Cannot be any more longer palindromes
+    }
+    for (let right = left + (palindrome.length || 1); right < s.length; ++right) {
+      if (isPalindrome(s, left, right)) {
+        palindrome = s.slice(left, right + 1);
+      }
+    }
+  }
+  return palindrome;
+};
+
+// I thought this would be faster due to only using slice once... but wasn't necessary.
+let longestPalindromeAlt = function (s) {
+  if (s.length <= 1) return s;
+
+  const palindrome = { start: 0, end: 0 };
+
+  for (let left = 0; left < s.length; ++left) {
+    if (palindrome.end - palindrome.start >= s.length - left) {
+      break; // Cannot be any more longer palindromes
+    }
+    for (let right = left + ((palindrome.end - palindrome.start) || 1); right < s.length; ++right) {
+      if (isPalindrome(s, left, right)) {
+        palindrome.start = left;
+        palindrome.end = right;
+      }
+    }
+  }
+  return s.slice(palindrome.start, palindrome.end + 1);
+};
+
+let isPalindrome = function (s, start, end) {
+  if (end - start < 1) return false;
+  for (let step = 0; step <= Math.floor((end - start) / 2); ++step) {
+    if (s[start + step] !== s[end - step]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// console.log(isPalindrome("dad", 0, 2));
+// console.log(isPalindrome("dd", 0, 1));
+// console.log(isPalindrome("racecar", 0, 6));
+// console.log(isPalindrome("pacecar", 0, 6));
+// console.log(isPalindrome("xracecarz", 1, 7));
+// console.log(isPalindrome("xracecarz", 0, 8));
+// console.log(isPalindrome("a", 0, 0));
+// console.log(isPalindrome("", 0, 0));
+
+// console.log(longestPalindrome("abcpoopacb"));
+// console.log(longestPalindrome("a"));
+// console.log(longestPalindrome("ac"));
+// console.log(longestPalindrome("bb"));
+
+// console.log(longestPalindromeAlt("abcpoopacb"));
+// console.log(longestPalindromeAlt("a"));
+// console.log(longestPalindromeAlt("ac"));
+// console.log(longestPalindromeAlt("bb"));
