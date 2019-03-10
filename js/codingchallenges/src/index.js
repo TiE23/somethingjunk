@@ -1678,8 +1678,130 @@ const isNumberPalindrome = (x) => {
   return true;
 };
 
-console.log(121, isNumberPalindrome(121));
-console.log(-121, isNumberPalindrome(-121));
-console.log(1, isNumberPalindrome(1));
-console.log(12, isNumberPalindrome(12));
-console.log(-0, isNumberPalindrome(-0));
+// console.log(121, isNumberPalindrome(121));
+// console.log(-121, isNumberPalindrome(-121));
+// console.log(1, isNumberPalindrome(1));
+// console.log(12, isNumberPalindrome(12));
+// console.log(-0, isNumberPalindrome(-0));
+
+
+/**
+ * 10. Regular Expression Matching (hard)
+ * https://leetcode.com/problems/regular-expression-matching/
+ * This one was a little beyond me. This one failed a case of "aaa", "a*a"
+ * @param {string} s
+ * @param {string} p
+ * @return {boolean}
+ */
+const isMatch = (s, p) => {
+  const expressions = expressionBreaker(p);
+
+  let sIndex = 0;
+  let eIndex = 0;
+  while (sIndex < s.length && eIndex < expressions.length) {
+    // Character
+    if (expressions[eIndex].char !== ".") {
+      // Match
+      if (expressions[eIndex].char === s[sIndex]) {
+        if (!expressions[eIndex].kleene) {
+          ++eIndex; // Match, not a kleene, so we increment both sIndex and eIndex
+          ++sIndex;
+        } else {
+          ++sIndex; // Match, is a kleene, so we only increment sIndex
+        }
+      // No match, but it's kleene, so we can continue.
+      } else if (expressions[eIndex].kleene) {
+        ++eIndex;
+        // No ++sIndex, we stay on it
+      // No match when we required it. So we break.
+      } else {
+        return false;
+      }
+    // Wildcard, check to see if we should skip this (the next char matches or is wildcard)
+    } else if (eIndex < expressions.length - 1 && expressions[eIndex].kleene &&
+      (expressions[eIndex + 1].char === s[sIndex] || expressions[eIndex + 1].char === ".")
+    ) {
+      ++eIndex;
+    // Wildcard with kleene means we can match this char, increment sIndex only
+    } else if (expressions[eIndex].kleene) {
+      ++sIndex;
+    // Wildcard without kleene means we can match this char, increment sIndex AND eIndex
+    } else {
+      ++eIndex;
+      ++sIndex;
+    }
+  }
+  // Should end with sIndex one over the end (=== length).
+  // and eIndex should be length - 1 when it ends in a kleene or else one over (=== length)
+  return sIndex === s.length && (
+    eIndex === expressions.length - 1 ? expressions[eIndex].kleene : eIndex === expressions.length
+  );
+};
+
+const expressionBreaker = (p) => {
+  if (p.length === 0) return [];
+  if (p.length === 1 && p !== "*") return [{ char: p, kleene: false }];
+
+  const fragments = [];
+  for (let index = 0; index < p.length; ++index) {
+    if (p[index] !== "*") {
+      if (index < p.length - 1 && p[index + 1] === "*") {
+        fragments.push({ char: p[index], kleene: true});
+        ++index; // Increment another step
+      } else {
+        fragments.push({ char: p[index], kleene: false });
+      }
+    } else {
+      return [];  // This means we found a * without a character
+    }
+  }
+  return fragments;
+};
+
+
+// console.log(isMatch("aa", "a"));
+// console.log(isMatch("aa", "a*"));
+// console.log(isMatch("ab", ".*"));
+// console.log(isMatch("aab", "c*a*b"));
+// console.log(isMatch("mississippi", "mis*is*p*"));
+// console.log(isMatch("aaa", "aaaa"));
+// console.log(isMatch("aaa", "a*a"));
+
+/**
+ * Their provided solution with my comments.
+ * @param text
+ * @param pattern
+ * @returns {*}
+ */
+const isMatchSolution = (text, pattern) => {
+  // If there is no pattern return true if there is no text ("" === "")
+  if (!pattern) {
+    return !text;
+  }
+
+  // Match is there is a string and the pattern matches or is a wildcard
+  // I made the mistake of removing !! meaning things got screwy.
+  const firstMatch = !!text && (pattern[0] === text[0] || pattern[0] === ".");
+
+  // If there is a Kleene star...
+  if (pattern.length >= 2 && pattern[1] === "*") {
+    // Return if the next expression after the current one fits...
+    return isMatchSolution(text, pattern.slice(2)) ||
+      // OR, if firstMatch, that the next text item matches the current pattern.
+      (firstMatch && isMatchSolution(text.slice(1), pattern));
+
+  // There is no Kleene star...
+  } else {
+    // Return if this was a firstMatch and the next character of the text and pattern
+    return firstMatch && isMatchSolution(text.slice(1), pattern.slice(1));
+  }
+};
+
+console.log("aa", "a", isMatchSolution("aa", "a"));
+console.log("aa", "a*", isMatchSolution("aa", "a*"));
+console.log("ab", ".*", isMatchSolution("ab", ".*"));
+console.log("aab", "c*a*b", isMatchSolution("aab", "c*a*b"));
+console.log("mississippi", "mis*is*p*", isMatchSolution("mississippi", "mis*is*p*"));
+console.log("aaa", "aaaa", isMatchSolution("aaa", "aaaa"));
+console.log("aaa", "a*a", isMatchSolution("aaa", "a*a"));
+console.log("(blank)", "(blank)", isMatchSolution("", ""));
