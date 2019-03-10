@@ -1641,16 +1641,45 @@ const extractLeadingNumberString = (str) => {
   return numberString;
 };
 
-console.log("42", myAtoi("42"));
-console.log(" -42", myAtoi(" -42"));
-console.log("3.1124", myAtoi("3.1124"));
-console.log("123", myAtoi("123"));
-console.log("+123", myAtoi("+123"));
-console.log("1 2 3", myAtoi("1 2 3"));
-console.log("-1 2 3", myAtoi("-1 2 3"));
-console.log("  123", myAtoi("  123"));
-console.log("  -123", myAtoi("  -123"));
-console.log("  -w", myAtoi("  -w"));
-console.log("  w 123", myAtoi("  w 123"));
-console.log("  w -123", myAtoi("  w -123"));
-console.log("+ 123", myAtoi("+ 123"));
+// console.log("42", myAtoi("42"));
+// console.log(" -42", myAtoi(" -42"));
+// console.log("3.1124", myAtoi("3.1124"));
+// console.log("123", myAtoi("123"));
+// console.log("+123", myAtoi("+123"));
+// console.log("1 2 3", myAtoi("1 2 3"));
+// console.log("-1 2 3", myAtoi("-1 2 3"));
+// console.log("  123", myAtoi("  123"));
+// console.log("  -123", myAtoi("  -123"));
+// console.log("  -w", myAtoi("  -w"));
+// console.log("  w 123", myAtoi("  w 123"));
+// console.log("  w -123", myAtoi("  w -123"));
+// console.log("+ 123", myAtoi("+ 123"));
+
+
+/**
+ * 9. Palindrome Number (easy)
+ * Score: 244ms (81.53%) and 45.5MB (53.93%)
+ * https://leetcode.com/problems/palindrome-number
+ * Pretty basic stuff
+ * @param x
+ * @returns {boolean}
+ */
+const isNumberPalindrome = (x) => {
+  if (x < 0) return false; // A minus symbol is a no-go
+  if (x < 10) return true; // A single digit is a palindrome
+
+  const numberString = String(x);
+
+  for (let index = 0; index < Math.floor(numberString.length / 2); ++index) {
+    if (numberString[index] !== numberString[numberString.length - index - 1]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+console.log(121, isNumberPalindrome(121));
+console.log(-121, isNumberPalindrome(-121));
+console.log(1, isNumberPalindrome(1));
+console.log(12, isNumberPalindrome(12));
+console.log(-0, isNumberPalindrome(-0));
