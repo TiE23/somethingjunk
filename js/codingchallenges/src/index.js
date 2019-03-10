@@ -1396,8 +1396,8 @@ const fbChecker = (target, candidate) => {
 
 /**
  * 5. Longest Palindromic Substring (medium)
+ * Score: 328ms (42.77%) and 35.1 MB (96.55%) on LeetCode
  * https://leetcode.com/problems/longest-palindromic-substring
- * Got 328ms (42.77%) and 35.1 MB (96.55%) on LeetCode
  * @param s
  * @returns {*}
  */
@@ -1483,10 +1483,10 @@ let isPalindrome = (s, start, end) => {
 
 /**
  * 6. ZigZag question (medium)
+ * Score: 104ms (73.22%) and 42.2MB (35.39%)
  * https://leetcode.com/problems/zigzag-conversion
  * There is another solution that does it in-place but the logic seems impossible to come up with
  * in a short amount of time. If this was a big data problem then yeah, do that instead.
- * I got 104ms (73.22%) and 42.2MB (35.39%)
  * This one is weird. Make "PAYPALISHIRING", 3 become:
  *  P   A   H   N
  *  A P L S I I G
@@ -1576,12 +1576,81 @@ const reverse = (x) => {
   }
 };
 
-console.log(123, reverse(123));
-console.log(-123, reverse(-123));
-console.log(1, reverse(1));
-console.log(2, reverse(2));
-console.log(0, reverse(0));
-console.log(10, reverse(10));
-console.log(1000, reverse(1000));
-console.log(1020, reverse(1020));
-console.log(1534236469, reverse(1534236469));
+// console.log(123, reverse(123));
+// console.log(-123, reverse(-123));
+// console.log(1, reverse(1));
+// console.log(2, reverse(2));
+// console.log(0, reverse(0));
+// console.log(10, reverse(10));
+// console.log(1000, reverse(1000));
+// console.log(1020, reverse(1020));
+// console.log(1534236469, reverse(1534236469));
+
+
+/**
+ * 8. String to Integer (atoi) (medium)
+ * Score: 92ms (62.40%) and 37.7MB (8.98%)
+ * https://leetcode.com/problems/string-to-integer-atoi/
+ * I tried doing this a "cheap" way using trim() and regex but I realized that their specifics were
+ * too specific and I needed to do it by hand with extractLeadingNumberString().
+ * Also MIN_INT and MAX_INT are in effect.
+ *
+ * I still just use parseInt() when I've got the string settled. I could do it by hand but unless
+ * I'm asked to I won't.
+ *
+ * @param {string} str
+ * @return {number}
+ */
+const myAtoi = (str) => {
+  const value = parseInt(extractLeadingNumberString(str), 10);
+  if (Number.isNaN(value)) {
+    return 0;
+  }
+  return Math.min(Math.max(value, -2147483648), 2147483647);
+};
+
+/**
+ * This allows starting spaces, but not starting letters.
+ * When a number has been detected (starting with a -, +, or digit) then all spaces and other
+ * letters no longer have effect.
+ * Accepted, all equal +/-123: " 123", "-123", "   +123 ", "123 abc", "123abc"
+ * Rejected: " - 123", "-abc123"
+ *
+ * Also decimal points are ignored, "3.14" becomes "3".
+ * @param str
+ * @returns {string}
+ */
+const extractLeadingNumberString = (str) => {
+  let numberString = "";
+  let symbolAllowed = true;
+  let spaceAllowed = true;
+
+  // I track symbol and spaced allowed. Symbol is allowed only at first non-space character. And
+  // space is only allowed before first -, +, or digit.
+  for (let index = 0; index < str.length; ++index) {
+    if (!spaceAllowed || str[index] !== " ") {
+      spaceAllowed = false;
+      if (str[index].match(/\d/) || (symbolAllowed && (str[index] === "+" || str[index] === "-"))) {
+        numberString += str[index];
+        symbolAllowed = false;
+      } else {
+        return numberString;
+      }
+    }
+  }
+  return numberString;
+};
+
+console.log("42", myAtoi("42"));
+console.log(" -42", myAtoi(" -42"));
+console.log("3.1124", myAtoi("3.1124"));
+console.log("123", myAtoi("123"));
+console.log("+123", myAtoi("+123"));
+console.log("1 2 3", myAtoi("1 2 3"));
+console.log("-1 2 3", myAtoi("-1 2 3"));
+console.log("  123", myAtoi("  123"));
+console.log("  -123", myAtoi("  -123"));
+console.log("  -w", myAtoi("  -w"));
+console.log("  w 123", myAtoi("  w 123"));
+console.log("  w -123", myAtoi("  w -123"));
+console.log("+ 123", myAtoi("+ 123"));
