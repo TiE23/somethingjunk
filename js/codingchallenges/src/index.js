@@ -1337,11 +1337,17 @@ class HuffmanTree {
 // console.log(huff_abracadabra.decode("00"));
 // console.log(huff_abracadabra.decode(""));
 
-// Facebook one character away check.
-// Checks two strings against each other and will tell you they would match if:
-// If you added one character anywhere (including at the start and end)
-// If you took away and one character anywhere
-// If you swapped out any one character anywhere.
+
+/**
+ * Facebook one character away check.
+ * Checks two strings against each other and will tell you they would match if:
+ * If you added one character anywhere (including at the start and end)
+ * If you took away and one character anywhere
+ * If you swapped out any one character anywhere.
+ * @param target
+ * @param candidate
+ * @returns {boolean}
+ */
 const fbChecker = (target, candidate) => {
   // If their lengths are too different or they're identical, then no.
   if (Math.abs(target.length - candidate.length) > 1 || target === candidate) return false;
@@ -1387,9 +1393,15 @@ const fbChecker = (target, candidate) => {
 // console.log(fbChecker("car", "scars"));
 // console.log(fbChecker("car", "car"));
 
-// https://leetcode.com/problems/longest-palindromic-substring
-// Got 328ms (42.77%) and 35.1 MB (96.55%) on LeetCode
-let longestPalindrome = function (s) {
+
+/**
+ * 5. Longest Palindromic Substring (medium)
+ * https://leetcode.com/problems/longest-palindromic-substring
+ * Got 328ms (42.77%) and 35.1 MB (96.55%) on LeetCode
+ * @param s
+ * @returns {*}
+ */
+let longestPalindrome = (s) => {
   if (s.length <= 1) return s;
 
   let palindrome = s[0];
@@ -1407,8 +1419,12 @@ let longestPalindrome = function (s) {
   return palindrome;
 };
 
-// I thought this would be faster due to only using slice once... but wasn't necessary.
-let longestPalindromeAlt = function (s) {
+/**
+ * I thought this would be faster due to only using slice once... but wasn't necessary.
+ * @param s
+ * @returns {*}
+ */
+let longestPalindromeAlt = (s) => {
   if (s.length <= 1) return s;
 
   const palindrome = { start: 0, end: 0 };
@@ -1427,7 +1443,15 @@ let longestPalindromeAlt = function (s) {
   return s.slice(palindrome.start, palindrome.end + 1);
 };
 
-let isPalindrome = function (s, start, end) {
+/**
+ * Basic substring palindrome reader. I pass the entire string and use start and end args to
+ * save some time.
+ * @param s
+ * @param start
+ * @param end
+ * @returns {boolean}
+ */
+let isPalindrome = (s, start, end) => {
   if (end - start < 1) return false;
   for (let step = 0; step <= Math.floor((end - start) / 2); ++step) {
     if (s[start + step] !== s[end - step]) {
@@ -1456,40 +1480,37 @@ let isPalindrome = function (s, start, end) {
 // console.log(longestPalindromeAlt("ac"));
 // console.log(longestPalindromeAlt("bb"));
 
-// ZigZag question
-// https://leetcode.com/problems/zigzag-conversion
-// There is another solution that does it in-place but the logic seems impossible to come up with
-// in a short amount of time. If this was a big data problem then yeah, do that instead.
-// I got 104ms (73.22%) and 42.2MB (35.39%)
-// This one is weird. Make "PAYPALISHIRING", 3 become:
-/*
-  P   A   H   N
-  A P L S I I G
-  Y   I   R
- */
-// And then read left to right, top to bottom in order to become:
-// "PAHNAPLSIIGYIR"
-
-// Or "PAYPALISHIRING", 4 become:
-/*
-  P     I     N
-  A   L S  I G
-  Y A   H R
-  P     I
- */
-// Which becomes "PINALSIGYAHRPI"
 
 /**
- * @param {string} s
- * @param {number} numRows
- * @return {string}
+ * 6. ZigZag question (medium)
+ * https://leetcode.com/problems/zigzag-conversion
+ * There is another solution that does it in-place but the logic seems impossible to come up with
+ * in a short amount of time. If this was a big data problem then yeah, do that instead.
+ * I got 104ms (73.22%) and 42.2MB (35.39%)
+ * This one is weird. Make "PAYPALISHIRING", 3 become:
+ *  P   A   H   N
+ *  A P L S I I G
+ *  Y   I   R
+ *
+ * And then read left to right, top to bottom in order to become:
+ * "PAHNAPLSIIGYIR"
+ * Or "PAYPALISHIRING", 4 become:
+ * P     I     N
+ * A   L S  I G
+ * Y A   H R
+ * P     I
+ * Which becomes "PINALSIGYAHRPI"
+ *
+ * @param s
+ * @param numRows
+ * @returns {string}
  */
-let zigZagConvert = function (s, numRows) {
+const zigZagConvert = (s, numRows) => {
   const zigZag = putIntoZigZag(s, numRows);
   return zigZagToString(zigZag);
 };
 
-let putIntoZigZag = function (s, numRows) {
+const putIntoZigZag = (s, numRows) => {
   const zigZag = [];
   let rowNum = 0;
   let increasing = false;
@@ -1507,7 +1528,7 @@ let putIntoZigZag = function (s, numRows) {
   return zigZag;
 };
 
-let zigZagToString = function (zigZag) {
+const zigZagToString = (zigZag) => {
   let result = "";
   zigZag.forEach((row) => {
     row.forEach((character) => {
@@ -1518,5 +1539,49 @@ let zigZagToString = function (zigZag) {
   return result;
 };
 
-console.log(zigZagConvert("PAYPALISHIRING", 3));
-console.log(zigZagConvert("PAYPALISHIRING", 4));
+// console.log(zigZagConvert("PAYPALISHIRING", 3));
+// console.log(zigZagConvert("PAYPALISHIRING", 4));
+
+
+/**
+ * 7. Reverse Integer
+ * https://leetcode.com/problems/reverse-integer (easy)
+ * Reverse integers. ex: 321 becomes 123, -102 becomes -201, 120 becomes 21
+ * Score: 84ms (73.51%) and 36MB (31.68%)
+ * @param x
+ * @returns {number}
+ */
+const reverse = (x) => {
+  const isNegative = x < 0;
+  const number = Math.abs(x);
+  const digits = [];
+
+  for (let power = 0; 10 ** power <= number; ++power) {
+    digits.push(Math.floor(number / (10 ** power)) % 10);
+  }
+
+  let answer = 0;
+  for (let index = 0; index < digits.length; ++index) {
+    answer += digits[index] * (10 ** (digits.length - 1 - index));
+  }
+
+  // return isNegative ? answer * -1 : answer;
+
+  // JavaScript integers are 64 bit. This is done to pass the challenge.
+  if (isNegative) answer *= -1;
+  if (answer > -2147483648 && answer < 2147483647) {
+    return answer;
+  } else {
+    return 0;
+  }
+};
+
+console.log(123, reverse(123));
+console.log(-123, reverse(-123));
+console.log(1, reverse(1));
+console.log(2, reverse(2));
+console.log(0, reverse(0));
+console.log(10, reverse(10));
+console.log(1000, reverse(1000));
+console.log(1020, reverse(1020));
+console.log(1534236469, reverse(1534236469));
