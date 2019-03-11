@@ -1881,8 +1881,105 @@ const validParens = (s) => {
   return stack.length === 0;
 };
 
-console.log("()", validParens("()"));
-console.log("()[]{}", validParens("()[]{}"));
-console.log("(]", validParens("(]"));
-console.log("([)]", validParens("([)]"));
-console.log("{[]}", validParens("{[]}"));
+// console.log("()", validParens("()"));
+// console.log("()[]{}", validParens("()[]{}"));
+// console.log("(]", validParens("(]"));
+// console.log("([)]", validParens("([)]"));
+// console.log("{[]}", validParens("{[]}"));
+
+
+/**
+ * 11. Container With Most Water
+ * https://leetcode.com/problems/container-with-most-water/
+ * Score: 912ms (14.15%) and 35.6MB (48.44%)
+ * Total brute force.
+ * @param {number[]} height
+ * @return {number}
+ */
+const maxAreaSlow = (height) => {
+  const largest = {
+    x: -1,
+    y: -1,
+    volume: -1,
+  };
+
+  for (let x = 0; x < height.length - 1; ++x) {
+    for (let y = x + 1; y < height.length; ++y) {
+      if (x !== y) {
+        const volume = Math.min(height[x], height[y]) * Math.abs(x - y);
+        if (volume > largest.volume) {
+          largest.volume = volume;
+          largest.x = x;
+          largest.y = y;
+        }
+      }
+    }
+  }
+
+  return largest.volume;
+};
+
+// console.log(maxAreaSlow([1,8,6,2,5,4,8,3,7])); // 49
+
+/**
+ * Score: 620ms (36.54%) and 35.5MB (63.54%)
+ * Brute force with super basic optimzation.
+ * @param height
+ * @returns {number}
+ */
+const maxAreaFaster = (height) => {
+  const largest = {
+    x: -1,
+    y: -1,
+    volume: -1,
+  };
+
+  for (let x = 0; x < height.length - 1; ++x) {
+    for (let y = x + 1; y < height.length; ++y) {
+      // Some very basic optimization
+      if (x !== y && height[y] * Math.max(y, height.length - y) > largest.volume) {
+        const volume = Math.min(height[x], height[y]) * Math.abs(x - y);
+        if (volume > largest.volume) {
+          largest.volume = volume;
+          largest.x = x;
+          largest.y = y;
+        }
+      }
+    }
+  }
+
+  return largest.volume;
+};
+
+// console.log(maxAreaFaster([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
+
+/**
+ * I took this from the solutions guide. My god it makes so much more sense.
+ * Attack from both sides solution.
+ * Score: 72ms (74.33%) and 35.6MB (48.44%)
+ * @param height
+ * @returns {number}
+ */
+const maxArea = (height) => {
+  let maxVolume = 0;
+
+  let leftIndex = 0;
+  let rightIndex = height.length - 1;
+
+  while (leftIndex < rightIndex) {
+    maxVolume = Math.max(
+      maxVolume,
+      Math.min(height[leftIndex], height[rightIndex]) * (rightIndex - leftIndex),
+    );
+
+    if (height[leftIndex] > height[rightIndex]) {
+      --rightIndex;
+    } else {
+      ++leftIndex;
+    }
+  }
+
+  return maxVolume;
+};
+
+console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
