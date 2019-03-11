@@ -1797,11 +1797,58 @@ const isMatchSolution = (text, pattern) => {
   }
 };
 
-console.log("aa", "a", isMatchSolution("aa", "a"));
-console.log("aa", "a*", isMatchSolution("aa", "a*"));
-console.log("ab", ".*", isMatchSolution("ab", ".*"));
-console.log("aab", "c*a*b", isMatchSolution("aab", "c*a*b"));
-console.log("mississippi", "mis*is*p*", isMatchSolution("mississippi", "mis*is*p*"));
-console.log("aaa", "aaaa", isMatchSolution("aaa", "aaaa"));
-console.log("aaa", "a*a", isMatchSolution("aaa", "a*a"));
-console.log("(blank)", "(blank)", isMatchSolution("", ""));
+// console.log("aa", "a", isMatchSolution("aa", "a"));
+// console.log("aa", "a*", isMatchSolution("aa", "a*"));
+// console.log("ab", ".*", isMatchSolution("ab", ".*"));
+// console.log("aab", "c*a*b", isMatchSolution("aab", "c*a*b"));
+// console.log("mississippi", "mis*is*p*", isMatchSolution("mississippi", "mis*is*p*"));
+// console.log("aaa", "aaaa", isMatchSolution("aaa", "aaaa"));
+// console.log("aaa", "a*a", isMatchSolution("aaa", "a*a"));
+// console.log("(blank)", "(blank)", isMatchSolution("", ""));
+
+/**
+ * Merge Sort
+ * https://hackernoon.com/programming-with-js-merge-sort-deb677b777c0
+ * Using JavaScript-y style. It's not as fast. You could speed it up with using array pointers
+ * instead of slices.
+ * @param array
+ * @returns {*}
+ */
+const mergeSort = (array) => {
+  if (array.length <= 1) {
+    return array;
+  }
+
+  const middle = Math.floor(array.length / 2);
+  const leftHalf = array.slice(0, middle);
+  const rightHalf = array.slice(middle);
+
+  return mergeHalves(
+    mergeSort(leftHalf),
+    mergeSort(rightHalf),
+  );
+};
+
+const mergeHalves = (leftHalf, rightHalf) => {
+  let leftIndex = 0;
+  let rightIndex = 0;
+  const mergedArray = [];
+
+  while (leftIndex < leftHalf.length && rightIndex < rightHalf.length) {
+    if (leftHalf[leftIndex] <= rightHalf[rightIndex]) {
+      mergedArray.push(leftHalf[leftIndex]);
+      ++leftIndex;
+    } else {
+      mergedArray.push(rightHalf[rightIndex]);
+      ++rightIndex;
+    }
+  }
+
+  // Combine any remaining array items that weren't sorted.
+  return mergedArray.concat(leftHalf.slice(leftIndex)).concat(rightHalf.slice(rightIndex));
+};
+
+console.log([], mergeSort([]));
+console.log([1], mergeSort([1]));
+console.log([1, 3, 2], mergeSort([1, 3, 2]));
+console.log([4, 3, 2, 1], mergeSort([4, 3, 2, 1]));
