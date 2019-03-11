@@ -1982,4 +1982,62 @@ const maxArea = (height) => {
   return maxVolume;
 };
 
-console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
+// console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
+
+
+/**
+ * 12. Integer to Roman
+ * https://leetcode.com/problems/integer-to-roman
+ * Score: 164ms (66.44%) and 39.5MB (92.13%)
+ * I stole this answer but I swear I had started out thinking that I could mod 10 and take away
+ * numbers. I just didn't realize the relationship that I had to V and X, X had to L an C, and C
+ * had to D and M (basically x5 and x10). I might've tried something similar.
+ * It works on 1994 like so:
+ * It grabs 4 and sees that it is numerals[unit] (I) numerals[unit+1] (V) "IV"
+ * Dividing by 10 and flooring we have 199.
+ * It grabs 9 (aka 90) and sees that it is numerals[unit] (X) numerals[unit+2] (C) "XC"
+ * Dividing by 10 and flooring we have 19.
+ * It grabs 9 (aka 900) and sees that it is numerals[unit] (C) numerals[unit+2) (M) "CM"
+ * Dividing by 10 and flooring we have 1.
+ * It grabs 1 (aka 1000) and sees that it is numerals[unit] (M) "M".
+ *    M    CM   XC  IV
+ * 1000 + 900 + 90 + 4
+ * @param {number} num
+ * @return {string}
+ */
+const intToRoman = (num) => {
+  const numerals = "IVXLCDM";
+  let unit = 0;
+  let output = "";
+  let workingNum = num;
+
+  while (workingNum) {
+    const digit = workingNum % 10;
+
+    if (digit < 4) { // I, II, III
+      output = numerals[unit].repeat(digit) + output; // Add to beginning of string
+    } else if (digit === 4) { // IV
+      output = numerals[unit] + numerals[unit + 1] + output;
+    } else if (digit < 9) { // V, VI, VII, VIII
+      output = numerals[unit + 1] + numerals[unit].repeat(digit - 5) + output;
+    } else {  // IX
+      output = numerals[unit] + numerals[unit + 2] + output;
+    }
+
+    workingNum = Math.floor(workingNum / 10);
+    unit += 2;
+  }
+  return output;
+};
+
+console.log(1, intToRoman(1));
+console.log(2, intToRoman(2));
+console.log(3, intToRoman(3));
+console.log(4, intToRoman(4));
+console.log(5, intToRoman(5));
+console.log(6, intToRoman(6));
+console.log(7, intToRoman(7));
+console.log(8, intToRoman(8));
+console.log(9, intToRoman(9));
+console.log(10, intToRoman(10));
+console.log(1994, intToRoman(1994));
