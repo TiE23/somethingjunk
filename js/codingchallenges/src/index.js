@@ -1848,7 +1848,41 @@ const mergeHalves = (leftHalf, rightHalf) => {
   return mergedArray.concat(leftHalf.slice(leftIndex)).concat(rightHalf.slice(rightIndex));
 };
 
-console.log([], mergeSort([]));
-console.log([1], mergeSort([1]));
-console.log([1, 3, 2], mergeSort([1, 3, 2]));
-console.log([4, 3, 2, 1], mergeSort([4, 3, 2, 1]));
+// console.log([], mergeSort([]));
+// console.log([1], mergeSort([1]));
+// console.log([1, 3, 2], mergeSort([1, 3, 2]));
+// console.log([4, 3, 2, 1], mergeSort([4, 3, 2, 1]));
+
+/**
+ * 20. Valid Parentheses
+ * https://leetcode.com/problems/valid-parentheses/
+ * Score: 60ms (71.16%) and 35MB (21.28%)
+ * @param {string} s
+ * @return {boolean}
+ */
+const pairs = {
+  ")": "(",
+  "}": "{",
+  "]": "[",
+};
+const validParens = (s) => {
+  const stack = [];
+
+  for (let i = 0; i < s.length; ++i) {
+    if (s[i] === "(" || s[i] === "{" || s[i] === "[") {
+      stack.push(s[i]);
+    } else if (pairs[s[i]]) {
+      if (stack.pop() !== pairs[s[i]]) {
+        return false;
+      }
+    }
+  }
+
+  return stack.length === 0;
+};
+
+console.log("()", validParens("()"));
+console.log("()[]{}", validParens("()[]{}"));
+console.log("(]", validParens("(]"));
+console.log("([)]", validParens("([)]"));
+console.log("{[]}", validParens("{[]}"));
