@@ -2069,10 +2069,111 @@ const longestCommonPrefix = (strs) => {
   }
 };
 
-console.log(["flower", "flow", "flight"], longestCommonPrefix(["flower", "flow", "flight"]));
-console.log(["flow", "flow", "flow"], longestCommonPrefix(["flow", "flow", "flow"]));
-console.log(["dog", "cat", "mouse"], longestCommonPrefix(["dog", "cat", "mouse"]));
-console.log(["", ""], longestCommonPrefix(["", ""]));
-console.log([" ", " "], longestCommonPrefix([" ", " "]));
-console.log(["", "  "], longestCommonPrefix(["", "  "]));
-console.log([], longestCommonPrefix([]));
+// console.log(["flower", "flow", "flight"], longestCommonPrefix(["flower", "flow", "flight"]));
+// console.log(["flow", "flow", "flow"], longestCommonPrefix(["flow", "flow", "flow"]));
+// console.log(["dog", "cat", "mouse"], longestCommonPrefix(["dog", "cat", "mouse"]));
+// console.log(["", ""], longestCommonPrefix(["", ""]));
+// console.log([" ", " "], longestCommonPrefix([" ", " "]));
+// console.log(["", "  "], longestCommonPrefix(["", "  "]));
+// console.log([], longestCommonPrefix([]));
+
+
+/**
+ * 15. 3Sum (medium)
+ * https://leetcode.com/problems/3sum/
+ * Score: None
+ * I think this question is bullshit in saying that given [-1, 0, 1, 2, -1, -4]
+ * That an answer of [ [ -1, 0, 1 ], [ -1, 2, -1 ], [ 0, 1, -1 ] ]
+ * is not valid because [-1, 0, 1] and [0, 1, -1] and "duplicates". Bullshit, they're not duplicates
+ * because they represent different numbers. So if you were using this in a real-world scenario
+ * that combination would be a valid alternative. If you needed to make purple paint and you had
+ * three paint cans, #1 blue, #2 red, and #3 red then a unique combination would be 1 & 2 and 1 & 3.
+ * So, I cannot turn this in to leet code but I'd argue with my interviewer that the question itself
+ * is flawed.
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+const threeSum = (nums) => {
+  if (nums.length < 3) return [];
+
+  const uniques = {};
+  const solutions = [];
+
+  const recursion = (a, b) => {
+    for (let index = b >= 0 ? b + 1 : a >= 0 ? a + 1 : 0; index < nums.length; ++index) {
+      // We found a working third value that is unique
+      if (
+        b >= 0 &&
+        !uniques[a][b][index] &&
+        uniques[a][b].sum + nums[index] === 0
+      ) {
+        // Third and final check.
+        uniques[a][b][index] = true;
+        solutions.push([nums[a], nums[b], nums[index]]);
+      } else if (
+        a >= 0 &&
+        !uniques[a][index]
+      ) {
+        // Second check
+        uniques[a][index] = { sum: uniques[a].sum + nums[index] };
+        recursion(a, index);
+      } else if (
+        !uniques[index]
+      ) {
+        // First check
+        uniques[index] = { sum: nums[index] };
+        recursion(index, -1);
+      }
+    }
+  };
+
+  recursion(-1, -1);
+  return solutions;
+};
+
+console.log([-1, 0, 1, 2, -1, -4], threeSum([-1, 0, 1, 2, -1, -4]));
+
+/**
+ * I give up on this one.
+ * @param nums
+ * @returns {Array}
+ */
+const threeSum2 = (nums) => {
+  if (nums.length < 3) return [];
+  const numsSorted = nums.sort((a, b) => a - b);
+
+  const checked = {};
+  const solutions = [];
+
+  const recursion = (a, b) => {
+    for (let index = 0; index < numsSorted.length; ++index) {
+      const cur = String(numsSorted[index]);
+      const aS = a >= 0 ? String(numsSorted[a]) : null;
+      const bS = b >= 0 ? String(numsSorted[b]) : null;
+
+      if (
+        b >= 0 &&
+        !checked[aS][bS][cur] &&
+        checked[aS][bS].sum + numsSorted[index] === 0
+      ) {
+        checked[aS][bS][cur] = true;
+        solutions.push([numsSorted[a], numsSorted[b], numsSorted[index]]);
+      } else if (
+        a >= 0 &&
+        !checked[aS][cur]
+      ) {
+        checked[aS][cur] = { sum: checked[aS].sum + numsSorted[index] };
+        recursion(a, index);
+      } else if (
+        !checked[cur]
+      ) {
+        checked[cur] = { sum: numsSorted[index] };
+        recursion(index, -1);
+      }
+    }
+  };
+
+  recursion(-1, -1);
+  return solutions;
+};
+// console.log([-1, 0, 1, 2, -1, -4], threeSum2([-1, 0, 1, 2, -1, -4]));
