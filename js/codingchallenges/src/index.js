@@ -1986,7 +1986,7 @@ const maxArea = (height) => {
 
 
 /**
- * 12. Integer to Roman
+ * 12. Integer to Roman (medium)
  * https://leetcode.com/problems/integer-to-roman
  * Score: 164ms (66.44%) and 39.5MB (92.13%)
  * I stole this answer but I swear I had started out thinking that I could mod 10 and take away
@@ -2030,14 +2030,49 @@ const intToRoman = (num) => {
   return output;
 };
 
-console.log(1, intToRoman(1));
-console.log(2, intToRoman(2));
-console.log(3, intToRoman(3));
-console.log(4, intToRoman(4));
-console.log(5, intToRoman(5));
-console.log(6, intToRoman(6));
-console.log(7, intToRoman(7));
-console.log(8, intToRoman(8));
-console.log(9, intToRoman(9));
-console.log(10, intToRoman(10));
-console.log(1994, intToRoman(1994));
+// console.log(1, intToRoman(1));
+// console.log(2, intToRoman(2));
+// console.log(3, intToRoman(3));
+// console.log(4, intToRoman(4));
+// console.log(5, intToRoman(5));
+// console.log(6, intToRoman(6));
+// console.log(7, intToRoman(7));
+// console.log(8, intToRoman(8));
+// console.log(9, intToRoman(9));
+// console.log(10, intToRoman(10));
+// console.log(1994, intToRoman(1994));
+
+/**
+ * 14. Longest Common Prefix (easy)
+ * https://leetcode.com/problems/longest-common-prefix
+ * Score: 64ms (72.71%) and 35.1MB (44.09%)
+ * Super easy but my god did I feel like a moron for the first minute or two before realizing I
+ * just needed to put a for loop inside an infinite while loop.
+ * @param {string[]} strs
+ * @return {string}
+ */
+const longestCommonPrefix = (strs) => {
+  let prefix = "";
+  let candidate;
+  let index = 0;
+
+  while (true) {
+    candidate = strs[0] ? strs[0][index] : false;
+    if (!candidate) return prefix;  // Reached the end of a string
+
+    for (let x = 1; x < strs.length; ++x) {
+      if (strs[x][index] !== candidate) return prefix;    // Found a non-matching character
+    }
+
+    prefix += candidate;
+    ++index;
+  }
+};
+
+console.log(["flower", "flow", "flight"], longestCommonPrefix(["flower", "flow", "flight"]));
+console.log(["flow", "flow", "flow"], longestCommonPrefix(["flow", "flow", "flow"]));
+console.log(["dog", "cat", "mouse"], longestCommonPrefix(["dog", "cat", "mouse"]));
+console.log(["", ""], longestCommonPrefix(["", ""]));
+console.log([" ", " "], longestCommonPrefix([" ", " "]));
+console.log(["", "  "], longestCommonPrefix(["", "  "]));
+console.log([], longestCommonPrefix([]));
