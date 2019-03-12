@@ -2441,8 +2441,60 @@ const binaryAdd = (s1, s2) => {
   return finalSum;
 };
 
-console.log("101", "111", binaryAdd("101", "111"));
-console.log("101", "0111", binaryAdd("101", "0111"));
-console.log("1", "0", binaryAdd("1", "0"));
-console.log("1", "", binaryAdd("1", ""));
-console.log("", "", binaryAdd("", ""));
+// console.log("101", "111", binaryAdd("101", "111"));
+// console.log("101", "0111", binaryAdd("101", "0111"));
+// console.log("1", "0", binaryAdd("1", "0"));
+// console.log("1", "", binaryAdd("1", ""));
+// console.log("", "", binaryAdd("", ""));
+
+
+/**
+ * 91. Decode Ways (medium)
+ * https://leetcode.com/problems/decode-ways
+ * Score: 160ms (23.75%) and 37.5MB (11.94%)
+ * This is a question I saw on a YouTube video about Facebook interview questions.
+ * https://www.youtube.com/watch?v=qli-JCrSwuk
+ * Given a string of digits (0-9), how many ways can the string be decoded by
+ * 1 = a, 2 = b, ... 26 = z?
+ * Ex: 127 could be abg (1, 2, 7) or lg (12, 7). (1, 27) is not possible.
+ * A key takeaway here is to always have memoization on the table whenever you see a step
+ * where two recursive calls are made to determine a number. The execution time on LeetCode was
+ * 46 times LONGER without memoization.
+ * @param input
+ */
+const numDecodings = (input) => {
+  const memo = new Array(input.length);
+
+  const recurse = (index) => {
+    // If we've already done the work just return the old answer.
+    if (memo[index]) {
+      return memo[index];
+    }
+
+    // No string is possible with blank input.
+    if (input.length === 0) return 0;
+    // Base case, we created a possible string.
+    if (input.length - index === 0) return 1;
+    // Zero is not allowed
+    if (input[index] === "0") return 0;
+
+    if (index < input.length - 1 && input.slice(index, index + 2) <= 26) {
+      memo[index] = recurse(index + 1) + recurse(index + 2);
+      return memo[index];
+    } else {
+      memo[index] = recurse(index + 1);
+      return memo[index];
+    }
+  };
+
+  return recurse(0);
+};
+
+console.log("1", numDecodings("1")); // 1: a
+console.log("10", numDecodings("10")); // 1: j
+console.log("11", numDecodings("11")); // 2: aa, k
+console.log("127", numDecodings("127")); // 2: abg, lg
+console.log("111", numDecodings("111")); // 3: aaa, ak, ka
+console.log("2626", numDecodings("2626")); // 4: bfbf, bfz, zbf, zz
+console.log("01", numDecodings("01")); // 0: (no zero character)
+console.log("", numDecodings("")); // 0: (zero length input)
