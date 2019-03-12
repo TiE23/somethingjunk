@@ -2361,3 +2361,48 @@ console.log(1, generateParenthesis(1));
 console.log(2, generateParenthesis(2));
 console.log(3, generateParenthesis(3));
 // console.log(4, generateParenthesis(4));
+
+
+/**
+ * 23. Merge k Sorted Lists (hard)
+ * https://leetcode.com/problems/merge-k-sorted-lists/
+ * Score: 560ms (20.05%) and 37.6MB (98.46%)
+ * My solution is somewhat simple. "One step above brute force". The number of approaches are quite
+ * varied. I'm happy with my results in any case. Time complexity is O(kN) where k is the number
+ * of lists and N is the length of the final list because we'll be running the for-loop for every
+ * item in the list. The space complexity is O(1) because I don't create any new nodes, I just
+ * steal the ones that are already present.
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+var mergeKLists = function(lists) {
+  let merged = { next: null };
+  let current = merged;
+
+  let done = false;
+  while (!done) {
+    done = true;
+
+    // Find the lowest value of the list's head nodes
+    let lowestK = null;
+
+    for (let k = 0; k < lists.length; ++k) {
+      if (lists[k]) {
+        done = false;   // There are still more
+        if (lowestK === null || lists[k].val <= lists[lowestK].val) {
+          lowestK = k;
+        }
+      }
+    }
+
+    if (!done) {
+      current.next = lists[lowestK];
+      lists[lowestK] = lists[lowestK].next;
+      current = current.next;
+    }
+  }
+
+  return merged.next;
+};
+
+// No testing, sorry.
