@@ -2314,3 +2314,50 @@ var mergeTwoLists = function(l1, l2) {
 };
 
 // No testing, sorry.
+
+
+/**
+ * 22. Generate Parentheses (medium)
+ * https://leetcode.com/problems/generate-parentheses/
+ * Score: 60ms (82.64%) and 34.5MB (97.80%)
+ * I like my score. Basically an improvement on the validate parens function. Instead of using a
+ * stack I simply use an "opens" variable to count up as the number of open parens are added
+ * and decrement the counter as they are "closed".
+ * @param {number} n
+ * @return {string[]}
+ */
+const generateParenthesis = (n) => {
+  if (n < 1) {
+    return [];
+  }
+
+  const output = [];
+
+  // Recursion is the key to explore every option.
+  const recursion = (opens, str) => {
+    if (str.length === n * 2 && opens === 0) {
+      output.push(str);
+      return;
+    }
+
+    // If there is room to add more open parens...
+    if (opens < n && str.length < (n * 2) - opens) {
+      // The biggest key was to add the length check otherwise we'd risk going infinite between
+      // 0 and 1 opens.
+      recursion(opens + 1, str + "(");
+    }
+
+    // Else try closing them.
+    if (opens > 0) {
+      recursion(opens - 1, str + ")");
+    }
+  };
+
+  recursion(0, "");
+  return output;
+};
+
+console.log(1, generateParenthesis(1));
+console.log(2, generateParenthesis(2));
+console.log(3, generateParenthesis(3));
+// console.log(4, generateParenthesis(4));
