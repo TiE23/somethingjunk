@@ -2131,7 +2131,7 @@ const threeSum = (nums) => {
   return solutions;
 };
 
-console.log([-1, 0, 1, 2, -1, -4], threeSum([-1, 0, 1, 2, -1, -4]));
+// console.log([-1, 0, 1, 2, -1, -4], threeSum([-1, 0, 1, 2, -1, -4]));
 
 /**
  * I give up on this one.
@@ -2177,3 +2177,51 @@ const threeSum2 = (nums) => {
   return solutions;
 };
 // console.log([-1, 0, 1, 2, -1, -4], threeSum2([-1, 0, 1, 2, -1, -4]));
+
+
+/**
+ * 17. Letter Combinations of a Phone Number (medium)
+ * https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+ * Score: 56ms (79.28%) and 33.7MB (91.24%)
+ * This one was pretty easy for me. Surprised I had such a good score. This is ripe for recursion
+ * where you can imagine the spidering-out call-stack as every combination is attempted with each
+ * digit.
+ * @param {string} digits
+ * @return {string[]}
+ */
+const letterCombinations = (digits) => {
+  const digitsString = String(digits);
+  if (!digitsString) return [];
+
+  const keys = {
+    2: "abc",
+    3: "def",
+    4: "ghi",
+    5: "jkl",
+    6: "mno",
+    7: "pqrs",
+    8: "tuv",
+    9: "wxyz",
+  };
+
+  const output = [];
+
+  const recursion = (str, digitsIndex) => {
+    if (digitsIndex >= digitsString.length) {
+      output.push(str);
+    } else {
+      // Object props that are numbers are handled just fine when referencing with strings.
+      const digit = digitsString[digitsIndex];
+
+      for (let letterIndex = 0; letterIndex < keys[digit].length; ++letterIndex) {
+        recursion(str + keys[digit][letterIndex], digitsIndex + 1);
+      }
+    }
+  };
+
+  recursion("", 0);
+  return output;
+};
+
+console.log(23, letterCombinations(23));
+console.log(233, letterCombinations(233));
