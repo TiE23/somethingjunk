@@ -2357,9 +2357,9 @@ const generateParenthesis = (n) => {
   return output;
 };
 
-console.log(1, generateParenthesis(1));
-console.log(2, generateParenthesis(2));
-console.log(3, generateParenthesis(3));
+// console.log(1, generateParenthesis(1));
+// console.log(2, generateParenthesis(2));
+// console.log(3, generateParenthesis(3));
 // console.log(4, generateParenthesis(4));
 
 
@@ -2406,3 +2406,43 @@ var mergeKLists = function(lists) {
 };
 
 // No testing, sorry.
+
+
+/**
+ * Practice interview question I saw on Glassdoor for Facebook. After seeing the inane answers
+ * other people gave I just had to write my own. Tried it out starting on paper.
+ * Add two binary numbers together when they're plain text.
+ * @param s1
+ * @param s2
+ * @returns {number}
+ */
+const binaryAdd = (s1, s2) => {
+  const longer = Math.max(s1.length, s2.length);
+  let finalSum = 0;
+  let carry = 0;
+
+  for (let index = 0; index < longer; ++index) {
+    let sum = (s1[s1.length - index - 1] === "1" ? 1 : 0) +
+              (s2[s2.length - index - 1] === "1" ? 1 : 0) +
+              carry;
+
+    // Deal with the carry. Add it or remove it.
+    // My biggest mistake was erroneously leaving this as sum > 2.
+    if (sum >= 2) {
+      carry = 1;
+    } else {
+      carry = 0;
+    }
+    finalSum += sum % 2 ? 2 ** index : 0;
+  }
+  if (carry) {
+    finalSum += 2 ** longer;
+  }
+  return finalSum;
+};
+
+console.log("101", "111", binaryAdd("101", "111"));
+console.log("101", "0111", binaryAdd("101", "0111"));
+console.log("1", "0", binaryAdd("1", "0"));
+console.log("1", "", binaryAdd("1", ""));
+console.log("", "", binaryAdd("", ""));
