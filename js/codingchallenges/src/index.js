@@ -2490,11 +2490,154 @@ const numDecodings = (input) => {
   return recurse(0);
 };
 
-console.log("1", numDecodings("1")); // 1: a
-console.log("10", numDecodings("10")); // 1: j
-console.log("11", numDecodings("11")); // 2: aa, k
-console.log("127", numDecodings("127")); // 2: abg, lg
-console.log("111", numDecodings("111")); // 3: aaa, ak, ka
-console.log("2626", numDecodings("2626")); // 4: bfbf, bfz, zbf, zz
-console.log("01", numDecodings("01")); // 0: (no zero character)
-console.log("", numDecodings("")); // 0: (zero length input)
+// console.log("1", numDecodings("1")); // 1: a
+// console.log("10", numDecodings("10")); // 1: j
+// console.log("11", numDecodings("11")); // 2: aa, k
+// console.log("127", numDecodings("127")); // 2: abg, lg
+// console.log("111", numDecodings("111")); // 3: aaa, ak, ka
+// console.log("2626", numDecodings("2626")); // 4: bfbf, bfz, zbf, zz
+// console.log("01", numDecodings("01")); // 0: (no zero character)
+// console.log("", numDecodings("")); // 0: (zero length input)
+
+
+function minSum(num, k) {
+  if (num.length === 0) return 0;
+
+  const numSorted = num.sort((a, b) => b - a);
+
+  let targetNumber = null;
+  let targetIndex = 0;
+
+  for (let round = 0; round < k; ++round) {
+    if (targetIndex < numSorted.length - 1 && numSorted[targetIndex + 1] < targetNumber) {
+      targetIndex += 1;
+    } else {
+      targetIndex = 0;
+    }
+
+    for (let index = targetIndex; index < numSorted.length; ++index) {
+      if (targetNumber === null || numSorted[index] > targetNumber) {
+        targetNumber = numSorted[index];
+        targetIndex = index;
+      }
+    }
+
+    targetNumber = Math.ceil(numSorted[targetIndex] / 2);
+    numSorted[targetIndex] = targetNumber;
+  }
+
+  let sum = 0;
+  for (let index = 0; index < numSorted.length; ++index) {
+    sum += numSorted[index];
+  }
+
+  return sum;
+}
+
+// console.log([10,20,7], minSum([10,20,7], 4));
+
+
+function minSumold(num, k) {
+  for (let round = 0; round < k; ++round) {
+    let largestNumber = null;
+    let largestIndex = null;
+    for (let index = 0; index < num.length; ++index) {
+      if (largestNumber === null || num[index] > largestNumber) {
+        largestNumber = num[index];
+        largestIndex = index;
+      }
+    }
+
+    num[largestIndex] = Math.ceil(num[largestIndex] / 2);
+  }
+
+  let sum = 0;
+  for (let index = 0; index < num.length; ++index) {
+    sum += num[index];
+  }
+
+  return sum;
+}
+
+
+const https = require("https");
+
+const getMovieTitles = (substr) => {
+  const url = `https://jsonmock.hackerrank.com/api/movies/search/?Title=${substr}`;
+
+  // First we grab the page count
+  getPageCount(url, (err, pageCount) => {
+    if (err) {
+      console.log("getPageCount Error!", err);
+    } else {
+      // Construct the page urls
+      const urls = [];
+      for (let page = 1; page <= pageCount; ++page) {
+        urls.push(`${url}&page=${page}`);
+      }
+
+      // With the urls set, we now go collecting the titles from each page
+      getTitles(urls, (err, titles) => {
+        if (err) {
+          console.log("getTitles Error!", err);
+        } else {
+          titles.sort().forEach(title => console.log(title));
+        }
+      });
+    }
+  });
+};
+
+
+const getPageCount = (url, callback) => {
+  https.get(url, (res) => {
+    let data = "";
+
+    res.on("data", (chunk) => {
+      data += chunk;
+    });
+
+    res.on("end", () => {
+      const parsed = JSON.parse(data);
+      callback(null, parsed.total_pages);
+    });
+  }).on("error", (err) => {
+    callback(err, null);
+  });
+};
+
+
+const getTitles = (urls, callback) => {
+  const titles = [];
+  let counter = 1;
+
+  urls.forEach((url) => {
+    https.get(url, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        const parsed = JSON.parse(data);
+        parsed.data.forEach((movie) => {
+          titles.push(movie.Title);
+        });
+
+        // We've reached the end. We can use the callback now.
+        if (counter === urls.length) {
+          callback(null, titles);
+        }
+
+        // Else increment the counter.
+        ++counter;
+      });
+    }).on("error", (err) => {
+      callback(err, null);
+    });
+  });
+};
+
+
+getMovieTitles("spiderman");
