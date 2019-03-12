@@ -1953,6 +1953,7 @@ const maxAreaFaster = (height) => {
 
 // console.log(maxAreaFaster([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
 
+
 /**
  * I took this from the solutions guide. My god it makes so much more sense.
  * Attack from both sides solution.
@@ -2133,6 +2134,7 @@ const threeSum = (nums) => {
 
 // console.log([-1, 0, 1, 2, -1, -4], threeSum([-1, 0, 1, 2, -1, -4]));
 
+
 /**
  * I give up on this one.
  * @param nums
@@ -2267,6 +2269,48 @@ const removeNthFromEnd = (head, n) => {
   } else {
     return head;
   }
+};
+
+// No testing, sorry.
+
+
+/**
+ * 21. Merge Two Sorted Lists (easy)
+ * https://leetcode.com/problems/merge-two-sorted-lists
+ * Score: 68ms (81.70%) and 35MB (100.00%)
+ * This one honestly pissed me off especially considering it was labelled as easy. I didn't read
+ * the question at all and wrote a solution in 90 seconds for merging two arrays before realizing
+ * we were dealing with linked lists. I ended up stealing this solution in reality after being
+ * totally unable to identify my own algorithm's flaws. So I'm just taking it in as a learning
+ * experience here. The key was to skip the first ListNode and instead work exclusively with .next
+ * references. That made it a lot cleaner in the end. Also the current.next = left || right is very
+ * nasty but for this question is acceptable. In real-world applications this would no be ideal
+ * because it creates no new ListNodes and instead hijacks existing ListNodes.
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(l1, l2) {
+  let sortedHead = { next: null };    // Faux ListNode
+  let current = sortedHead;
+
+  let left = l1;
+  let right = l2;
+
+  while (left && right) {
+    if (left.val <= right.val) {
+      current.next = left;
+      left = left.next;
+    } else {
+      current.next = right;
+      right = right.next;
+    }
+    current = current.next;
+  }
+
+  current.next = left || right;
+
+  return sortedHead.next;
 };
 
 // No testing, sorry.
