@@ -2223,5 +2223,50 @@ const letterCombinations = (digits) => {
   return output;
 };
 
-console.log(23, letterCombinations(23));
-console.log(233, letterCombinations(233));
+// console.log(23, letterCombinations(23));
+// console.log(233, letterCombinations(233));
+
+
+/**
+ * 19. Remove Nth Node From End of List (medium)
+ * https://leetcode.com/problems/remove-nth-node-from-end-of-list
+ * Score: 80ms (27.88%) and 34.2MB (8.50%)
+ * Pretty piss-poor performance. A two-pointer solution is faster. I was just attracted to the idea
+ * of using recursion.
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+const removeNthFromEnd = (head, n) => {
+  const recursion = (node, n) => {
+    if (node.next) {
+      const { nth, next } = recursion(node.next, n);
+
+      // We found it, the next link was the one we wanted gone.
+      if (nth === n) {
+        node.next = next;
+      }
+
+      return {
+        nth: nth + 1, // Pass it on
+        next: node.next,
+      };
+    } else {
+      // We've reached the end.
+      return {
+        nth: 1,
+        next: node.next,
+      };
+    }
+  };
+
+  // This step was the last thing that hung me up. I didn't know how to remove the first node.
+  const { nth } = recursion(head, n);
+  if (n === nth) {
+    return head.next;
+  } else {
+    return head;
+  }
+};
+
+// No testing, sorry.
