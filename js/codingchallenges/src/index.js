@@ -2565,50 +2565,36 @@ const https = require("https");
 const getMovieTitles = (substr) => {
   const url = `https://jsonmock.hackerrank.com/api/movies/search/?Title=${substr}`;
 
-  // First we grab the page count
-  getPageCount(url, (err, pageCount) => {
+  // We grab the first page, which comes with a page count
+  getPageTotalAndTitles([url], [], (err, pageCount, titles) => {
     if (err) {
-      console.log("getPageCount Error!", err);
-    } else {
-      // Construct the page urls
+      console.log("getPageTotalAndTitles Error!", err);
+
+    // We have more than one page, then we gotta do it again
+    } else if (pageCount > 1) {
+      // Construct the page urls starting with page 2.
       const urls = [];
-      for (let page = 1; page <= pageCount; ++page) {
+      for (let page = 2; page <= pageCount; ++page) {
         urls.push(`${url}&page=${page}`);
       }
 
       // With the urls set, we now go collecting the titles from each page
-      getTitles(urls, (err, titles) => {
+      getPageTotalAndTitles(urls, titles, (err, pageCount, moreTitles) => {
         if (err) {
-          console.log("getTitles Error!", err);
+          console.log("getPageTotalAndTitles Error!", err);
         } else {
-          titles.sort().forEach(title => console.log(title));
+          moreTitles.sort().forEach(title => console.log(title));
         }
       });
+    } else {
+      // Just return the first page's worth of titles
+      titles.sort().forEach(title => console.log(title));
     }
   });
 };
 
 
-const getPageCount = (url, callback) => {
-  https.get(url, (res) => {
-    let data = "";
-
-    res.on("data", (chunk) => {
-      data += chunk;
-    });
-
-    res.on("end", () => {
-      const parsed = JSON.parse(data);
-      callback(null, parsed.total_pages);
-    });
-  }).on("error", (err) => {
-    callback(err, null);
-  });
-};
-
-
-const getTitles = (urls, callback) => {
-  const titles = [];
+const getPageTotalAndTitles = (urls, titles, callback) => {
   let counter = 1;
 
   urls.forEach((url) => {
@@ -2627,7 +2613,7 @@ const getTitles = (urls, callback) => {
 
         // We've reached the end. We can use the callback now.
         if (counter === urls.length) {
-          callback(null, titles);
+          callback(null, parsed.total_pages, titles);
         }
 
         // Else increment the counter.
@@ -2641,3 +2627,4 @@ const getTitles = (urls, callback) => {
 
 
 getMovieTitles("spiderman");
+getMovieTitles("batman");
