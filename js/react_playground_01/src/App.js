@@ -1,19 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ApiShooter from "./components/apishooter/ApiShooter";
 
-import Smiley from "./components/Smiley";
-import CounterButton from "./components/CounterButton";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Smiley />
-        <CounterButton />
+        <div className="main">
+          <ApiShooter />
+        </div>
       </div>
     );
   }
 }
+
+// class App extends Component {
+//   state = {
+//     counter: 0
+//   };
+//
+//   incrementCounter = () => {
+//     this.setState({
+//       counter: this.state.counter + 1
+//     });
+//   };
+//
+//   render() {
+//     return (<div className="App">
+//       <p>Counter: {this.state.counter}</p>
+//       <button onClick={this.incrementCounter}>
+//         Increment counter</button>
+//     </div>);
+//   }
+// }
 
 export default App;

@@ -98,3 +98,30 @@
 button {
   color: blue;
 }
+
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+.group:after {
+  clear: both;
+}
+.group {
+  clear: both;
+  *zoom: 1;
+}
+
+
+.main {
+  text-align: left;
+  margin: 0 5px;
+}
+
+.NewShotForm {
+  display: inline-block;
+  border: #61dafb dashed 1px;
+  width: 30%;
+  margin: 0 5%;
+  padding: 20px;
+}
