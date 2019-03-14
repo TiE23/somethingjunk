@@ -8,11 +8,21 @@ class ApiShooter extends PureComponent {
     shots: [],
   };
 
+  addShot = (name, payload) => {
+    this.setState(prevState => ({
+      shots: prevState.shots.push({ name, payload }),
+    }));
+
+    console.log({ name, payload });
+  };
+
   render() {
     return (
       <div>
         <h1>Fun API Shooter</h1>
-        <NewShotContainer />
+        <NewShotContainer
+          addShot={this.addShot}
+        />
       </div>
     );
   }

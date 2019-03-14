@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Api from "../../Api";
 
 import NewShotForm from "./NewShotForm";
+import NewShotIndicator from "./NewShotIndicator";
 
 /**
  * This container component should hold the API calling logic
@@ -33,10 +34,6 @@ class NewShotContainer extends PureComponent {
             loading: false,
           });
         } else {
-
-          // TODO - Remove this
-          console.log("Got it!", payload);
-
           this.setState({
             payload,
             loading: false,
@@ -46,6 +43,17 @@ class NewShotContainer extends PureComponent {
     } else {
       this.setState({ error: "No resource selected!" });
     }
+  };
+
+  handleFireShot = (e) => {
+    e.preventDefault();
+
+    this.props.addShot(this.state.payload);
+
+    this.setState({
+      choice: "",
+      payload: null,
+    });
   };
 
 
@@ -62,11 +70,21 @@ class NewShotContainer extends PureComponent {
             handleSubmit={this.handleSubmit}
           />
         </div>
+        {this.state.payload &&
+          <div className="group">
+            <NewShotIndicator
+              rows={this.state.payload.length}
+              fireShot={this.handleFireShot}
+            />
+          </div>
+        }
       </div>
     );
   }
 }
 
-NewShotContainer.propTypes = {};
+NewShotContainer.propTypes = {
+  addShot: PropTypes.func.isRequired,
+};
 
 export default NewShotContainer;
