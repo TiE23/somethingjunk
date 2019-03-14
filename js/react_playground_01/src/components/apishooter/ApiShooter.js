@@ -1,7 +1,7 @@
 import React, {PureComponent} from "react";
-import PropTypes from "prop-types";
 
 import NewShotContainer from "./NewShotContainer";
+import ShotsList from "./ShotsList";
 
 class ApiShooter extends PureComponent {
   state = {
@@ -10,10 +10,8 @@ class ApiShooter extends PureComponent {
 
   addShot = (name, payload) => {
     this.setState(prevState => ({
-      shots: prevState.shots.push({ name, payload }),
+      shots: prevState.shots.concat({ name, payload }),
     }));
-
-    console.log({ name, payload });
   };
 
   render() {
@@ -23,11 +21,13 @@ class ApiShooter extends PureComponent {
         <NewShotContainer
           addShot={this.addShot}
         />
+        {this.state.shots.length > 0 &&
+          <ShotsList shots={this.state.shots} />
+        }
       </div>
     );
   }
 }
 
-ApiShooter.propTypes = {};
 
 export default ApiShooter;

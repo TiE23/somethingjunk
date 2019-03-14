@@ -48,7 +48,7 @@ class NewShotContainer extends PureComponent {
   handleFireShot = (e) => {
     e.preventDefault();
 
-    this.props.addShot(this.state.payload);
+    this.props.addShot(this.state.choice, this.state.payload);
 
     this.setState({
       choice: "",

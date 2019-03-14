@@ -39,13 +39,9 @@
   background-image: -o-linear-gradient(top, #eb94d0, #2079b0);
   background-image: linear-gradient(to bottom, #eb94d0, #2079b0);
 
-  -webkit-border-radius: 28px;
-  -moz-border-radius: 28px;
   border-radius: 28px;
 
   text-shadow: 3px 2px 1px #9daef5;
-  -webkit-box-shadow: 6px 5px 24px #666;
-  -moz-box-shadow: 6px 5px 24px #666;
   box-shadow: 6px 5px 24px #666;
 
   font-family: Arial, sans-serif;
@@ -120,8 +116,18 @@ button {
 
 .NewShotForm {
   display: inline-block;
+  box-sizing: border-box;
   border: #61dafb dashed 1px;
   width: 30%;
   margin: 0 5%;
+  padding: 20px;
+}
+
+.SingleShot {
+  display: inline-block;
+  box-sizing: border-box;
+  border: #f4511e solid 2px;
+  width: 90%;
+  margin: 20px 5%;
   padding: 20px;
 }
