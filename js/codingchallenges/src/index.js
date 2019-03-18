@@ -2772,4 +2772,45 @@ let strStr = (haystack, needle) => {
   return -1;
 };
 
-console.log("(hello, ll)", strStr("hello", "ll"));
+// console.log("(hello, ll)", strStr("hello", "ll"));
+
+
+/**
+ * 24. Swap Nodes in Pairs (medium)
+ * https://leetcode.com/problems/swap-nodes-in-pairs
+ * Score: 56ms (90.42%) and 33.8MB (21.09%)
+ * Not my answer. I really flubbed this in my original answer thinking that recursive wasn't the
+ * right answer.
+ * @param node
+ * @returns {*}
+ */
+const swapPairs = (node) => {
+  if (!node) return null;
+  if (!node.next) return node;
+
+  const n1 = node.next;
+  const n2 = node.next.next;
+
+  n1.next = node;
+  node.next = swapPairs(n2);
+  return n1;
+};
+
+const ll1 = new LinkedList();
+ll1.insertAtEnd(1);
+ll1.insertAtEnd(2);
+ll1.insertAtEnd(3);
+ll1.insertAtEnd(4);
+ll1.insertAtEnd(5);
+ll1.insertAtEnd(6);
+
+console.log("before", ll1.toString());
+const newHead = swapPairs(ll1.head);
+console.log("after", ((node) => {
+  const output = [];
+  while (node) {
+    output.push(node.data);
+    node = node.next;
+  }
+  return `[${output.join(", ")}]`;
+})(newHead)); // IIFE to print out the contents, yo.
