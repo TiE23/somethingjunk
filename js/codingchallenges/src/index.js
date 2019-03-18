@@ -2837,5 +2837,53 @@ const removeDuplicates = (nums) => {
   return lastIndex + 1;
 };
 
-const test1 = [1, 2, 2, 3, 3, 4, 4, 5];
-console.log(test1, test1.slice(0, removeDuplicates(test1)));
+// const test1 = [1, 2, 2, 3, 3, 4, 4, 5];
+// console.log(test1, test1.slice(0, removeDuplicates(test1)));
+
+
+/**
+ * 33. Search in Rotated Sorted Array (medium)
+ * https://leetcode.com/problems/search-in-rotated-sorted-array
+ * Score: 60ms (86.14%) and 33.7MB (97.30%)
+ * Not my answer.
+ * @param nums
+ * @param target
+ * @returns {*}
+ */
+const search = (nums, target) => {
+  if (nums.length < 1) return -1;
+  if (nums.length === 1) return nums[0] === target ? 0 : -1;
+
+  const recurse = (left, right) => {
+    if (left === right) {
+      return nums[left] === target ? left : -1;
+    }
+
+    const mid = Math.floor((left + right) / 2);
+
+    if (nums[mid] === target) {
+      return mid;
+    }
+
+    // Pivot point is to the right of the mid
+    if (nums[left] <= nums[mid]) {
+      if (target >= nums[left] && target <= nums[mid]) { // Target is to the left of mid
+        return recurse(left, mid - 1);
+      }
+      return recurse(mid + 1, right); // Target is to the right of mid
+    }
+
+    // Target is to the right of mid
+    if (target >= nums[mid] && target <= nums[right]) {
+      return recurse(mid + 1, right);
+    } else {
+      // Target is to the left of mid
+      return recurse(left, mid - 1);
+    }
+  };
+
+  return recurse(0, nums.length - 1);
+};
+
+const searchTest1 = [4, 5, 6, 7, 0, 1, 2];
+console.log(searchTest1, "find 0", search(searchTest1, 0));
