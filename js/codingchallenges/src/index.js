@@ -2626,5 +2626,59 @@ const getPageTotalAndTitles = (urls, titles, callback) => {
 };
 
 
-getMovieTitles("spiderman");
-getMovieTitles("batman");
+// getMovieTitles("spiderman");
+// getMovieTitles("batman");
+
+// https://www.facebook.com/careers/life/sample_interview_questions/
+const spiral = (size) => {
+  if (size <= 0) {
+    return "";
+  }
+
+  // Right, down, left, up (in the order we travel)
+  const dirRow = [0, 1, 0, -1]; // Travelling between rows go +1 down, -1 up
+  const dirCol = [1, 0, -1, 0]; // Travelling between columns go +1 right, -1 left
+
+  // Make the 2D array
+  const matrix = new Array(size).fill(0);
+  for (let row = 0; row < size; ++row) matrix[row] = new Array(size).fill(0);
+
+  const limit = size * size;
+  let value = 0;
+  let row = 0;
+  let col = 0;
+  let direction = 0;
+
+  while (value++ < limit) {
+    matrix[row][col] = value;
+    row += dirRow[direction];
+    col += dirCol[direction];
+
+    // Next step is invalid
+    if (row < 0 || col < 0 || row >= size || col >= size || matrix[row][col] !== 0) {
+      row -= dirRow[direction];
+      col -= dirCol[direction];
+      direction = (direction + 1) % 4;  // Switch direction
+      row += dirRow[direction];
+      col += dirCol[direction];
+    }
+  }
+
+  let output = "";
+  matrix.forEach((rowArray) => {
+    rowArray.forEach((number) => {
+      output += `${String(number).padStart(Math.ceil(Math.log10(limit + 1)), "0")} `;
+    });
+    output += "\n";
+  });
+
+  return output;
+};
+
+console.log(spiral(0));
+console.log(spiral(1));
+console.log(spiral(2));
+console.log(spiral(3));
+console.log(spiral(4));
+console.log(spiral(5));
+console.log(spiral(10));
