@@ -2814,3 +2814,28 @@ console.log("after", ((node) => {
   }
   return `[${output.join(", ")}]`;
 })(newHead)); // IIFE to print out the contents, yo.
+
+
+/**
+ * 26. Remove Duplicates from Sorted Array (easy)
+ * https://leetcode.com/problems/remove-duplicates-from-sorted-array
+ * Score: 72ms (95.96%) and 36.8MB (93.24%)
+ * Does it in place and modifies the array by reference.
+ * @param nums
+ * @returns {*}
+ */
+const removeDuplicates = (nums) => {
+  if (nums.length < 2) return nums.length;
+  let lastIndex = 0;
+
+  for (let index = 1; index < nums.length; ++index) {
+    if (nums[index] !== nums[lastIndex]) {
+      nums[++lastIndex] = nums[index];
+    }
+  }
+
+  return lastIndex + 1;
+};
+
+const test1 = [1, 2, 2, 3, 3, 4, 4, 5];
+console.log(test1, test1.slice(0, removeDuplicates(test1)));
