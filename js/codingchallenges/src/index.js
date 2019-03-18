@@ -2182,6 +2182,60 @@ const threeSum2 = (nums) => {
 
 
 /**
+ * The key was to sort the solution that was found before recording it in the checked table.
+ * @param nums
+ * @returns {Array}
+ */
+const threeSum3 = (nums) => {
+  if (nums.length < 3) return [];
+
+  const checked = {};
+  const solutions = [];
+
+  let aIndex = 0;
+  let bIndex = 1;
+  let cIndex = 2;
+
+  while (aIndex < nums.length) {
+    // Solution found
+    if (nums[aIndex] + nums[bIndex] + nums[cIndex] === 0) {
+      const solution = [nums[aIndex], nums[bIndex], nums[cIndex]];
+      solution.sort((a, b) => a - b);
+
+      // Build and then record the checked solution.
+      if (!checked[solution[0]]) {
+        checked[solution[0]] = {};
+      }
+
+      if (!checked[solution[0]][solution[1]]) {
+        checked[solution[0]][solution[1]] = {};
+      }
+
+      if (!checked[solution[0]][solution[1]][solution[2]]) {
+        checked[solution[0]][solution[1]][solution[2]] = true;
+        // If this is the first time we've gotten this solution we record it.
+        solutions.push(solution);
+      }
+    }
+
+    if (bIndex > nums.length) {
+      aIndex++;
+      bIndex = aIndex + 1;
+      cIndex = bIndex + 1;
+    } else if (cIndex > nums.length) {
+      bIndex++;
+      cIndex = bIndex + 1;
+    } else {
+      cIndex++;
+    }
+  }
+
+  return solutions;
+};
+console.log([-1, 0, 1, 2, -1, -4], threeSum3([-1, 0, 1, 2, -1, -4]));
+
+
+/**
  * 17. Letter Combinations of a Phone Number (medium)
  * https://leetcode.com/problems/letter-combinations-of-a-phone-number/
  * Score: 56ms (79.28%) and 33.7MB (91.24%)
@@ -2675,10 +2729,10 @@ const spiral = (size) => {
   return output;
 };
 
-console.log(spiral(0));
-console.log(spiral(1));
-console.log(spiral(2));
-console.log(spiral(3));
-console.log(spiral(4));
-console.log(spiral(5));
-console.log(spiral(10));
+// console.log(spiral(0));
+// console.log(spiral(1));
+// console.log(spiral(2));
+// console.log(spiral(3));
+// console.log(spiral(4));
+// console.log(spiral(5));
+// console.log(spiral(10));
