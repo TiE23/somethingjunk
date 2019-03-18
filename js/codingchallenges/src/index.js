@@ -160,17 +160,18 @@ function q1_6(image) {
   const rotatedImage = [];
 
   // This I just recognize a pattern where I work up from the bottom and write left-to-right.
-  for (let inY = image.length - 1; inY >= 0; --inY) {
-    for (let inX = 0; inX < image[inY].length; ++inX) {
-      if (!rotatedImage[inX]) {
-        rotatedImage[inX] = [];
+  for (let row = image.length - 1; row >= 0; --row) {
+    for (let col = 0; col < image[row].length; ++col) {
+      if (!rotatedImage[col]) {
+        rotatedImage[col] = [];
       }
-      rotatedImage[inX].push(image[inY][inX]);
+      rotatedImage[col].push(image[row][col]);
     }
   }
   return rotatedImage;
 }
 
+// In place solution.
 function q1_6b(image) {
   const n = image.length;  // Get the width/height of image
 
@@ -2232,7 +2233,7 @@ const threeSum3 = (nums) => {
 
   return solutions;
 };
-console.log([-1, 0, 1, 2, -1, -4], threeSum3([-1, 0, 1, 2, -1, -4]));
+// console.log([-1, 0, 1, 2, -1, -4], threeSum3([-1, 0, 1, 2, -1, -4]));
 
 
 /**
@@ -2736,3 +2737,39 @@ const spiral = (size) => {
 // console.log(spiral(4));
 // console.log(spiral(5));
 // console.log(spiral(10));
+
+
+/**
+ * 28. Implement strStr() (easy)
+ * https://leetcode.com/problems/implement-strstr
+ * Score: 60ms (73.83%) and 35MB (36.28%)
+ * I think I literally slept walked myself into this solution, haha. Didn't think very hard about
+ * it and just wrote it out.
+ * @param haystack
+ * @param needle
+ * @returns {number}
+ */
+let strStr = (haystack, needle) => {
+  if (!needle) return 0;
+  if (haystack.length < needle.length) return -1;
+
+  let matching = false;
+
+  for (let hIndex = 0; hIndex < haystack.length; ++hIndex) {
+    if (haystack.length - hIndex < needle.length) return -1;
+    for (let nIndex = 0; nIndex < needle.length; ++nIndex) {
+      if (haystack[hIndex + nIndex] === needle[nIndex]) {
+        matching = true;
+      } else {
+        matching = false;
+        break;
+      }
+    }
+    if (matching) {
+      return hIndex;
+    }
+  }
+  return -1;
+};
+
+console.log("(hello, ll)", strStr("hello", "ll"));
