@@ -54,6 +54,7 @@ table {
 */
 /* Using font-weight of 300 to make text on the page fairly light. */
 body {
+  background: #293f50;
   color: #888;
   font: 300 16px/22px Lato, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -156,12 +157,21 @@ h1, h3, h4, h5, p {
 
 .btn {
   border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
   display: inline-block;
+  font-weight: 400;
+  letter-spacing: .5px;
   margin: 0;
+  text-transform: uppercase;
 }
 .btn-alt {
-  border: 1px solid #dfe2e5;
+  border: 1px solid #fff;
   padding: 10px 30px;
+}
+.btn-alt:hover {
+  background: #fff;
+  color: #648880;
 }
 
 /*
@@ -171,6 +181,7 @@ h1, h3, h4, h5, p {
 */
 
 .hero {
+  color: #fff;
   line-height: 44px;
   padding: 22px 80px 66px 80px;
   text-align: center;
@@ -180,6 +191,7 @@ h1, h3, h4, h5, p {
 }
 .hero p {
   font-size: 24px;
+  font-weight: 100;
 }
 
 
@@ -203,6 +215,18 @@ h1, h3, h4, h5, p {
 
 /*
   ========================================
+  Rows
+  ========================================
+*/
+
+.row {
+  background: #fff;
+  min-width: 960px;
+  padding: 66px 0 44px 0;
+}
+
+/*
+  ========================================
   Primary header
   ========================================
 */
@@ -211,8 +235,11 @@ h1, h3, h4, h5, p {
   border-top: 4px solid #648880;
   float: left;
   font-size: 48px;
+  font-weight: 100;
+  letter-spacing: .5px;
   line-height: 44px;
   padding: 40px 0 22px 0;
+  text-transform: uppercase;
 }
 
 .tagline {
@@ -239,7 +266,7 @@ h1, h3, h4, h5, p {
 
 /*
   ========================================
-  Primary footer
+  Primary header/footer
   ========================================
 */
 
@@ -253,6 +280,15 @@ h1, h3, h4, h5, p {
 .primary-footer small {
   float: left;
   font-weight: 400;
+}
+
+.primary-header a,
+.primary-footer a {
+  color: #fff;
+}
+.primary-header a:hover,
+.primary-footer a:hover {
+  color: #648880;
 }
 
 /*
@@ -296,5 +332,3 @@ h1, h3, h4, h5, p {
   padding-left: 15px;
   padding-right: 15px;
 }
-
-
