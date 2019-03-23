@@ -2885,5 +2885,32 @@ const search = (nums, target) => {
   return recurse(0, nums.length - 1);
 };
 
-const searchTest1 = [4, 5, 6, 7, 0, 1, 2];
-console.log(searchTest1, "find 0", search(searchTest1, 0));
+// const searchTest1 = [4, 5, 6, 7, 0, 1, 2];
+// console.log(searchTest1, "find 0", search(searchTest1, 0));
+
+
+/**
+ * 27. Remove Element
+ * https://leetcode.com/problems/remove-element
+ * Score: 60ms (87.13%) and 34MB (11.87%)
+ * Removes a specific element from an array, shifting the results to the left, and modifying
+ * in-place and by reference.
+ * @param nums
+ * @param val
+ * @returns {number}
+ */
+const removeElement = (nums, val) => {
+  let i = 0;
+  for (let j = 0; j < nums.length; ++j) {
+    if (nums[j] !== val) {
+      nums[i] = nums[j];
+      ++i;
+    }
+  }
+
+  return i;
+};
+
+let arrTest = [2, 3, 3, 2];
+let result = removeElement(arrTest, 3);
+console.log(arrTest, "->", arrTest.slice(0, result));
