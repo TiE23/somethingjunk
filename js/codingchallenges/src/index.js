@@ -2911,6 +2911,54 @@ const removeElement = (nums, val) => {
   return i;
 };
 
-let arrTest = [2, 3, 3, 2];
-let result = removeElement(arrTest, 3);
-console.log(arrTest, "->", arrTest.slice(0, result));
+// let arrTest = [2, 3, 3, 2];
+// let result = removeElement(arrTest, 3);
+// console.log(arrTest, "->", arrTest.slice(0, result));
+
+
+/**
+ * 31. Next Permutation (medium)
+ * https://leetcode.com/problems/next-permutation
+ * Score: 68ms (94.56%) and 34.7MB (100.00%)
+ * This is not my answer. This was a really weird question to be honest, but it was interesting
+ * to learn from it. Main takeaway is to do the question on paper/whiteboard and try and give
+ * yourself interesting test cases.
+ * Basically it finds the next permutation of a number given an array of integers.
+ * 1, 2, 3 -> 1, 3, 2
+ * 3, 2, 1 -> 1, 2, 3 (wrap-around)
+ * 1, 1, 5 -> 1, 5, 1
+ * The example that I should've paid more attention to was:
+ * 1, 3, 2 -> 2, 1, 3
+ * @param nums
+ */
+const nextPermutation = (nums) => {
+  let i = nums.length - 2;
+  while (i >= 0 && nums[i + 1] <= nums[i]) {
+    --i;
+  }
+
+  if (i >= 0) {
+    let j = nums.length - 1;
+    while (j >= 0 && nums[j] <= nums[i]) {
+      --j;
+    }   // It'll leave the loop on the first element that is larger.
+    swap(nums, i, j);
+  }
+  reverseArray(nums, i + 1);
+};
+
+const swap = (nums, left, right) => {
+  const temp = nums[left];
+  nums[left] = nums[right];
+  nums[right] = temp;
+};
+
+const reverseArray = (nums, start) => {
+  let left = start;
+  let right = nums.length - 1;
+  while (left < right) {
+    swap(nums, left, right);
+    ++left;
+    --right;
+  }
+};
