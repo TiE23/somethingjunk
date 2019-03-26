@@ -3272,5 +3272,73 @@ const combinationSum = (candidates, target) => {
   return combos;
 };
 
-console.log(combinationSum([2, 3, 6, 7], 7));
-console.log(combinationSum([2, 3, 5], 8));
+// console.log(combinationSum([2, 3, 6, 7], 7));
+// console.log(combinationSum([2, 3, 5], 8));
+
+
+/**
+ * 40. Combination Sum II (medium)
+ * https://leetcode.com/problems/combination-sum-ii
+ * Score: 104ms (28.34%) and 37.8MB (29.63%)
+ * An evolution of the previous question. This time the numbers cannot be re-used multiple times
+ * and therefore with repeats in the input list we need to track our unique combinations to prevent
+ * repeating the same answers.
+ * I do this by updating the startIndex to now be x + 1 so that the next loop cannot re-use the last
+ * number. And by using a unique object, a basic tree. I write a new function isUnique() that
+ * both determines if the combination is unique and also adds it to the tree if it is.
+ * This isn't that fast. But whatever.
+ * @param candidates
+ * @param target
+ * @returns {Array}
+ */
+const combinationSum2 = (candidates, target) => {
+  const sorted = candidates.sort((a, b) => a - b);
+  const combos = [];
+  const unique = {};
+
+  const recurse = (remain, combo, startIndex) => {
+    for (let x = startIndex; x < sorted.length; ++x) {
+      if (sorted[x] <= 0) {
+        break;
+      }  // Avoid infinite loop
+
+      if (remain - sorted[x] === 0) {     // We found our base-case
+        combo.push(sorted[x]);
+        if (isUnique(combo)) {
+          combos.push(combo);
+        }
+        break;
+      } else if (remain < sorted[x]) {    // Too large
+        break;
+      } else {                            // Too small, need to go again
+        recurse(remain - sorted[x], combo.concat(sorted[x]), x + 1);
+      }
+    }
+  };
+
+  const isUnique = (combo) => {
+    let pointer = unique;
+    for (let x = 0; x < combo.length; ++x) {
+      if (!pointer[combo[x]]) {
+        // On a leaf set to true, otherwise set to an empty object
+        if (x === combo.length - 1) {
+          pointer[combo[x]] = true;             // Last iteration of the loop = new leaf: set true
+        } else {
+          pointer[combo[x]] = {};               // Not the leave, set to an empty object
+          pointer = pointer[combo[x]];          // Navigate furthwe
+        }
+      } else if (pointer[combo[x]] === true) {  // Finding a === true means we found a repeat
+        return false;
+      } else {                                  // Navigate further
+        pointer = pointer[combo[x]];
+      }
+    }
+    return true;
+  };
+
+  recurse(target, [], 0);
+  return combos;
+};
+
+console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+console.log(combinationSum2([2, 5, 2, 1, 2], 5));
