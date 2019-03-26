@@ -3224,10 +3224,53 @@ const countAndSay = (n) => {
   return res;
 };
 
-console.log(countAndSay(1));
-console.log(countAndSay(2));
-console.log(countAndSay(3));
-console.log(countAndSay(4));
-console.log(countAndSay(5));
-console.log(countAndSay(6));
-console.log(countAndSay(7));
+// console.log(countAndSay(1));
+// console.log(countAndSay(2));
+// console.log(countAndSay(3));
+// console.log(countAndSay(4));
+// console.log(countAndSay(5));
+// console.log(countAndSay(6));
+// console.log(countAndSay(7));
+
+
+/**
+ * 39. Combination Sum (medium)
+ * https://leetcode.com/problems/combination-sum
+ * Score: 80ms (75.30%) and 37.4MB (31.34%)
+ * This was actually a pretty good one. By sorting first and trusting that there were no duplicates
+ * I could forgo any sort of mapping system with memoization, though I did consider it at first.
+ * The key aspect at the end was the need to use the startIndex variable, otherwise the algorithm
+ * would produce multiple configurations of the same answers.
+ * Another key take-away is intelligent use of sorting to create unique combinations (see
+ * the above function threeSum3() for an example of this being key to an answer).
+ * @param candidates
+ * @param target
+ * @returns {Array}
+ */
+const combinationSum = (candidates, target) => {
+  const sorted = candidates.sort((a, b) => a - b);
+  const combos = [];
+
+  const recurse = (remain, combo, startIndex) => {
+    for (let x = startIndex; x < sorted.length; ++x) {
+      if (sorted[x] <= 0) {
+        break;
+      }  // Avoid infinite loop
+
+      if (remain - sorted[x] === 0) {     // We found our base-case
+        combos.push(combo.concat(sorted[x]));
+        break;
+      } else if (remain < sorted[x]) {    // Too large
+        break;
+      } else {                            // Too small, need to go again
+        recurse(remain - sorted[x], combo.concat(sorted[x]), x);
+      }
+    }
+  };
+
+  recurse(target, [], 0);
+  return combos;
+};
+
+console.log(combinationSum([2, 3, 6, 7], 7));
+console.log(combinationSum([2, 3, 5], 8));
