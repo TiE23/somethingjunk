@@ -3009,3 +3009,40 @@ const searchRange = (nums, target) => {
 
   return [leftIndex, find(false) - 1];
 };
+
+
+/**
+ * 35. Search Insert Position (easy)
+ * https://leetcode.com/problems/search-insert-position
+ * Score: 56ms (93.13%) and 33.7MB (86.77%)
+ * The brute-force was super basic and I only realized how dumb it was when I saw the score.
+ * Binary search was the answer. But I have to admit I got a little mixed-up with off-by-one errors.
+ * I originally had right = nums.length and while(left < right) but that left holes and made for
+ * odd -1 or +1 returns depending on case.
+ * @param nums
+ * @param target
+ * @returns {number}
+ */
+const searchInsert = (nums, target) => {
+  // This is brute force.
+  // for (let x = 0; x < nums.length; ++x) {
+  //     if (nums[x] >= target) return x;
+  // }
+  // return nums.length; // At the end
+
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) {
+      return mid;
+    } else if (nums[mid] < target) {
+      left = mid + 1;     // Go right
+    } else {
+      right = mid - 1;    // Go left
+    }
+  }
+
+  return left;
+};
