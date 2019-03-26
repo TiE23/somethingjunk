@@ -2962,3 +2962,50 @@ const reverseArray = (nums, start) => {
     --right;
   }
 };
+
+
+/**
+ * 34. Find First and Last Position of Element in Sorted Array (medium)
+ * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array
+ * Score: 60ms (88.99%) and 34.9MB (85.19%)
+ * This is also not my answer, but it slightly adjusted to follow a style that I'd write it in
+ * to begin.
+ * @param nums
+ * @param target
+ * @returns {number[]}
+ */
+const searchRange = (nums, target) => {
+  const results = [-1, -1];
+
+  const find = (left) => {
+    let low = 0;
+    let high = nums.length;
+
+    while (low < high) {
+      const mid = Math.floor((low + high) / 2);
+      if (left) { // Going left
+        if (nums[mid] >= target) {
+          high = mid; // We go left
+        } else {
+          low = mid + 1;  // We go right
+        }
+      } else { // Going right
+        if (nums[mid] <= target) {
+          low = mid + 1; // We go right
+        } else {
+          high = mid; // We go left
+        }
+      }
+    }
+
+    return low;
+  };
+
+  const leftIndex = find(true);
+
+  if (nums[leftIndex] !== target) {
+    return results;
+  }
+
+  return [leftIndex, find(false) - 1];
+};
