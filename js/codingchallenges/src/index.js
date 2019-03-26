@@ -3182,14 +3182,52 @@ const sudokuBad3 = [
   [".",".",".",".","8",".",".","7","9"],
 ];
 
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9"]));
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "1"])); // False, repeat 1
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8"]));      // False, too few
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9", "4"]));  // False, too many
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "10"]));  // False, 10 is too great
-console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "-1"]));  // False, -1 is too low
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9"]));
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "1"])); // False, repeat 1
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8"]));      // False, too few
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9", "4"]));  // False, too many
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "10"]));  // False, 10 is too great
+// console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "-1"]));  // False, -1 is too low
+//
+// isValidSudoku(sudokuGood);
+// isValidSudoku(sudokuBad1);
+// isValidSudoku(sudokuBad2);
+// isValidSudoku(sudokuBad3);
 
-isValidSudoku(sudokuGood);
-isValidSudoku(sudokuBad1);
-isValidSudoku(sudokuBad2);
-isValidSudoku(sudokuBad3);
+
+/**
+ * 38. Count and Say (easy)
+ * https://leetcode.com/problems/count-and-say/
+ * Score: N/A
+ * People hate this question. It's freaking weird. The first time I saw it I was at a loss to what
+ * the algorithm even meant. But I copied down a solution because it was given as an example on a
+ * Facebook interview prep guide.
+ * Answer taken from https://leetcode.com/problems/count-and-say/discuss/16123/Concise-JavaScript-using-regex
+ * The regex used here is very interesting. Using \1 and lookbehind, I've never seen this before,
+ * but it works.
+ * What it does it it'll split up integers that may repeat. As in, 111222333 becomes 111|222|333|.
+ * When you can do that, it's simply a matter of counting the length of a section and getting the
+ * first element.
+ * So, the hypothetical 111222333 becomes 313233 "three ones, three twos, three threes".
+ * @param n
+ * @returns {string}
+ */
+const countAndSay = (n) => {
+  let res = "1";
+  for (let i = 1; i < n; i++) {
+    res = res
+      .replace(/(\d)(?!\1)/g, "$1|")
+      .split("|")
+      .reduce((newRes, s) => newRes + (s ? s.length + s[0] : ""), "");  // Because we have a trailing | we gotta check !!s.
+  }
+
+  return res;
+};
+
+console.log(countAndSay(1));
+console.log(countAndSay(2));
+console.log(countAndSay(3));
+console.log(countAndSay(4));
+console.log(countAndSay(5));
+console.log(countAndSay(6));
+console.log(countAndSay(7));
