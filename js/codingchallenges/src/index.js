@@ -2804,16 +2804,16 @@ ll1.insertAtEnd(4);
 ll1.insertAtEnd(5);
 ll1.insertAtEnd(6);
 
-console.log("before", ll1.toString());
-const newHead = swapPairs(ll1.head);
-console.log("after", ((node) => {
-  const output = [];
-  while (node) {
-    output.push(node.data);
-    node = node.next;
-  }
-  return `[${output.join(", ")}]`;
-})(newHead)); // IIFE to print out the contents, yo.
+// console.log("before", ll1.toString());
+// const newHead = swapPairs(ll1.head);
+// console.log("after", ((node) => {
+//   const output = [];
+//   while (node) {
+//     output.push(node.data);
+//     node = node.next;
+//   }
+//   return `[${output.join(", ")}]`;
+// })(newHead)); // IIFE to print out the contents, yo.
 
 
 /**
@@ -3046,3 +3046,150 @@ const searchInsert = (nums, target) => {
 
   return left;
 };
+
+
+/**
+ * 36. Valid Sudoku (medium)
+ * https://leetcode.com/problems/valid-sudoku/
+ * Score with row, col, subBox check order: 108ms (20.61%) and 37.5MB (92.50%)
+ * Score with subBox, row, col check order: 96ms (54.85%) and 37.4MB (96.25%)
+ * Score with subBox, col, row check order: 92ms (62.38%) and 37.4MB (96.25%)
+ * I think I could make this a little faster by moving check9 logic directly into the check
+ * loops to save time on creating new arrays and instead just checking values directly.
+ * It was really interesting discovering how changing the order of my check loops sped things
+ * up. Checking row is clearly the fastest process as we just directly give the row to check9.
+ * @param board
+ * @returns {boolean}
+ */
+const isValidSudoku = (board) => {
+  // Check sub-boxes.
+  for (let subCol = 0; subCol < 3; ++subCol) {
+    for (let subRow = 0; subRow < 3; ++subRow) {
+      const subBox = [];  // This will be a little slower using .push().
+      for (let col = subCol * 3; col < (subCol * 3) + 3; ++col) {
+        for (let row = subRow * 3; row < (subRow * 3) + 3; ++row) {
+          subBox.push(board[row][col]);
+        }
+      }
+      if (!check9(subBox)) {
+        console.log(`Bad subBox (row: ${subRow} col: ${subCol}): ${subBox}`);
+        return false;
+      }
+    }
+  }
+
+  // Check columns.
+  for (let col = 0; col < 9; ++col) {
+    const column = new Array(9);  // Saving a tiny bit of time by declaring size of array to start.
+    for (let row = 0; row < 9; ++row) {
+      column[row] = board[row][col];
+    }
+    if (!check9(column)) {
+      console.log(`Bad col ${col}: ${column}`);
+      return false;
+    }
+  }
+
+  // Check rows.
+  for (let row = 0; row < 9; ++row) {
+    if (!check9(board[row])) {
+      console.log(`Bad row ${row}: ${board[row]}`);
+      return false;
+    }
+  }
+
+  console.log("Good!");
+  return true;
+};
+
+
+/**
+ * Check for repetition of a series of 9 sudoku entries. If there is a repeat of a number, returns
+ * false. It uses bit manipulation as a cheap way to check for repeated values.
+ * Value 256 128  64  32  16   8   4   2   1
+ * Bit     0   0   0   0   0   0   0   0   0
+ * Number  9   8   7   6   5   4   3   2   1
+ * Each number is recorded as a bit (2 ** (number - 1)).
+ * If the bit is already set that means we have a repeat and it must be rejected.
+ * @param nine
+ * @returns {boolean}
+ */
+const check9 = (nine) => {
+  if (nine.length !== 9) {
+    return false;
+  }
+
+  let check = 0;
+  for (let i = 0; i < 9; ++i) {
+    if (nine[i] !== ".") {
+      const number = parseInt(nine[i], 10);
+      if (number < 1 || number > 9 || (check & (2 ** (number - 1)))) {
+        return false;
+      } else {
+        check |= (2 ** (number - 1));
+      }
+    }
+  }
+
+  return true;
+};
+
+const sudokuGood = [
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"],
+];
+
+const sudokuBad1 = [
+  ["8","3",".",".","7",".",".",".","."],  // Top left 8 is bad. Will trip column check.
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"],
+];
+
+const sudokuBad2 = [
+  ["5","3",".",".","7",".",".",".","7"],  // Top right 7 is bad. Will trip row check.
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"],
+];
+
+const sudokuBad3 = [
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","5","8","."],  // 5 on this row is bad. Will trip sub-box check.
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"],
+];
+
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9"]));
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "1"])); // False, repeat 1
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8"]));      // False, too few
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "9", "4"]));  // False, too many
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "10"]));  // False, 10 is too great
+console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "-1"]));  // False, -1 is too low
+
+isValidSudoku(sudokuGood);
+isValidSudoku(sudokuBad1);
+isValidSudoku(sudokuBad2);
+isValidSudoku(sudokuBad3);
