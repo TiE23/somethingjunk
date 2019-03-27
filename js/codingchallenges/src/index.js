@@ -3340,5 +3340,57 @@ const combinationSum2 = (candidates, target) => {
   return combos;
 };
 
-console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
-console.log(combinationSum2([2, 5, 2, 1, 2], 5));
+// console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+// console.log(combinationSum2([2, 5, 2, 1, 2], 5));
+
+
+/**
+ * 32. Longest Valid Parentheses (hard)
+ * https://leetcode.com/problems/longest-valid-parentheses/
+ * Score: 68ms (88.41%) and 36.3MB (37.93%)
+ * Not my answer. The specifics were a little too wild for me. I threw myself off by thinking I
+ * could just use a openings counter instead of a stack and just count streaks of good values.
+ * So,        ( ( ) )
+ * would be   1 2 1 0           // Count that streak of 4
+ * While      ( ) ) ( ( ) ) )
+ * would be   1 0 x 1 2 1 0 x   // Count that streak of 4
+ * But my idea immediately broke with their very first example:
+ * So,        ( ( )
+ * would be   1 2 1             // I'd count 3
+ * I thought that maybe taking the longest streak and subtracting remaining openings (1) would work
+ * but that would break very easily, for example:
+ * So,         ( ) ( ( (
+ * would be    1 0 1 2 3        // It's count 3 streak, subtract 3, and get zero, when it's 0.
+ * Flawed idea from the outset.
+ * The solution they provided that I liked, using a stack, was a little magical (it didn't make
+ * intuitive sense to me) starting with [-1] and adding the current index to the stack when empty.
+ * That was all a little weird to me. But -1 made sense as it would allow for () to work (1 - (-1)).
+ * The current index on empty stack, though, was a little odd. But it was an off-by-one quirk. It
+ * mades sense when you immediately start with say, )(). So that the first index (0) would be
+ * immediately added to it, allowing the rest of the algorithm to work.
+ * @param s
+ * @returns {number}
+ */
+const longestValidParentheses = (s) => {
+  let longest = 0;
+  const stack = [-1];
+
+  for (let i = 0; i < s.length; ++i) {
+    if (s[i] === "(") {
+      stack.push(i);
+    } else {
+      stack.pop();
+      if (stack.length === 0) {
+        stack.push(i);  // Restarting count
+      } else {
+        longest = Math.max(longest, i - stack[stack.length - 1]);
+      }
+    }
+  }
+
+  return longest;
+};
+
+console.log("())(()()", longestValidParentheses("())(()()"));
+console.log(")()", longestValidParentheses(")()"));
+console.log("()))(())", longestValidParentheses("()))(())"));
