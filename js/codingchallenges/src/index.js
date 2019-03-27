@@ -3391,6 +3391,109 @@ const longestValidParentheses = (s) => {
   return longest;
 };
 
-console.log("())(()()", longestValidParentheses("())(()()"));
-console.log(")()", longestValidParentheses(")()"));
-console.log("()))(())", longestValidParentheses("()))(())"));
+// console.log("())(()()", longestValidParentheses("())(()()"));
+// console.log(")()", longestValidParentheses(")()"));
+// console.log("()))(())", longestValidParentheses("()))(())"));
+
+
+/**
+ * 42. Trapping Rain Water (hard)
+ * https://leetcode.com/problems/trapping-rain-water/
+ * Score: Not accepted, times out.
+ * I spent around an hour on this guy and needed to do debugging to figure things out.
+ * Turns out that using a two pointer solution, that I had mildly suspected, was the best answer.
+ * I think my answer is still kinda fun, though pretty confusing to follow.
+ * @param height
+ * @returns {number}
+ */
+const trap = (height) => {
+  let leftWall = 0;
+  let min = 0;
+  const puddle = [];
+  let total = 0;
+
+  for (let x = 0; x < height.length; ++x) {
+    min = Math.min(min, height[x]);
+
+    const wall = height[x]; // For debugging ease
+
+    // Rain trap, record puddle
+    if (leftWall > 0) {
+      for (let h = leftWall - 1; h >= wall; --h) {
+        if (!puddle[h]) {
+          puddle[h] = 1;
+        } else {
+          ++puddle[h];
+        }
+      }
+    }
+
+    // Wall found
+    if (wall > 0 && wall > min) {
+      total += recordPuddleVolume(puddle, wall);
+      leftWall = Math.max(wall, leftWall);  // Left wall only replaced by larger walls
+      min = wall;
+    }
+  }
+
+  return total;
+};
+
+const recordPuddleVolume = (puddle, max) => {
+  let total = 0;
+  for (let x = 0; x < max; ++x) {
+    if (puddle[x] !== undefined) {
+      total += puddle[x];
+      puddle[x] = 0;  // Drain, we recorded it.
+    }
+  }
+  return total;
+};
+
+// console.log([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1], trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])); // 6
+// console.log([4, 2, 3], trap([4, 2, 3]));  // 1
+// console.log([5, 2, 1, 2, 1, 5], trap([5, 2, 1, 2, 1, 5]));  // 14
+// console.log([5, 2, 1, 2, 1, 5, 0, 1], trap([5, 2, 1, 2, 1, 5, 0, 1]));  // 15
+
+
+/**
+ * Taken from their solutions. Two pointer solution attacking from both sides.
+ * The key bit is moving on the lesser pointer. If left is shorter than right, then move left.
+ * And whenever the pointer is lower than it's current max, record a puddle. By only concentrating
+ * on the lowest of the pointers you'll only track the lowest viable valleys.
+ * @param height
+ * @returns {number}
+ */
+const trap2 = (height) => {
+  let total = 0;
+  let left = 0;
+  let right = height.length - 1;
+  let leftMax = 0;
+  let rightMax = 0;
+
+  while (left < right) {
+    if (height[left] < height[right]) {
+      if (height[left] >= leftMax) {
+        leftMax = height[left];
+      } else {
+        total += (leftMax - height[left]);
+      }
+      ++left;
+    } else {
+      if (height[right] >= rightMax) {
+        rightMax = height[right];
+      } else {
+        total += (rightMax - height[right]);
+      }
+      --right;
+    }
+  }
+
+  return total;
+};
+
+
+console.log([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1], trap2([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])); // 6
+console.log([4, 2, 3], trap2([4, 2, 3]));  // 1
+console.log([5, 2, 1, 2, 1, 5], trap2([5, 2, 1, 2, 1, 5]));  // 14
+console.log([5, 2, 1, 2, 1, 5, 0, 1], trap2([5, 2, 1, 2, 1, 5, 0, 1]));  // 15
