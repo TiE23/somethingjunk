@@ -2638,12 +2638,12 @@ const getMovieTitles = (substr) => {
         if (err) {
           console.log("getPageTotalAndTitles Error!", err);
         } else {
-          moreTitles.sort().forEach(title => console.log(title));
+          moreTitles.sort().forEach((title, index) => console.log(`${index + 1}. ${title}`));
         }
       });
     } else {
       // Just return the first page's worth of titles
-      titles.sort().forEach(title => console.log(title));
+      titles.sort().forEach((title, index) => console.log(`${index + 1}. ${title}`));
     }
   });
 };
@@ -2675,13 +2675,13 @@ const getPageTotalAndTitles = (urls, titles, callback) => {
         ++counter;
       });
     }).on("error", (err) => {
-      callback(err, null);
+      callback(err, null, null);
     });
   });
 };
 
 
-// getMovieTitles("spiderman");
+getMovieTitles("spiderman");
 // getMovieTitles("batman");
 
 // https://www.facebook.com/careers/life/sample_interview_questions/
@@ -2932,17 +2932,17 @@ const removeElement = (nums, val) => {
  * @param nums
  */
 const nextPermutation = (nums) => {
-  let i = nums.length - 2;
-  while (i >= 0 && nums[i + 1] <= nums[i]) {
-    --i;
+  let i = nums.length - 2;  // Start at second-to-last element
+  while (i >= 0 && nums[i] >= nums[i + 1]) {
+    --i;  // Search leftwards for first element that is smaller than its right neighbor
   }
 
   if (i >= 0) {
-    let j = nums.length - 1;
+    let j = nums.length - 1;  // Start at end
     while (j >= 0 && nums[j] <= nums[i]) {
-      --j;
-    }   // It'll leave the loop on the first element that is larger.
-    swap(nums, i, j);
+      --j;  // Search leftwards for first element that is larger than i (ex: [i]=2, [j]=3)
+    }   // It'll leave the loop on the first element that is larger
+    swap(nums, i, j); // Swap those two numbers (ex: 1,2,3 becomes 1,3,2)
   }
   reverseArray(nums, i + 1);
 };
@@ -3493,7 +3493,100 @@ const trap2 = (height) => {
 };
 
 
-console.log([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1], trap2([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])); // 6
-console.log([4, 2, 3], trap2([4, 2, 3]));  // 1
-console.log([5, 2, 1, 2, 1, 5], trap2([5, 2, 1, 2, 1, 5]));  // 14
-console.log([5, 2, 1, 2, 1, 5, 0, 1], trap2([5, 2, 1, 2, 1, 5, 0, 1]));  // 15
+// console.log([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1], trap2([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])); // 6
+// console.log([4, 2, 3], trap2([4, 2, 3]));  // 1
+// console.log([5, 2, 1, 2, 1, 5], trap2([5, 2, 1, 2, 1, 5]));  // 14
+// console.log([5, 2, 1, 2, 1, 5, 0, 1], trap2([5, 2, 1, 2, 1, 5, 0, 1]));  // 15
+
+
+const defaultComparator = (a, b) => {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+};
+
+
+/**
+ * Implementation of QuickSort (because it helps to write it out)
+ * https://medium.com/@Charles_Stover/implementing-quicksort-in-javascript-8044a8e2bf39
+ * @param unsorted
+ * @param comparator
+ * @returns {[]}
+ */
+const quickSort = (unsorted, comparator = defaultComparator) => {
+  // Make a safe, deep copy.
+  const sorted = [...unsorted];
+
+  const recursiveSort = (start, end) => {
+    // If the range is 1 or fewer in length it's sorted.
+    if (end - start < 1) {
+      return;
+    }
+
+    // Here we're using the last value as the pivot. Very simple decision.
+    const pivotValue = sorted[end];
+    let splitIndex = start;
+
+    for (let i = start; i < end; ++i) {
+      const sort = comparator(sorted[i], pivotValue);
+
+      // [i] is less than the pivot value
+      if (sort === -1) {
+        if (i !== splitIndex) {
+          // Swap them
+          [sorted[splitIndex], sorted[i]] = [sorted[i], sorted[splitIndex]];
+        }
+
+        // Move the split index to the right, denoting an increase in the less-than sub-array size
+        ++splitIndex;
+      }
+      // Leave the values that are greater than or equal to the pivot value where they are
+    }
+
+    // Move the pivot value to between the split since we know it is located BETWEEN all less-than
+    // and greater-than-or-equal-to values;
+    [sorted[end], sorted[splitIndex]] = [sorted[splitIndex], pivotValue];
+
+    // Recursively sort the less-than and greater-than arrays.
+    recursiveSort(start, splitIndex - 1);
+    recursiveSort(splitIndex + 1, end);
+  };
+
+  recursiveSort(0, unsorted.length - 1);
+  return sorted;
+};
+
+// console.log(quickSort([4, 2, 5, 3, 7, 2]));
+
+
+const findKthLargest = (nums, k) => {
+  const sorted = [...nums];
+
+  const recurse = (k, low, high) => {
+    const pivot = sorted[high];
+    let insertI = low;
+    for (let i = low; i < high; i += 1) {
+      if (sorted[i] < pivot) {
+        [sorted[i], sorted[insertI]] = [sorted[insertI], sorted[i]];
+        ++insertI;
+      }
+    }
+    // Pivot swap
+    [sorted[insertI], sorted[high]] = [sorted[high], sorted[insertI]];
+
+    if (high - k > insertI) {
+      // Number is on the right side
+      return recurse(sorted, k, insertI + 1, high);
+    } else if (high - k === insertI) {
+      // Pivot is the number
+      return pivot;
+    } else {
+      // Number is on the left side
+      return recurse(k - (high - insertI) - 1, low, insertI - 1);
+    }
+  };
+
+  return recurse(k - 1, 0, nums.length - 1);
+};
+
+// console.log([4, 2, 5, 3, 7, 9], findKthLargest([4, 2, 5, 3, 7, 9], 2));
