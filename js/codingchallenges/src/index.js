@@ -2681,7 +2681,7 @@ const getPageTotalAndTitles = (urls, titles, callback) => {
 };
 
 
-getMovieTitles("spiderman");
+// getMovieTitles("spiderman");
 // getMovieTitles("batman");
 
 // https://www.facebook.com/careers/life/sample_interview_questions/
@@ -3590,3 +3590,122 @@ const findKthLargest = (nums, k) => {
 };
 
 // console.log([4, 2, 5, 3, 7, 9], findKthLargest([4, 2, 5, 3, 7, 9], 2));
+
+
+/**
+ * 43. Multiply Strings (medium)
+ * https://leetcode.com/problems/multiply-strings/
+ * Score: 108ms (24.71%) and 41.9MB (15.00%)
+ * Not very fast as this is essentially emulating the human steps to long multiplication by
+ * calculating each product
+ * @param num1
+ * @param num2
+ * @returns {string}
+ */
+const multiply = (num1, num2) => {
+  // We're assuming no negatives and no non digit numbers.
+  if (num1 === "0" || num2 === "0") {
+    return "0";
+  }
+
+  // Do the multiplication
+  const products = [];
+
+  for (let a = num1.length - 1; a >= 0; --a) {
+    let carry = 0;
+    for (let b = num2.length - 1; b >= 0; --b) {
+      const aNum = parseInt(num1[a], 10);
+      const bNum = parseInt(num2[b], 10);
+      const product = (aNum * bNum) + carry;
+
+      // Track the carry for the next round
+      carry = Math.floor(product / 10);
+
+      const digit = product % 10;
+
+      // Write down the digit
+      if (!products[a]) {
+        products[a] = `${digit}${"".padEnd(num1.length - 1 - a, "0")}`;
+      } else {
+        products[a] = `${digit}${products[a]}`;
+      }
+    }
+
+    if (carry > 0) {
+      products[a] = `${carry}${products[a]}`;
+    }
+  }
+
+  // Do the addition of all the products.
+  let finalProduct = "";
+  let done = false;
+  let counter = 0;
+  let carry = 0;
+  while (!done) {
+    const numbers = [];
+    for (let p = 0; p < products.length; ++p) {
+      const len = products[p].length;
+      if (products[p][len - 1 - counter]) {
+        numbers.push(products[p][len - 1 - counter]);
+      }
+    }
+
+    if (numbers.length === 0) {
+      done = true;
+      break;
+    }
+
+    const sum = carry + numbers.reduce((total, val) => total + parseInt(val, 10), 0);
+    carry = Math.floor(sum / 10);
+    finalProduct = `${(sum % 10)}${finalProduct}`;
+
+    ++counter;
+  }
+
+  // If there is a carry, add it.
+  if (carry > 0) {
+    finalProduct = `${carry}${finalProduct}`;
+  }
+
+  return finalProduct;
+};
+
+console.log(multiply("123", "456"));  // 56088
+console.log(multiply("123", "0"));    // 0
+
+
+/**
+ * Different approach is much cleaner and smarter. It totally skips the long addition step I went
+ * through the trouble of writing.
+ * @param num1
+ * @param num2
+ * @returns {string}
+ */
+const multiply2 = (num1, num2) => {
+  if (num1 === "0" || num2 === "0") {
+    return "0";
+  }
+
+  // Create an array of zeroes that is the sum of the length of the two numbers.
+  const product = new Array(num1.length + num2.length);
+  product.fill(0);
+
+  let pos = product.length - 1;
+  for (let a = num1.length - 1; a >= 0; --a) {
+    let tempPos = pos;
+    for (let b = num2.length - 1; b >= 0; --b) {
+      product[tempPos] += (parseInt(num1[a], 10) * parseInt(num2[b], 10));
+      product[tempPos - 1] += Math.floor(product[tempPos] / 10); // Carry
+      product[tempPos] %= 10; // Make a single digit
+      --tempPos;  // Shift over one digit to get to next power of 10
+    }
+    --pos;
+  }
+
+  // Join the numbers array and trim off the leading zeroes.
+  return product.join("").replace(/^0+/, "");
+};
+
+
+console.log(multiply2("123", "456"));  // 56088
+console.log(multiply2("123", "0"));    // 0
