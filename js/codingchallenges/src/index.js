@@ -3744,4 +3744,67 @@ const permute = (nums) => {
   return results;
 };
 
-console.log([1, 2, 3], permute([1, 2, 3]));
+// console.log([1, 2, 3], permute([1, 2, 3]));
+
+
+/**
+ * 47. Permutations II (medium)
+ * https://leetcode.com/problems/permutations-ii
+ * Score: 408ms (5.07%) and 43.3MB (14.29%)
+ * Really bad score. I just did what seemed obvious, using a tree that would determine if the
+ * output is unique or not. Some improvements I saw was people using sort at the beginning to sort
+ * nums and using a count or visited system.
+ * @param nums
+ * @returns {Array}
+ */
+const permuteUnique = (nums) => {
+  const results = [];
+  const uniques = {};
+
+  const recurse = (input, output) => {
+    if (input.length === 0) {
+      // Only push to results if the result is unique
+      if (isUnique(output, uniques)) {
+        results.push(output);
+      }
+    } else {
+      for (let x = 0; x < input.length; ++x) {
+        recurse(
+          input.slice(0, x).concat(input.slice(x + 1)),
+          output.concat(input[x]),
+        );
+      }
+    }
+  };
+
+  recurse(nums, []);
+  return results;
+};
+
+const isUnique = (nums, uniques) => {
+  let ptr = uniques;
+
+  for (let x = 0; x < nums.length; ++x) {
+    // New combo found
+    if (!ptr[nums[x]]) {
+      // Is a leaf, set as true and return true
+      if (x === nums.length - 1) {
+        ptr[nums[x]] = true;
+        return true;
+      } else {    // Not a leaf, new object and move pointer
+        ptr[nums[x]] = {};
+        ptr = ptr[nums[x]];
+      }
+    } else if (ptr[nums[x]] === true) {
+      // We found a leaf that already exists
+      return false;
+      // Navigate to the next node
+    } else {
+      ptr = ptr[nums[x]];
+    }
+  }
+
+  return false; // Should never reach this.
+};
+
+console.log([1, 2, 1], permuteUnique([1, 2, 1]));
