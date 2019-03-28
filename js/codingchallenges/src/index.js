@@ -3109,7 +3109,8 @@ const isValidSudoku = (board) => {
  * Value 256 128  64  32  16   8   4   2   1
  * Bit     0   0   0   0   0   0   0   0   0
  * Number  9   8   7   6   5   4   3   2   1
- * Each number is recorded as a bit (2 ** (number - 1)).
+ * Each number is recorded as a bit (1 << (number - 1)).
+ * Update: Using bitshift instead of (2 ** (number - 1)).
  * If the bit is already set that means we have a repeat and it must be rejected.
  * @param nine
  * @returns {boolean}
@@ -3123,10 +3124,61 @@ const check9 = (nine) => {
   for (let i = 0; i < 9; ++i) {
     if (nine[i] !== ".") {
       const number = parseInt(nine[i], 10);
-      if (number < 1 || number > 9 || (check & (2 ** (number - 1)))) {
+      if (number < 1 || number > 9 || (check & (1 << (number - 1)))) {
         return false;
       } else {
-        check |= (2 ** (number - 1));
+        check |= (1 << (number - 1));
+      }
+    }
+  }
+
+  return true;
+};
+
+/**
+ * This is a pretty ballsy answer that someone left in my own submission thread. Using bit
+ * manipulation pretty hard core. I made some adjustments for style and for clarity but it is
+ * otherwise Joshua33's work.
+ * The cool thing is using an array and a single digit for rows, columns, and boxes.
+ * Using bit-shifting 1 and the checked number (he doesn't bother with 0, so #9 is 10th bit).
+ * And using a simple bit of math to determine the box array index.
+ * https://leetcode.com/problems/valid-sudoku/discuss/262509/JavaScript-using-bit-manipulation/254396
+ * @param board
+ * @returns {boolean}
+ */
+const isValidSudokuJoshua33 = (board) => {
+  const rowCounts = new Array(9).fill(0); // 9 rows
+  const colCounts = new Array(9).fill(0); // 9 cols
+  const boxCounts = new Array(9).fill(0); // 9 boxes
+
+  for (let row = 0; row < 9; ++row) {
+    for (let col = 0; col < 9; ++col) {
+      const x = board[row][col];
+
+      if (x !== ".") {
+        if (rowCounts[row] & (1 << x)) {
+          return false; // If already set we have a duplicate.
+        }
+
+        if (colCounts[col] & (1 << x)) {
+          return false; // If already set we have a duplicate.
+        }
+
+        // The box index is determined by the row, col position.
+        //         Col Col Col
+        //         0-2 3-5 6-8
+        // Row 0-2  0,  1,  2,
+        // Row 3-5  3,  4,  5,
+        // Row 6-8  6,  7,  8,
+        const box = (Math.floor(row / 3) * 3) + Math.floor(col / 3);
+        if (boxCounts[box] & (1 << x)) {
+          return false; // If already set we have a duplicate.
+        }
+
+        // Record the number for the row, column, and box.
+        rowCounts[row] |= 1 << x;
+        colCounts[col] |= 1 << x;
+        boxCounts[box] |= 1 << x;
       }
     }
   }
@@ -3189,10 +3241,14 @@ const sudokuBad3 = [
 // console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "10"]));  // False, 10 is too great
 // console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "-1"]));  // False, -1 is too low
 //
-// isValidSudoku(sudokuGood);
-// isValidSudoku(sudokuBad1);
-// isValidSudoku(sudokuBad2);
-// isValidSudoku(sudokuBad3);
+isValidSudoku(sudokuGood);
+isValidSudoku(sudokuBad1);
+isValidSudoku(sudokuBad2);
+isValidSudoku(sudokuBad3);
+console.log(isValidSudokuJoshua33(sudokuGood));
+console.log(isValidSudokuJoshua33(sudokuBad1));
+console.log(isValidSudokuJoshua33(sudokuBad2));
+console.log(isValidSudokuJoshua33(sudokuBad3));
 
 
 /**
@@ -3807,4 +3863,4 @@ const isUnique = (nums, uniques) => {
   return false; // Should never reach this.
 };
 
-console.log([1, 2, 1], permuteUnique([1, 2, 1]));
+// console.log([1, 2, 1], permuteUnique([1, 2, 1]));
