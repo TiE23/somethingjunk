@@ -3670,8 +3670,8 @@ const multiply = (num1, num2) => {
   return finalProduct;
 };
 
-console.log(multiply("123", "456"));  // 56088
-console.log(multiply("123", "0"));    // 0
+// console.log(multiply("123", "456"));  // 56088
+// console.log(multiply("123", "0"));    // 0
 
 
 /**
@@ -3706,6 +3706,42 @@ const multiply2 = (num1, num2) => {
   return product.join("").replace(/^0+/, "");
 };
 
+// console.log(multiply2("123", "456"));  // 56088
+// console.log(multiply2("123", "0"));    // 0
 
-console.log(multiply2("123", "456"));  // 56088
-console.log(multiply2("123", "0"));    // 0
+
+/**
+ * 46. Permutations (medium)
+ * https://leetcode.com/problems/permutations
+ * Score: 72ms (86.90%) and 37MB (46.46%)
+ * I had to seek out a solution to solve my issue. One problem was that I wanted to use splice()
+ * but didn't want to affect the original array. I also needed to create new arrays for every
+ * recursive call. If I didn't I'd be passing the same reference between all stacks, causing
+ * chaos. So the solution I found had liberal use of concat(). By using concat() and splice() twice
+ * on the same array you can perform a kind of splice() but one that leaves the original array
+ * alone and returns a new array object.
+ * @param nums
+ * @returns {Array}
+ */
+const permute = (nums) => {
+  const results = [];
+
+  const recurse = (input, output) => {
+    if (input.length === 0) {
+      results.push(output);
+    } else {
+      for (let x = 0; x < input.length; ++x) {
+        // Key point is to use concat to create new arrays
+        recurse(
+          input.slice(0, x).concat(input.slice(x + 1)),
+          output.concat(input[x]),
+        );
+      }
+    }
+  };
+
+  recurse(nums, []);
+  return results;
+};
+
+console.log([1, 2, 3], permute([1, 2, 3]));
