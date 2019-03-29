@@ -173,22 +173,21 @@ function q1_6(image) {
 
 // In place solution.
 function q1_6b(image) {
-  const n = image.length;  // Get the width/height of image
-
-  for (let layer = 0; layer < n; ++layer) {
-    const first = layer;
-    const last = n - 1 - layer;
-    for (let x = first; x < last; ++x) {
-      const offset = x - first;
+  const size = image.length;  // Get the width/height of image
+  const halfSize = Math.floor(size / 2);
+  for (let layer = 0; layer < halfSize; ++layer) {
+    const last = size - 1 - layer;
+    for (let x = layer; x < last; ++x) {
+      const offset = x - layer;
 
       // Save top
-      const top = image[first][x];
+      const top = image[layer][x];
 
       // Left to top
-      image[first][x] = image[last - offset][first];
+      image[layer][x] = image[last - offset][layer];
 
       // Bottom to left
-      image[last - offset][first] = image[last][last - offset];
+      image[last - offset][layer] = image[last][last - offset];
 
       // Right to bottom
       image[last][last - offset] = image[x][last];
@@ -202,22 +201,22 @@ function q1_6b(image) {
 }
 
 const img1x1 = [
-  ["a"],
+  ["1"],
 ];
 const img2x2 = [
-  ["a", "b"],
-  ["c", "d"],
+  ["1", "2"],
+  ["3", "4"],
 ];
 const img3x3 = [
-  ["a", "b", "c"],
-  ["d", "e", "f"],
-  ["g", "h", "i"],
+  ["1", "2", "3"],
+  ["4", "5", "6"],
+  ["7", "8", "9"],
 ];
 const img4x4 = [
-  ["a", "b", "c", "d"],
-  ["e", "f", "g", "h"],
-  ["i", "j", "k", "l"],
-  ["m", "n", "o", "p"],
+  [" 1", " 2", " 3", " 4"],
+  [" 5", " 6", " 7", " 8"],
+  [" 9", "10", "11", "12"],
+  ["13", "14", "15", "16"],
 ];
 
 // console.log(img1x1, q1_6(img1x1));
@@ -3241,14 +3240,14 @@ const sudokuBad3 = [
 // console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "10"]));  // False, 10 is too great
 // console.log(check9(["1", "2", "3", ".", ".", ".", "7", "8", "-1"]));  // False, -1 is too low
 //
-isValidSudoku(sudokuGood);
-isValidSudoku(sudokuBad1);
-isValidSudoku(sudokuBad2);
-isValidSudoku(sudokuBad3);
-console.log(isValidSudokuJoshua33(sudokuGood));
-console.log(isValidSudokuJoshua33(sudokuBad1));
-console.log(isValidSudokuJoshua33(sudokuBad2));
-console.log(isValidSudokuJoshua33(sudokuBad3));
+// isValidSudoku(sudokuGood);
+// isValidSudoku(sudokuBad1);
+// isValidSudoku(sudokuBad2);
+// isValidSudoku(sudokuBad3);
+// console.log(isValidSudokuJoshua33(sudokuGood));
+// console.log(isValidSudokuJoshua33(sudokuBad1));
+// console.log(isValidSudokuJoshua33(sudokuBad2));
+// console.log(isValidSudokuJoshua33(sudokuBad3));
 
 
 /**
@@ -3864,3 +3863,73 @@ const isUnique = (nums, uniques) => {
 };
 
 // console.log([1, 2, 1], permuteUnique([1, 2, 1]));
+
+
+/**
+ * 48. Rotate Image (medium)
+ * https://leetcode.com/problems/rotate-image/
+ * Score: 56ms (94.68%) and 33.7MB (81.54%)
+ * I went back and looked up the previous solution but ended up putting my own spin on it.
+ * I accidentally discovered a funny little quirk where if you have four corners and swap
+ * between one corner and the other three corners once each, you'll end up rotating the corners.
+ * Ex: (TR = top right, BR = bottom right, BL = bottom left)
+ *   Swap TR    Swap BR    Swap BL
+ * |  1 - 2   |  2   1   |  4   1  |   3   1  |
+ * |         -|>   \    -|> |     -|>         |
+ * |  3   4   |  3   4   |  3   2  |   4   2  |
+ *    You end up rotated!
+ * @param matrix
+ * @returns {*}
+ */
+const rotate = (matrix) => {
+  const size = matrix.length;
+  const halfSize = Math.floor(size / 2);
+
+  const swapCells = (matrix, l1, l2, r1, r2) => {
+    const temp = matrix[l1][l2];
+    matrix[l1][l2] = matrix[r1][r2];
+    matrix[r1][r2] = temp;
+  };
+
+  for (let layer = 0; layer < halfSize; ++layer) {
+    const swapRange = size - 1 - (layer * 2);
+    const end = size - 1 - layer;
+
+    for (let i = 0; i < swapRange; ++i) {
+      // These swaps are slow and take up extra memory. Score: 60ms (67.96%) and 34.2MB (15.38%)
+      // Top right swap
+      // [matrix[layer][layer + i], matrix[layer + i][end]] =
+      //   [matrix[layer + i][end], matrix[layer][layer + i]];
+      //
+      // // Bottom right swap
+      // [matrix[layer][layer + i], matrix[end][end - i]] =
+      //   [matrix[end][end - i], matrix[layer][layer + i]];
+      //
+      // // Bottom left swap
+      // [matrix[layer][layer + i], matrix[end - i][layer]] =
+      //   [matrix[end - i][layer], matrix[layer][layer + i]];
+
+      // Top right swap
+      swapCells(matrix, layer, layer + i, layer + i, end);
+
+      // Bottom right swap
+      swapCells(matrix, layer, layer + i, end, end - i);
+
+      // Bottom left swap
+      swapCells(matrix, layer, layer + i, end - i, layer);
+    }
+  }
+
+  return matrix;
+};
+
+console.log(rotate(img1x1));  // [ [ '1' ] ]
+console.log(rotate(img2x2));  // [ [ '3', '1' ], [ '4', '2' ] ]
+console.log(rotate(img3x3));  // [ [ '7', '4', '1' ], [ '8', '5', '2' ], [ '9', '6', '3' ] ]
+console.log(rotate(img4x4));
+/*
+[ [ '13', ' 9', ' 5', ' 1' ],
+  [ '14', '10', ' 6', ' 2' ],
+  [ '15', '11', ' 7', ' 3' ],
+  [ '16', '12', ' 8', ' 4' ] ]
+ */
