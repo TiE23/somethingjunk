@@ -2866,26 +2866,25 @@ const search = (nums, target) => {
 
     // Pivot point is to the right of the mid
     if (nums[left] <= nums[mid]) {
-      if (target >= nums[left] && target <= nums[mid]) { // Target is to the left of mid
-        return recurse(left, mid - 1);
+      if (nums[left] <= target && target <= nums[mid]) {
+        return recurse(left, mid - 1);  // Target is to the left of mid
+      } else {
+        return recurse(mid + 1, right); // Target is to the right of mid
       }
-      return recurse(mid + 1, right); // Target is to the right of mid
-    }
-
-    // Target is to the right of mid
-    if (target >= nums[mid] && target <= nums[right]) {
-      return recurse(mid + 1, right);
     } else {
-      // Target is to the left of mid
-      return recurse(left, mid - 1);
+      if (nums[mid] <= target && target <= nums[right]) {
+        return recurse(mid + 1, right); // Target is to the right of mid
+      } else {
+        return recurse(left, mid - 1);  // Target is to the left of mid
+      }
     }
   };
 
   return recurse(0, nums.length - 1);
 };
 
-// const searchTest1 = [4, 5, 6, 7, 0, 1, 2];
-// console.log(searchTest1, "find 0", search(searchTest1, 0));
+const searchTest1 = [4, 5, 6, 7, 8, 9, 0, 1, 2, 3];
+console.log(searchTest1, "find 0", search(searchTest1, 0));
 
 
 /**
