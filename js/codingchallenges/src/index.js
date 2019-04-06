@@ -2884,7 +2884,7 @@ const search = (nums, target) => {
 };
 
 const searchTest1 = [4, 5, 6, 7, 8, 9, 0, 1, 2, 3];
-console.log(searchTest1, "find 0", search(searchTest1, 0));
+// console.log(searchTest1, "find 0", search(searchTest1, 0));
 
 
 /**
@@ -3922,13 +3922,47 @@ const rotate = (matrix) => {
   return matrix;
 };
 
-console.log(rotate(img1x1));  // [ [ '1' ] ]
-console.log(rotate(img2x2));  // [ [ '3', '1' ], [ '4', '2' ] ]
-console.log(rotate(img3x3));  // [ [ '7', '4', '1' ], [ '8', '5', '2' ], [ '9', '6', '3' ] ]
-console.log(rotate(img4x4));
+// console.log(rotate(img1x1));  // [ [ '1' ] ]
+// console.log(rotate(img2x2));  // [ [ '3', '1' ], [ '4', '2' ] ]
+// console.log(rotate(img3x3));  // [ [ '7', '4', '1' ], [ '8', '5', '2' ], [ '9', '6', '3' ] ]
+// console.log(rotate(img4x4));
 /*
 [ [ '13', ' 9', ' 5', ' 1' ],
   [ '14', '10', ' 6', ' 2' ],
   [ '15', '11', ' 7', ' 3' ],
   [ '16', '12', ' 8', ' 4' ] ]
  */
+
+
+/**
+ * 49. Group Anagrams (medium)
+ * https://leetcode.com/problems/group-anagrams
+ * Score: 124ms (93.55%) and 44.6MB (91.82%)
+ * Heh, made a couple of silly mistakes. The sort algorithm cannot be simply made to be "a - b" when
+ * doing strings. I had a helper function but realized I could just make it a one-line solution.
+ * I use a map to save some time as an alternative would be to place the groups into the map
+ * directly and then return the contents of the map in an array, which I feel is slightly dirty
+ * as it often will mix up the output.
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+const groupAnagrams = (strs) => {
+  const groups = [];
+  const map = {};
+
+  strs.forEach((str) => {
+    const sorted = str.split("").sort().join("");
+
+    if (map[sorted] === undefined) {  // Need to check undefined as the first entry will be 0
+      // This is a new anagram
+      map[sorted] = groups.push([str]) - 1; // Get the new tail's index with length - 1
+    } else {
+      // It's a recognized anagram
+      groups[map[sorted]].push(str);  // Add to the group
+    }
+  });
+
+  return groups;
+};
+
+console.log(["eat", "tea", "tan", "ate", "nat", "bat"], groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
