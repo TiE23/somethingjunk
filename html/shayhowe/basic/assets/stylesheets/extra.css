@@ -1,0 +1,18 @@
+.spaced {
+  display: flex;
+  justify-content: space-around;
+}
+
+.service h2, .service p {
+  color: #999;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.service {
+  background: #eee;
+  padding: 0 20px;
+  margin: 0 10px;
+  border-radius: 10px;
+  width: 100%; /* This makes sure that the element takes up as much width as it can. */
+}

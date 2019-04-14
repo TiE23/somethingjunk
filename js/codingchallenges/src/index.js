@@ -3966,3 +3966,55 @@ const groupAnagrams = (strs) => {
 };
 
 console.log(["eat", "tea", "tan", "ate", "nat", "bat"], groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
+
+const person = {
+  firstName: "John",
+  lastName: "Doe",
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+};
+
+const greet = function (language = "en", ending = "!") {
+  if (language === "en") {
+    console.log(`Hello, ${this.getFullName()}${ending}`);
+  } else if (language === "es") {
+    console.log(`Hola, ${this.getFullName()}${ending}`);
+  }
+};
+
+// Bind example. Give it its "this" context in the form of person
+const boundGreet = greet.bind(person);
+boundGreet();                    // Hello, John Doe!
+
+// Call example. Immediately call it with "this" context.
+// Following args are function args.
+greet.call(person);                 // Hello, John Doe!
+greet.call(person, "es");           // Hola, John Doe!
+greet.call(person, "es", "...");    // Hola, John Doe...
+
+// Apply example. Just like .call() but the arguments are passed
+// in an array.
+greet.apply(person, ["es"]);        // Hola, John Doe!
+greet.apply(person, ["es", "..."]); // Hola, John Doe...
+
+// Function borrowing example.
+const person2 = {
+  firstName: "Jane",
+  lastName: "Doe",  // This will be undefined if not set here.
+};
+
+// Call person's getFullName function but with person2 object.
+console.log(person.getFullName.apply(person2)); // Jane Doe
+
+// Function currying example.
+function myMultiply(a, b) {
+  return a * b;
+}
+
+// Function currying = Creating a copy of a function but with some
+// preset parameters
+const multipleByTwo = myMultiply.bind(this, 2);   // "a" becomes 2
+const multipleByThree = myMultiply.bind(this, 3); // "a" becomes 3
+console.log(multipleByTwo(5));    // 10
+console.log(multipleByThree(5));  // 15
