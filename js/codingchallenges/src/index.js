@@ -3965,7 +3965,7 @@ const groupAnagrams = (strs) => {
   return groups;
 };
 
-console.log(["eat", "tea", "tan", "ate", "nat", "bat"], groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
+// console.log(["eat", "tea", "tan", "ate", "nat", "bat"], groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
 
 const person = {
   firstName: "John",
@@ -3985,18 +3985,16 @@ const greet = function (language = "en", ending = "!") {
 
 // Bind example. Give it its "this" context in the form of person
 const boundGreet = greet.bind(person);
-boundGreet();                    // Hello, John Doe!
+// boundGreet();                    // Hello, John Doe!
 
-// Call example. Immediately call it with "this" context.
-// Following args are function args.
-greet.call(person);                 // Hello, John Doe!
-greet.call(person, "es");           // Hola, John Doe!
-greet.call(person, "es", "...");    // Hola, John Doe...
+// Call example. Immediately call it with "this" context. Following args are function args.
+// greet.call(person);                 // Hello, John Doe!
+// greet.call(person, "es");           // Hola, John Doe!
+// greet.call(person, "es", "...");    // Hola, John Doe...
 
-// Apply example. Just like .call() but the arguments are passed
-// in an array.
-greet.apply(person, ["es"]);        // Hola, John Doe!
-greet.apply(person, ["es", "..."]); // Hola, John Doe...
+// Apply example. Just like .call() but the arguments are passed in an array.
+// greet.apply(person, ["es"]);        // Hola, John Doe!
+// greet.apply(person, ["es", "..."]); // Hola, John Doe...
 
 // Function borrowing example.
 const person2 = {
@@ -4005,7 +4003,7 @@ const person2 = {
 };
 
 // Call person's getFullName function but with person2 object.
-console.log(person.getFullName.apply(person2)); // Jane Doe
+// console.log(person.getFullName.apply(person2)); // Jane Doe
 
 // Function currying example.
 function myMultiply(a, b) {
@@ -4016,5 +4014,144 @@ function myMultiply(a, b) {
 // preset parameters
 const multipleByTwo = myMultiply.bind(this, 2);   // "a" becomes 2
 const multipleByThree = myMultiply.bind(this, 3); // "a" becomes 3
-console.log(multipleByTwo(5));    // 10
-console.log(multipleByThree(5));  // 15
+// console.log(multipleByTwo(5));    // 10
+// console.log(multipleByThree(5));  // 15
+
+
+
+// Callback Hell Example Question
+function mockHttpRequest(url, callback) {
+  setTimeout(callback, 100 + (Math.random() * 200));
+}
+
+// Rewrite this function, to avoid "callback hell"
+function mockSomething(user, pass) {
+  mockHttpRequest("/user/login", function(loginRes) {
+    mockHttpRequest("/user/profile/get", function(profileRes) {
+      mockHttpRequest("/user/preferences/set", function() {
+        console.log(`All calls complete! ${user}, ${pass}`);
+      });
+    });
+  });
+}
+
+mockSomething("user1", "password");
+console.log("Doing #1 now!");
+
+
+// Strategy #1 - Just moving some functions out.
+// We don't do anything with data, by the way. It just looked weird without it.
+function getLogin(data, cb) {
+  mockHttpRequest("/user/login", cb);
+}
+function getProfile(data, cb) {
+  mockHttpRequest("/user/profile/get", cb);
+}
+function setPreferences(data, cb) {
+  mockHttpRequest("/user/preferences/set", cb);
+}
+
+function mockSomething2(user, pass) {
+  getLogin([user, pass], (loginRes) => {
+    getProfile(loginRes, (profileRes) => {
+      setPreferences(profileRes, () => {
+        console.log(`All calls complete! ${user}, ${pass}`);
+      });
+    });
+  });
+}
+
+mockSomething2("user2", "password");
+console.log("Doing #2 now!");
+
+
+// Strategy #2 - Using promises
+// Need to promisify everything including mockHttpRequest().
+function mockHttpRequestP(url) {
+  return new Promise((resolve, reject) => {
+    const waitTime = Math.floor(100 + (Math.random() * 200));
+    if (waitTime % 10 === 0) {  // One in ten will fail.
+      reject(new Error(`Bad response from ${url}`));
+    }
+    setTimeout(() => resolve(`${Math.floor(waitTime)}ms`), waitTime); // Returning timing info.
+  });
+}
+function getLoginP(user, pass) {
+  return new Promise((resolve, reject) => {
+    mockHttpRequestP("/user/login")
+      .then(waitTime => resolve(`${user}, ${pass}: Got Login in ${waitTime}!`))
+      .catch(err => reject(err));
+  });
+}
+function getProfileP(data) {
+  return new Promise((resolve, reject) => {
+    mockHttpRequestP("/user/profile/get")
+      .then(waitTime => resolve(`${data} Got Profile in ${waitTime}!`))
+      .catch(err => reject(err));
+  });
+}
+function getPreferencesP(data) {
+  return new Promise((resolve, reject) => {
+    mockHttpRequestP("/user/preferences/set")
+      .then(waitTime => resolve(`${data} Set Preferences in ${waitTime}!`))
+      .catch(err => reject(err));
+  });
+}
+
+function mockSomething3(user, pass) {
+  getLoginP(user, pass)
+    .then(loginData => getProfileP(loginData))
+    .then(profileData => getPreferencesP(profileData))
+    .then(preferencesData => console.log(`All calls complete! ${preferencesData}`))
+    .catch(err => console.log(`Error! "${err.message}"`));
+}
+
+mockSomething3("user3", "password");
+console.log("Doing #3 now!");
+
+
+// Strategy #3 - Use Async and Await
+// Need to promisify setTimeout() to work. https://stackoverflow.com/a/33292942/3120546
+const sleep = waitTime => new Promise(resolve => setTimeout(resolve, waitTime));
+
+async function mockHttpRequestA(url) {
+  const waitTime = Math.floor(100 + (Math.random() * 200));
+
+  // Just awaiting the promise.
+  await sleep(waitTime);
+
+  // Simulate a 1-in-10 chance of a bad response.
+  if (waitTime % 10 === 0) {
+    throw new Error(`Bad response from ${url}`);
+  }
+
+  return waitTime;
+}
+
+async function getLoginA(user, pass) {
+  return `${user}, ${pass}: Got Login in ${await mockHttpRequestA("/user/login")}ms!`;
+}
+
+async function getProfileA() {
+  return ` Got Profile in ${await mockHttpRequestA("/user/profile/get")}ms!`;
+}
+
+async function getPreferencesA() {
+  return ` Set Preferences in ${await mockHttpRequestA("/user/preferences/set")}ms!`;
+}
+
+async function mockSomething4(user, pass) {
+  try {
+    let results = "";
+    results += await getLoginA(user, pass);
+    results += await getProfileA();
+    results += await getPreferencesA();
+
+    console.log(`All calls complete! ${results}`);
+  } catch (err) {
+    console.log(`Error! "${err.message}"`);
+  }
+}
+
+mockSomething4("user4", "password");
+console.log("Doing #4 now!");
