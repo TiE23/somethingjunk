@@ -1,6 +1,10 @@
 /* eslint-disable no-console, camelcase */
-// To confirm that ES6 import syntax works.
+// To confirm that ES6 import syntax works. https://stackoverflow.com/a/36821986/3120546
+
 // import { findIndex } from "lodash";
+import performance from "performance-now";
+import https from "https";
+
 //
 // const abc = ["A", "B", "C"];
 // console.log(findIndex(abc, o => o === "B"));
@@ -2614,8 +2618,6 @@ function minSumold(num, k) {
 }
 
 
-const https = require("https");
-
 const getMovieTitles = (substr) => {
   const url = `https://jsonmock.hackerrank.com/api/movies/search/?Title=${substr}`;
 
@@ -4035,8 +4037,8 @@ function mockSomething(user, pass) {
   });
 }
 
-mockSomething("user1", "password");
-console.log("Doing #1 now!");
+// mockSomething("user1", "password");
+// console.log("Doing #1 now!");
 
 
 // Strategy #1 - Just moving some functions out.
@@ -4061,8 +4063,8 @@ function mockSomething2(user, pass) {
   });
 }
 
-mockSomething2("user2", "password");
-console.log("Doing #2 now!");
+// mockSomething2("user2", "password");
+// console.log("Doing #2 now!");
 
 
 // Strategy #2 - Using promises
@@ -4106,8 +4108,8 @@ function mockSomething3(user, pass) {
     .catch(err => console.log(`Error! "${err.message}"`));
 }
 
-mockSomething3("user3", "password");
-console.log("Doing #3 now!");
+// mockSomething3("user3", "password");
+// console.log("Doing #3 now!");
 
 
 // Strategy #3 - Use Async and Await
@@ -4153,5 +4155,73 @@ async function mockSomething4(user, pass) {
   }
 }
 
-mockSomething4("user4", "password");
-console.log("Doing #4 now!");
+// mockSomething4("user4", "password");
+// console.log("Doing #4 now!");
+
+
+// Promisify a function from memory
+function sleepPromise(time) {
+  return new Promise((resolve, reject) => {
+    if (time < 0) {
+      reject();
+    } else {
+      setTimeout(resolve, time);
+    }
+  });
+}
+
+// Use a promise from memory
+sleepPromise(300)
+  .then(() => console.log("SleepA promise complete!"))
+  .catch(() => console.log("SleepA failed..."));
+console.log("SleepA called sleepPromise(300)");
+
+sleepPromise(-300)
+  .then(() => console.log("SleepB promise complete!"))
+  .catch(() => console.log("SleepB failed..."));
+console.log("SleepB called sleepPromise(-300)");
+
+
+// Use await from memory
+async function doSleep(title, time) {
+  console.log(`${title} should take ${time}ms...`);
+  try {
+    // Note here that sleepPromise is not an async function, rather it returns a promise
+    await sleepPromise(time);
+    console.log(`${title} doSleep ${time}ms done!`);
+  } catch (err) {
+    console.log(`${title} doSleep ${time}ms failed!`);
+  }
+}
+
+doSleep("SleepC", 2000);
+doSleep("SleepD", -2000);
+
+
+// Example of Promise.all()
+// This starts all sleep functions at the same time.
+async function multiSleep(sleeps) {
+  if (!sleeps || sleeps.length === 0) {
+    return;
+  }
+
+  const sleepFunctions = sleeps.map(config => doSleep(config.title, config.time));
+  const totalTime = sleeps.reduce((sum, { time }) => sum + time, 0);
+
+  const start = performance();
+  await Promise.all(sleepFunctions);
+  const end = performance();
+
+  console.log(
+    `${sleeps.length} sleeps completed in ${Math.floor(end - start)}ms, not ${totalTime}ms`,
+  );
+}
+
+// Proof in point, if we used await for each one of the following 4 sleeps it'd take 19 seconds
+// to complete the following sleeps:
+multiSleep([
+  { title: "SleepE", time: 5000 },
+  { title: "SleepF", time: 6000 },
+  { title: "SleepG", time: 5000 },
+  { title: "SleepH", time: 3000 },
+]);
