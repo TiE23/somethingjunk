@@ -4020,7 +4020,6 @@ const multipleByThree = myMultiply.bind(this, 3); // "a" becomes 3
 // console.log(multipleByThree(5));  // 15
 
 
-
 // Callback Hell Example Question
 function mockHttpRequest(url, callback) {
   setTimeout(callback, 100 + (Math.random() * 200));
@@ -4029,28 +4028,34 @@ function mockHttpRequest(url, callback) {
 // Rewrite this function, to avoid "callback hell"
 function mockSomething(user, pass) {
   mockHttpRequest("/user/login", function(loginRes) {
+    // Do something to login
     mockHttpRequest("/user/profile/get", function(profileRes) {
+      // Do something to profile
       mockHttpRequest("/user/preferences/set", function() {
+        // Do something to preferences
         console.log(`All calls complete! ${user}, ${pass}`);
       });
     });
   });
 }
 
-// mockSomething("user1", "password");
-// console.log("Doing #1 now!");
+mockSomething("user1", "password");
+console.log("Doing #1 now!");
 
 
 // Strategy #1 - Just moving some functions out.
 // We don't do anything with data, by the way. It just looked weird without it.
 function getLogin(data, cb) {
   mockHttpRequest("/user/login", cb);
+  // Do something to login
 }
 function getProfile(data, cb) {
   mockHttpRequest("/user/profile/get", cb);
+  // Do something to profile
 }
 function setPreferences(data, cb) {
   mockHttpRequest("/user/preferences/set", cb);
+  // Do something to preferences
 }
 
 function mockSomething2(user, pass) {
@@ -4063,8 +4068,8 @@ function mockSomething2(user, pass) {
   });
 }
 
-// mockSomething2("user2", "password");
-// console.log("Doing #2 now!");
+mockSomething2("user2", "password");
+console.log("Doing #2 now!");
 
 
 // Strategy #2 - Using promises
@@ -4108,8 +4113,8 @@ function mockSomething3(user, pass) {
     .catch(err => console.log(`Error! "${err.message}"`));
 }
 
-// mockSomething3("user3", "password");
-// console.log("Doing #3 now!");
+mockSomething3("user3", "password");
+console.log("Doing #3 now!");
 
 
 // Strategy #3 - Use Async and Await
@@ -4155,8 +4160,8 @@ async function mockSomething4(user, pass) {
   }
 }
 
-// mockSomething4("user4", "password");
-// console.log("Doing #4 now!");
+mockSomething4("user4", "password");
+console.log("Doing #4 now!");
 
 
 // Promisify a function from memory
@@ -4192,6 +4197,7 @@ async function doSleep(title, time) {
   } catch (err) {
     console.log(`${title} doSleep ${time}ms failed!`);
   }
+  return [title, time];
 }
 
 doSleep("SleepC", 2000);
@@ -4209,7 +4215,8 @@ async function multiSleep(sleeps) {
   const totalTime = sleeps.reduce((sum, { time }) => sum + time, 0);
 
   const start = performance();
-  await Promise.all(sleepFunctions);
+  const results = await Promise.all(sleepFunctions);
+  console.log("Promise.all() results:", results);
   const end = performance();
 
   console.log(
@@ -4225,3 +4232,85 @@ multiSleep([
   { title: "SleepG", time: 5000 },
   { title: "SleepH", time: 3000 },
 ]);
+
+// https://learn.freecodecamp.org/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/pig-latin/
+function translatePigLatin(str) {
+  const clusterFind = str.match(/^[^aeiou]+/);
+
+  if (clusterFind) {
+    str = str.slice(clusterFind[0].length);
+    str += clusterFind[0] + "ay";
+  } else {
+    str += "way";
+  }
+  return str;
+}
+
+// console.log(translatePigLatin("consonant"));
+// console.log(translatePigLatin("california"));
+// console.log(translatePigLatin("paragraphs"));
+// console.log(translatePigLatin("glove"));
+// console.log(translatePigLatin("algorithm"));
+// console.log(translatePigLatin("eight"));
+// console.log(translatePigLatin("sky"));
+// console.log(translatePigLatin("skrrrt"));
+
+
+// https://learn.freecodecamp.org/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/sum-all-odd-fibonacci-numbers
+function sumOddFibs(num) {
+  let oddSum = 0;
+  let a = 1;
+  let b = 0;
+  let temp;
+
+  while (a <= num) {
+    if (a % 2 === 1) {
+      oddSum += a;
+    }
+
+    temp = a;
+    a = a + b;
+    b = temp;
+  }
+
+  return oddSum;
+}
+
+// console.log(sumOddFibs(4));
+// console.log(sumOddFibs(75024));
+// console.log(sumOddFibs(75025));
+
+// https://learn.freecodecamp.org/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/sum-all-primes
+function sumPrimes(num) {
+  let sum = 0;
+
+  for (let x = 2; x <= num; ++x) {
+    if (isPrime(x)) {
+      sum += x;
+    }
+  }
+
+  return sum;
+}
+
+function isPrime(num) {
+  num = Math.abs(num);  // Just dealing with positive numbers
+  if (num < 2) return false;  // 0 and 1 are not primes
+  if (num === 2) return true; // 2 is a prime
+  if (num % 2 === 0) return false;  // Even numbers other than 2 are not prime
+  let divisor = 3;
+  while (divisor < num / 2) {
+    if ((num / divisor) % 1 === 0) {
+      return false;
+    }
+    ++divisor;
+  }
+  return true;
+}
+
+// console.log(sumPrimes(2));    // 2
+// console.log(sumPrimes(3));    // 5
+// console.log(sumPrimes(5));    // 10
+// console.log(sumPrimes(10));   // 17
+// console.log(sumPrimes(977));  // 73156
+
