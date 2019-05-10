@@ -1,0 +1,148 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Grid */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.container,
+.grid {
+  margin: 0 auto;
+  width: 960px;
+}
+.container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+* {
+  font-family: Helvetica, sans-serif;
+}
+
+p {
+  margin: 0 0 0 5px;
+}
+
+.section {
+  width: 90%;
+  max-width: 960px;
+  margin: 20px auto;
+  padding: 0 0 20px 0;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.row {
+  min-width: 600px;
+  background: lightgray;
+  padding: 22px 10px 22px 10px;
+}
+
+.row p {
+  font-family: helvetica, sans-serif;
+  text-align: center;
+}
+
+.hero {
+  color: #fff;
+  line-height: 44px;
+  padding: 22px 80px 10px 80px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: Georgia, serif;
+  color: #222;
+  margin: 10 0 0 5px;
+  font-size: 48px;
+}
+
+.hero p {
+  color: #222;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+.userinput {
+  padding: 5px 10px;
+  font-size: 16px;
+  margin: 2px;
+}
+
+.btn {
+  background-color: #2d72ad;
+  color: #fbfbfb;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  margin: 2px;
+}
+.btn:hover {
+  background-color: #89afd0;
+}
+
+#winner h2 {
+  font-size: 20px;
+}
+
+#results ol {
+  list-style-type: upper-roman;
+  padding-left: 15px;
+}

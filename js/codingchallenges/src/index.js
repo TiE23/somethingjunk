@@ -2283,8 +2283,8 @@ const letterCombinations = (digits) => {
   return output;
 };
 
-// console.log(23, letterCombinations(23));
-// console.log(233, letterCombinations(233));
+// console.log("23", letterCombinations("23"));
+// console.log("234", letterCombinations("234"));
 
 
 /**
@@ -2531,10 +2531,10 @@ const numDecodings = (input) => {
 
     // No string is possible with blank input.
     if (input.length === 0) return 0;
-    // Base case, we created a possible string.
-    if (input.length - index === 0) return 1;
     // Zero is not allowed
     if (input[index] === "0") return 0;
+    // Base case, we created a possible string.
+    if (index >= input.length) return 1;
 
     if (index < input.length - 1 && input.slice(index, index + 2) <= 26) {
       memo[index] = recurse(index + 1) + recurse(index + 2);
@@ -2554,6 +2554,7 @@ const numDecodings = (input) => {
 // console.log("127", numDecodings("127")); // 2: abg, lg
 // console.log("111", numDecodings("111")); // 3: aaa, ak, ka
 // console.log("2626", numDecodings("2626")); // 4: bfbf, bfz, zbf, zz
+// console.log("123412", numDecodings("123412")); // 6: abcdab, lcdab, awdab, abcl, lcdl, awdl
 // console.log("01", numDecodings("01")); // 0: (no zero character)
 // console.log("", numDecodings("")); // 0: (zero length input)
 
@@ -4039,8 +4040,8 @@ function mockSomething(user, pass) {
   });
 }
 
-mockSomething("user1", "password");
-console.log("Doing #1 now!");
+// mockSomething("user1", "password");
+// console.log("Doing #1 now!");
 
 
 // Strategy #1 - Just moving some functions out.
@@ -4068,8 +4069,8 @@ function mockSomething2(user, pass) {
   });
 }
 
-mockSomething2("user2", "password");
-console.log("Doing #2 now!");
+// mockSomething2("user2", "password");
+// console.log("Doing #2 now!");
 
 
 // Strategy #2 - Using promises
@@ -4113,8 +4114,8 @@ function mockSomething3(user, pass) {
     .catch(err => console.log(`Error! "${err.message}"`));
 }
 
-mockSomething3("user3", "password");
-console.log("Doing #3 now!");
+// mockSomething3("user3", "password");
+// console.log("Doing #3 now!");
 
 
 // Strategy #3 - Use Async and Await
@@ -4160,8 +4161,8 @@ async function mockSomething4(user, pass) {
   }
 }
 
-mockSomething4("user4", "password");
-console.log("Doing #4 now!");
+// mockSomething4("user4", "password");
+// console.log("Doing #4 now!");
 
 
 // Promisify a function from memory
@@ -4176,15 +4177,15 @@ function sleepPromise(time) {
 }
 
 // Use a promise from memory
-sleepPromise(300)
-  .then(() => console.log("SleepA promise complete!"))
-  .catch(() => console.log("SleepA failed..."));
-console.log("SleepA called sleepPromise(300)");
-
-sleepPromise(-300)
-  .then(() => console.log("SleepB promise complete!"))
-  .catch(() => console.log("SleepB failed..."));
-console.log("SleepB called sleepPromise(-300)");
+// sleepPromise(300)
+//   .then(() => console.log("SleepA promise complete!"))
+//   .catch(() => console.log("SleepA failed..."));
+// console.log("SleepA called sleepPromise(300)");
+//
+// sleepPromise(-300)
+//   .then(() => console.log("SleepB promise complete!"))
+//   .catch(() => console.log("SleepB failed..."));
+// console.log("SleepB called sleepPromise(-300)");
 
 
 // Use await from memory
@@ -4200,8 +4201,8 @@ async function doSleep(title, time) {
   return [title, time];
 }
 
-doSleep("SleepC", 2000);
-doSleep("SleepD", -2000);
+// doSleep("SleepC", 2000);
+// doSleep("SleepD", -2000);
 
 
 // Example of Promise.all()
@@ -4226,12 +4227,12 @@ async function multiSleep(sleeps) {
 
 // Proof in point, if we used await for each one of the following 4 sleeps it'd take 19 seconds
 // to complete the following sleeps:
-multiSleep([
-  { title: "SleepE", time: 5000 },
-  { title: "SleepF", time: 6000 },
-  { title: "SleepG", time: 5000 },
-  { title: "SleepH", time: 3000 },
-]);
+// multiSleep([
+//   { title: "SleepE", time: 5000 },
+//   { title: "SleepF", time: 6000 },
+//   { title: "SleepG", time: 5000 },
+//   { title: "SleepH", time: 3000 },
+// ]);
 
 // https://learn.freecodecamp.org/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/pig-latin/
 function translatePigLatin(str) {
@@ -4314,3 +4315,34 @@ function isPrime(num) {
 // console.log(sumPrimes(10));   // 17
 // console.log(sumPrimes(977));  // 73156
 
+
+// Dynamic programming solution to the classic change making algorithm
+// https://www.geeksforgeeks.org/find-minimum-number-of-coins-that-make-a-change/
+const makeChangeDynamic = (coins, value, printout = false) => {
+  // Create a table to hold minimum coin numbers.
+  const table = new Array(value + 1).fill(Number.MAX_SAFE_INTEGER);
+  table[0] = 0;
+
+  // Compute minimum coins required for all values between 1 and value
+  for (let count = 1; count <= value; ++count) {
+    // Go through all coins
+    for (let coin = 0; coin < coins.length; ++coin) {
+      // Only try a coin that is smaller than what we need (don't try to use a quarter for 24 cents)
+      if (coins[coin] <= count) {
+        // Grab the previously calculated value.
+        const subResult = table[count - coins[coin]];
+        // If this solution is one coin better, save it.
+        if (subResult !== Number.MAX_SAFE_INTEGER && subResult + 1 < table[count]) {
+          table[count] = subResult + 1; // Add one new coin.
+        }
+      } // If coin values incremented in value we could break to save some time.
+    }
+  }
+
+  if (printout) {
+    console.log(table.map((coinCount, sumValue) => `${sumValue} cents needs ${coinCount} coins`));
+  }
+  return table[value];  // This will have the minimum number of coins.
+};
+
+console.log("makeChangeDynamic()", makeChangeDynamic([1, 5, 10, 25], 99, true));  // 3x25, 2x10, 4x1 = 9 coins
