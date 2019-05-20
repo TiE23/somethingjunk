@@ -4345,4 +4345,100 @@ const makeChangeDynamic = (coins, value, printout = false) => {
   return table[value];  // This will have the minimum number of coins.
 };
 
-console.log("makeChangeDynamic()", makeChangeDynamic([1, 5, 10, 25], 99, true));  // 3x25, 2x10, 4x1 = 9 coins
+// console.log("makeChangeDynamic()", makeChangeDynamic([1, 5, 10, 25], 99, true));  // 3x25, 2x10, 4x1 = 9 coins
+
+
+/**
+ * 54. Spiral Matrix (medium)
+ * https://leetcode.com/problems/spiral-matrix
+ * Score: 56ms (94.80%) and 31.4MB (7.06%)
+ * I lifted an idea from an example question I did for Facebook (see function spiral() above)
+ * where the directions were controlled with pre-set incrementer.
+ * I made a dumb mistake of setting the dirs values incorrectly, forgetting that the rows were
+ * opposite what you expected (to move DOWN you INCREMENT the row value).
+ * I didn't know a good way of using a single iteration tracking value to control the borders, so I
+ * ended up using rowStart/rowEnd/colStart/colEnd values. Finally, I copped-out and used a set
+ * length for the array (rows * cols) to end the function early, otherwise the algorithm would
+ * always append one extra value at the end as the start/end values weren't checked until the next
+ * round of the loop.
+ * This one took me at least 30 minutes of work. I didn't have a whiteboard or paper, I imagine
+ * using them would've really helped.
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+const spiralOrder = (matrix) => {
+  if (!matrix.length || !matrix[0].length) return [];
+
+  // Going to use a trick I saw for another question I saw some weeks ago.
+  const dirs = [
+    [0, 1],  // Move right (0 rows, 1 cols)
+    [1, 0], // Move down (1 rows, 0 cols)
+    [0, -1], // Move left (0 rows, -1 cols)
+    [-1, 0],  // Move up (-1 rows, 0 cols)
+  ];
+  let dir = 0;
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  let iteration = 0;
+  const results = new Array(rows * cols);
+
+  let rowStart = 0;
+  let rowEnd = rows;
+  let colStart = 0;
+  let colEnd = cols;
+  let row = 0;
+  let col = 0;   // Start -1 so the first one is 0
+
+  // Limiting the iteration cound to rows * cols is a cop-out
+  // Just didn't want to deal...
+  while (iteration < rows * cols) {
+    results[iteration] = (matrix[row][col]);
+
+    if (row + dirs[dir][0] >= rowEnd || row + dirs[dir][0] < rowStart ||
+        col + dirs[dir][1] >= colEnd || col + dirs[dir][1] < colStart
+    ) {
+      if (dir === 0) ++rowStart;  // Moved as far right as we could
+      if (dir === 1) --colEnd;    // Moved as far down as we could
+      if (dir === 2) --rowEnd;    // Moved as far left as we could
+      if (dir === 3) ++colStart;  // Moved as far up as we could
+      dir = (dir + 1) % 4;
+    }
+
+    row += dirs[dir][0];
+    col += dirs[dir][1];
+
+    ++iteration;
+  }
+
+  return results;
+};
+// 1 2 3
+// 4 5 6
+// 7 8 9
+const spiralOrder01 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+// -> 1 2 3 6 9 8 7 4 5
+console.log(spiralOrder(spiralOrder01));
+
+// 1  2  3  4
+// 5  6  7  8
+// 9 10 11 12
+const spiralOrder02 = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]];
+// -> 1 2 3 4 8 12 11 10 9 5 6 7
+console.log(spiralOrder(spiralOrder02));
+
+// Edge-y cases
+const spiralOrder03 = [[1]];
+console.log(spiralOrder(spiralOrder03));
+const spiralOrder04 = [[1, 2]];
+console.log(spiralOrder(spiralOrder04));
+const spiralOrder05 = [[1], [2]];
+console.log(spiralOrder(spiralOrder05));
+const spiralOrder06 = [[1, 2], [3, 4]];
+console.log(spiralOrder(spiralOrder06));
+const spiralOrder07 = [[1], [2], [3]];
+console.log(spiralOrder(spiralOrder07));
+const spiralOrder08 = [];
+console.log(spiralOrder(spiralOrder08));
+const spiralOrder09 = [[]];
+console.log(spiralOrder(spiralOrder09));
