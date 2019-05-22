@@ -4425,20 +4425,46 @@ console.log(spiralOrder(spiralOrder01));
 // 9 10 11 12
 const spiralOrder02 = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]];
 // -> 1 2 3 4 8 12 11 10 9 5 6 7
-console.log(spiralOrder(spiralOrder02));
+// console.log(spiralOrder(spiralOrder02));
 
 // Edge-y cases
 const spiralOrder03 = [[1]];
-console.log(spiralOrder(spiralOrder03));
+// console.log(spiralOrder(spiralOrder03));
 const spiralOrder04 = [[1, 2]];
-console.log(spiralOrder(spiralOrder04));
+// console.log(spiralOrder(spiralOrder04));
 const spiralOrder05 = [[1], [2]];
-console.log(spiralOrder(spiralOrder05));
+// console.log(spiralOrder(spiralOrder05));
 const spiralOrder06 = [[1, 2], [3, 4]];
-console.log(spiralOrder(spiralOrder06));
+// console.log(spiralOrder(spiralOrder06));
 const spiralOrder07 = [[1], [2], [3]];
-console.log(spiralOrder(spiralOrder07));
+// console.log(spiralOrder(spiralOrder07));
 const spiralOrder08 = [];
-console.log(spiralOrder(spiralOrder08));
+// console.log(spiralOrder(spiralOrder08));
 const spiralOrder09 = [[]];
-console.log(spiralOrder(spiralOrder09));
+// console.log(spiralOrder(spiralOrder09));
+
+import fetch from "node-fetch";
+
+const testFetch = () => {
+  fetch("https://jsonplaceholder.typicode.com/todos/1")
+    .then(response => response.json())
+    .then(json => console.log(json));
+
+};
+
+// testFetch();
+
+const testFetchP = () => {
+  return new Promise((res, err) => {
+    fetch("https://jsonplaceholder.typicode.com/todos/1")
+      .then(response => response.json())
+      .then(json => res(json));
+  });
+};
+
+async function fetchAsync() {
+  const results = await testFetchP();
+  console.log("awaiting", results);
+}
+
+fetchAsync().then(res => console.log("done"));
