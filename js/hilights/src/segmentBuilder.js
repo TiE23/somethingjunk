@@ -9,7 +9,7 @@ const segmentBuilder = (textData) => {
   highlights.forEach((highlight, index) => {
     // Disallow styles with bad offsets or negative priorities
     if (highlight.startOffset < 0 || highlight.endOffset > string.length ||
-      highlight.priority < 0
+      highlight.priority < 0 || highlight.startOffset >= highlight.endOffset
     ) {
       return;
     }
@@ -26,7 +26,7 @@ const segmentBuilder = (textData) => {
   const segments = [];
   let segmentNum = 0;
 
-  let prevStyle = undefined;
+  let prevStyle;
 
   for (let s = 0; s < styleArray.length; ++s) {
     if (prevStyle === undefined || prevStyle !== styleArray[s]) {
@@ -39,12 +39,16 @@ const segmentBuilder = (textData) => {
           segments[segmentNum - 1].style !== -1 &&
           highlights[segments[segmentNum - 1].style].priority < highlights[styleArray[s]].priority,
         rightStretch: false,
-        // Check the previous character in the string if it's not a space
-        leftTrim: false,// s > 0 && string[s - 1] !== " ",
+        leftTrim: false,
         rightTrim: false,
       });
 
-      // Look back one segment to determine end, rightStretch, and rightTrim
+      // Check the previous character in the string if it's not a space
+      if (s > 0 && string[s - 1] !== " ") {
+        segments[segmentNum].leftTrim = !segments[segmentNum].leftStretch;
+      }
+
+      // Look back one segment to perform so look-behind adjustments.
       if (segmentNum > 0) {
         // Mark the previous segment's end offset
         segments[segmentNum - 1].end = s;
@@ -56,9 +60,9 @@ const segmentBuilder = (textData) => {
           segments[segmentNum - 1].rightStretch = true;
         }
 
-        // If the current character in the string is not a space, mark rightTrim
+        // If the current character in the string is not a space, mark rightTrim on prev segment
         if (string[s] !== " " && s < styleArray.length - 1) {
-          // segments[segmentNum - 1].rightTrim = true;
+          segments[segmentNum - 1].rightTrim = !segments[segmentNum - 1].rightStretch;
         }
       }
 
@@ -70,7 +74,6 @@ const segmentBuilder = (textData) => {
 
   return segments;
 };
-
 
 
 export default segmentBuilder;

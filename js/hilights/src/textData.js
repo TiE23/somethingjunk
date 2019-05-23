@@ -1,13 +1,14 @@
 const data = [
+  // Demo string
   {
     string: "You will deliver new technology with an adorable puppy. Perfect!",
     /**
      * You will deliver new technology with an adorable puppy. Perfect!
      *     ^            ^ ^          ^      ^  ^      ^      ^ ^      ^
      *     4           17 19        30     37 40     47     54 56    63  <- Zero-start indexes
-     * ----000000000000000011111111111------222333333332222222-44444444  <- Highlights
+     * ----000000000000000011111111111------222333333332222222-44444444  <- Styles (- is -1/none)
      *   4         16          11        6   3    8       7   1   8      <- Segment lengths
-     *                        ls            rs           ls
+     *                        ls            rs           ls              <- Stretches
      *
      */
     highlights: [
@@ -43,27 +44,14 @@ const data = [
       },
     ],
   },
-  {
-    string: "You will deliver new technology with an adorable puppy. Perfect!",
-    highlights: [
-      {
-        startOffset: 4,
-        endOffset: 20,
-        color: "#d9f593",
-        priority: 0,
-      },
-      {
-        startOffset: 17,
-        endOffset: 31,
-        color: "#e8e8e8",
-        priority: 1,
-      },
-    ],
-  },
+
+  // Testing an un-highlighted string
   {
     string: "You will deliver new technology with an adorable puppy. Perfect!",
     highlights: [],
   },
+
+  // Testing some bad highlights
   {
     string: "Short sentence.",
     highlights: [
@@ -75,14 +63,20 @@ const data = [
       },
       // Invalid highlights
       {
-        startOffset: 17,
+        startOffset: 17,  // Out of range
         endOffset: 31,
         color: "#e8e8e8",
         priority: 1,
       },
       {
         startOffset: -1,
-        endOffset: 3,
+        endOffset: 3,     // Negative range
+        color: "#e8e8e8",
+        priority: 1,
+      },
+      {
+        startOffset: 3,
+        endOffset: 1,     // Backwards range
         color: "#e8e8e8",
         priority: 1,
       },
@@ -90,10 +84,12 @@ const data = [
         startOffset: 1,
         endOffset: 4,
         color: "#e8e8e8",
-        priority: -10,
+        priority: -10,    // Negative priority
       },
     ],
   },
+
+  // Testing a heavily nested sentence
   {
     string: "Heavily nested sentence.",
     highlights: [
@@ -129,6 +125,8 @@ const data = [
       },
     ],
   },
+
+  // Showing extra space handling (pre-wrap)
   {
     string: "More   spaces  than necessary.",
     highlights: [
@@ -146,6 +144,8 @@ const data = [
       },
     ],
   },
+
+  // Highlighting the whole string, and nesting further inside
   {
     string: "The whole thing!",
     highlights: [
@@ -153,45 +153,73 @@ const data = [
         startOffset: 0,
         endOffset: 16,
         color: "#d9f593",
-        priority: 3,
+        priority: 4,
       },
       {
         startOffset: 0,
         endOffset: 16,
         color: "#f58e56",
-        priority: 3,  // Same priority as above means this takes precedent
+        priority: 4,  // Same priority as above means this takes precedent
       },
       {
         startOffset: 1,
         endOffset: 15,
-        color: "#c0f568",
-        priority: 2,
+        color: "#50f53c",
+        priority: 3,
       },
       {
         startOffset: 2,
         endOffset: 14,
         color: "#f581c2",
-        priority: 1,
+        priority: 2,
       },
       {
         startOffset: 3,
         endOffset: 13,
         color: "#93f5b2",
+        priority: 1,
+      },
+      {
+        startOffset: 4,
+        endOffset: 12,
+        color: "#1799f5",
         priority: 0,
       },
     ],
   },
+
+  // Showing trim (keeping padding+margins flush
   {
-    string: "",
+    string: "Trimming. Not here",
     highlights: [
       {
         startOffset: 0,
-        endOffset: 16,
+        endOffset: 9,
+        color: "#6ef5ae",
+        priority: 1,
+      },
+      {
+        startOffset: 2,
+        endOffset: 5,
         color: "#d9f593",
-        priority: 3,
+        priority: 0,
+      },
+      {
+        startOffset: 10,
+        endOffset: 13,
+        color: "#d9f593",
+        priority: 0,
+      },
+      {
+        startOffset: 14,
+        endOffset: 18,
+        color: "#d9f593",
+        priority: 0,
       },
     ],
   },
+
+  // Showing a conflicting priority issue
   {
     string: "Z-fighting issue.",
     highlights: [
@@ -209,14 +237,16 @@ const data = [
       },
     ],
   },
+
+  // Handling a blank string
   {
-    string: "Trimming",
+    string: "",
     highlights: [
       {
-        startOffset: 2,
-        endOffset: 5,
+        startOffset: 0,
+        endOffset: 16,
         color: "#d9f593",
-        priority: 0,
+        priority: 3,
       },
     ],
   },

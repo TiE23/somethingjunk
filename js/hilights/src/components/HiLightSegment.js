@@ -10,7 +10,7 @@ const HiLightSegment = (props) => {
       zIndex: props.style.priority * -1,  //
     };
 
-    const classes = ["segment"];
+    const classes = ["basicSegment"];
     if (props.leftStretch) classes.push("leftStretchSegment");
     if (props.rightStretch) classes.push("rightStretchSegment");
     if (props.leftTrim) classes.push("leftTrimSegment");
