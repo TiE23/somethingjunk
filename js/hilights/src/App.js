@@ -1,12 +1,13 @@
 import React from "react";
 import "./App.css";
 
-import HiLightContainer from "./components/HiLightContainer";
+import HighlightDemoContainer from "./components/HighlightDemoContainer";
 
 function App() {
   return (
     <div className="App">
-      <HiLightContainer />
+      <HighlightDemoContainer />
+      <p>By Kyle Geib - 2019-05-23</p>
     </div>
   );
 }

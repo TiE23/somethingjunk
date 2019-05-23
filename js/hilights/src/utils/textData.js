@@ -1,16 +1,15 @@
 const data = [
-  // Demo string
+  // The demo string
   {
-    string: "You will deliver new technology with an adorable puppy. Perfect!",
     /**
      * You will deliver new technology with an adorable puppy. Perfect!
      *     ^            ^ ^          ^      ^  ^      ^      ^ ^      ^
      *     4           17 19        30     37 40     47     54 56    63  <- Zero-start indexes
-     * ----000000000000000011111111111------222333333332222222-44444444  <- Styles (- is -1/none)
+     * ----000000000000000011111111111------222333333332222222-44444444  <- Styles, "-" is -1 (none)
      *   4         16          11        6   3    8       7   1   8      <- Segment lengths
-     *                        ls            rs           ls              <- Stretches
-     *
+     *                         ls           rs           ls              <- Stretches applied
      */
+    string: "You will deliver new technology with an adorable puppy. Perfect!",
     highlights: [
       {
         startOffset: 4, // "will deliver new"
@@ -190,7 +189,7 @@ const data = [
 
   // Showing trim (keeping padding+margins flush
   {
-    string: "Trimming. Not here",
+    string: "Trimming. Not here AB",
     highlights: [
       {
         startOffset: 0,
@@ -214,6 +213,18 @@ const data = [
         startOffset: 14,
         endOffset: 18,
         color: "#d9f593",
+        priority: 0,
+      },
+      {
+        startOffset: 19,
+        endOffset: 20,
+        color: "#d059f5",
+        priority: 0,  // Edge-case issue, if set to 1, we get unwanted stretch.
+      },
+      {
+        startOffset: 20,
+        endOffset: 21,
+        color: "#d059f5",
         priority: 0,
       },
     ],

@@ -3,7 +3,14 @@ import PropTypes from "prop-types";
 
 import times from "lodash/times";
 
-const HiLightDemoSelector = (props) => {
+/**
+ * Very basic set of buttons. Nothing fancy at all. Just generates a button for the number of
+ * choices we want and shows which button is selected.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
+const HighlightDemoSelector = (props) => {
   return (
     <div>
       {times(props.choiceCount, index => (
@@ -22,10 +29,10 @@ const HiLightDemoSelector = (props) => {
   );
 };
 
-HiLightDemoSelector.propTypes = {
+HighlightDemoSelector.propTypes = {
   choiceCount: PropTypes.number.isRequired,
   selectedIndex: PropTypes.number.isRequired,
   changeIndex: PropTypes.func.isRequired,
 };
 
-export default HiLightDemoSelector;
+export default HighlightDemoSelector;

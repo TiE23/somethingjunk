@@ -1,16 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import segmentBuilder from "../segmentBuilder";
-import HiLightSegment from "./HiLightSegment";
+import HighlightSegment from "./HighlightSegment";
 
-const HiLightDisplay = (props) => {
+import segmentBuilder from "../utils/segmentBuilder";
+
+/**
+ * Takes in the textData prop and has segmentData built for itself, creating an array of
+ * HighlightSegment components to display in its display div.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
+const HighlightDemoDisplay = (props) => {
   const segmentData = segmentBuilder(props.textData);
 
   const segments = segmentData.map((segment, index) => {
     return (
-      <HiLightSegment
-        key={index}
+      <HighlightSegment
+        key={index} // Not kosher, sorry!
         string={props.textData.string.slice(segment.start, segment.end)}
         style={segment.style === -1 ? null : {
           color: props.textData.highlights[segment.style].color,
@@ -33,7 +41,7 @@ const HiLightDisplay = (props) => {
   );
 };
 
-HiLightDisplay.propTypes = {
+HighlightDemoDisplay.propTypes = {
   textData: PropTypes.shape({
     string: PropTypes.string.isRequired,
     highlights: PropTypes.arrayOf(
@@ -47,4 +55,4 @@ HiLightDisplay.propTypes = {
   }).isRequired,
 };
 
-export default HiLightDisplay;
+export default HighlightDemoDisplay;

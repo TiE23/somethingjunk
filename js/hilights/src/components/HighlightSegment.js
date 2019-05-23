@@ -1,7 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const HiLightSegment = (props) => {
+/**
+ * This is the segment component. It is a styled span element that is used to represent highlighted
+ * sections of a string. Using a combination of style and className attributes the appearance
+ * of each segment is defined.
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
+const HighlightSegment = (props) => {
   // If the segment is a highlight
   if (props.style) {
     // Set the style information
@@ -10,6 +18,7 @@ const HiLightSegment = (props) => {
       zIndex: props.style.priority * -1,  //
     };
 
+    // Naive classes management.
     const classes = ["basicSegment"];
     if (props.leftStretch) classes.push("leftStretchSegment");
     if (props.rightStretch) classes.push("rightStretchSegment");
@@ -24,14 +33,14 @@ const HiLightSegment = (props) => {
         {props.string}
       </span>
     );
-  } else {  // Plain, un-highlighted span
-    return (
-      <span>{props.string}</span>
-    )
+
+  // The segment is not a highlight
+  } else {
+    return <span>{props.string}</span>;
   }
 };
 
-HiLightSegment.propTypes = {
+HighlightSegment.propTypes = {
   string: PropTypes.string.isRequired,
   style: PropTypes.shape({
     color: PropTypes.string.isRequired,
@@ -43,8 +52,8 @@ HiLightSegment.propTypes = {
   rightTrim: PropTypes.bool.isRequired,
 };
 
-HiLightSegment.defaultProps = {
+HighlightSegment.defaultProps = {
   style: null,
 };
 
-export default HiLightSegment;
+export default HighlightSegment;

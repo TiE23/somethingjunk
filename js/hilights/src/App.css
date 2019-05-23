@@ -10,17 +10,17 @@
 }
 
 .display {
-  font-size: 200%;
-  width: 90%;
   box-sizing: border-box;
+  font-size: 200%;
   font-family: Georgia, serif;
-  border: #b1b0ff solid 1px;
-  border-radius: 5px;
-  padding: 5px;
-  margin-top: 5px;
   white-space: pre-wrap;
   background-color: ghostwhite;
+  width: 90%;
   z-index: 1;
+  margin-top: 5px;
+  padding: 5px;
+  border: #b1b0ff solid 1px;
+  border-radius: 5px;
 }
 
 
