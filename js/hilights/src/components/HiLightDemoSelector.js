@@ -10,7 +10,10 @@ const HiLightDemoSelector = (props) => {
         <button
           key={`button_${index}`}
           onClick={() => props.changeIndex(index)}
-          style={{ backgroundColor: props.selectedIndex === index ? "#cbf9db" : null }}
+          style={{
+            backgroundColor: props.selectedIndex === index ? "#cbf9db" : null,
+            margin: "0 3px",
+          }}
         >
           Text #{index + 1}
         </button>

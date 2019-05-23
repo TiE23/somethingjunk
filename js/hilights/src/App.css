@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  padding: 5px;
 }
 
 .flex {
@@ -9,8 +10,49 @@
 }
 
 .display {
+  font-size: 200%;
   width: 90%;
   box-sizing: border-box;
+  font-family: Georgia, serif;
   border: #b1b0ff solid 1px;
   border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
+  white-space: pre-wrap;
+  background-color: ghostwhite;
+  z-index: 1;
+}
+
+
+/*
+  ///////////////////////////////////////////////
+  ////////////// SEGMENT STYLES /////////////////
+  ///////////////////////////////////////////////
+ */
+.segment {
+  box-sizing: border-box;
+  position: relative;
+  padding: 0 0.2ch;
+  margin-left: -0.1ch;
+  margin-right: -0.1ch;
+  border-radius: 0.7ch;
+  border: solid white 0.1ch;
+}
+
+.leftStretchSegment {
+  padding-left: 1ch;
+  margin-left: -1.0ch;
+}
+
+.rightStretchSegment {
+  padding-right: 1ch;
+  margin-right: -1.0ch;
+}
+
+.leftTrimSegment {
+  padding-left: 0;
+}
+
+.rightTrimSegment {
+  padding-right: 0;
 }
