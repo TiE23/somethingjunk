@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
 
 import textData from "../textData";
 
 import HiLightDemoSelector from "./HiLightDemoSelector";
+import HiLightDisplay from "./HiLightDisplay";
 
 class HiLightContainer extends PureComponent {
   constructor(props) {
@@ -26,12 +26,12 @@ class HiLightContainer extends PureComponent {
           selectedIndex={this.state.textIndex}
           changeIndex={this.handleTextIndexChange}
         />
-
+        <HiLightDisplay
+          textData={textData[this.state.textIndex]}
+        />
       </div>
     );
   }
 }
-
-HiLightContainer.propTypes = {};
 
 export default HiLightContainer;
