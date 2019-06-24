@@ -10,12 +10,14 @@ parser = OptionParser()
 parser.add_option("-m", "--month", help="Month (number, def: %s)" % currentMonth , metavar="int", default=currentMonth)
 parser.add_option("-y", "--year", help="Year (def: %s)" % currentYear, metavar="Int", default=currentYear)
 parser.add_option("-w", "--workDaysOnly", help="Work days only", action="store_true", dest="workDaysOnly", default=False)
+parser.add_option("-s", "--singleSpace", help="Single space output", action="store_true", dest="singleSpace", default=False)
 
 (options, args) = parser.parse_args()
 
 options.month = int(options.month)
 options.year = int(options.year)
 options.workDaysOnly = bool(options.workDaysOnly)
+options.singleSpace = bool(options.singleSpace)
 
 if options.month > 12 or options.month < 1:
   print("Put in a good month, dude!")
@@ -33,6 +35,5 @@ for dayNumber in range(1, counts[options.month - 1] + 1):
 
   # If --workDaysOnly is set, don't print the weekends (days 5 and 6)
   if not options.workDaysOnly or (options.workDaysOnly and dayOfTheWeek < 5):
-    print("%s-%s-%s %s\n" % (str(options.year), \
-      str(options.month).zfill(2), str(dayNumber).zfill(2), days[dayOfTheWeek]))
- 
+    print("%s-%s-%s %s%s" % (str(options.year), str(options.month).zfill(2),
+    	str(dayNumber).zfill(2), days[dayOfTheWeek], "" if options.singleSpace else "\n"))
