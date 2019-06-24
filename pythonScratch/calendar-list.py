@@ -9,11 +9,13 @@ currentMonth = strftime("%m")
 parser = OptionParser()
 parser.add_option("-m", "--month", help="Month (number, def: %s)" % currentMonth , metavar="int", default=currentMonth)
 parser.add_option("-y", "--year", help="Year (def: %s)" % currentYear, metavar="Int", default=currentYear)
+parser.add_option("-w", "--workDaysOnly", help="Work days only", action="store_true", dest="workDaysOnly", default=False)
 
 (options, args) = parser.parse_args()
 
 options.month = int(options.month)
 options.year = int(options.year)
+options.workDaysOnly = bool(options.workDaysOnly)
 
 if options.month > 12 or options.month < 1:
   print("Put in a good month, dude!")
@@ -26,7 +28,11 @@ days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 leapyear = not(options.year % 4 and (options.year % 100 != 0 or options.year % 400 == 0))
 counts = [31, 29 if leapyear else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-for x in range(1, counts[options.month - 1] + 1):
-  print("%s-%s-%s %s\n" % (str(options.year), \
-    str(options.month).zfill(2), str(x).zfill(2), \
-    days[(x-1 + calculatedWeekDay) % 7]))
+for dayNumber in range(1, counts[options.month - 1] + 1):
+  dayOfTheWeek = (dayNumber - 1 + calculatedWeekDay) % 7
+
+  # If --workDaysOnly is set, don't print the weekends (days 5 and 6)
+  if not options.workDaysOnly or (options.workDaysOnly and dayOfTheWeek < 5):
+    print("%s-%s-%s %s\n" % (str(options.year), \
+      str(options.month).zfill(2), str(dayNumber).zfill(2), days[dayOfTheWeek]))
+ 
