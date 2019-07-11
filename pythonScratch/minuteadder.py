@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
-# Written with Python3.6 in mind
+# Written for Python >=3.6
 
 # Supports stdin (use `echo "blah" | python minuteadder.py` or `python minuteadder.py < list.txt`)
 # Keep it a single line
@@ -11,21 +11,28 @@
 
 import sys, re
 stdin = sys.stdin.read().strip("\n").replace(" ", "")
-print("Input: %s " % stdin)
+print(f"Input: {stdin}")
 
-def sumList(inList):
-  outSum = 0
-  for x in inList:
-    outSum += x
-  return outSum
+def sumList(inputList):
+  listSum = 0
+  for value in inputList:
+    listSum += value
+  return listSum
 
 def makeTime(secondsTotal):
   seconds = secondsTotal % 60
   minutes = (secondsTotal // 60) % 60
-  hours = (secondsTotal // 3600) % 24
+  rawHours = secondsTotal //3600
+  hours = (rawHours) % 24
   days = secondsTotal // 86400
 
-  return {"days" : days, "hours": hours, "minutes": minutes, "seconds": seconds}
+  return {
+    "days" : days,
+    "rawHours": rawHours,
+    "hours": hours,
+    "minutes": minutes,
+    "seconds": seconds
+  }
 
 
 split = []
@@ -39,11 +46,15 @@ for chunk in minuteChunks:
 
 totalSeconds = sumList(split)
 totalTime = makeTime(totalSeconds)
-print("Total Seconds: {}".format(totalSeconds))
-print("Total Time: {}{}:{}:{}".format( \
-  (str(totalTime["days"]) + " day" + \
-    ("s" if totalTime["days"] > 1 else "") + \
-    ", ") if totalTime["days"] > 0 else "", \
-    str(totalTime["hours"]).zfill(2), \
-    str(totalTime["minutes"]).zfill(2), \
-    str(totalTime["seconds"]).zfill(2)))
+
+daysClause = "" if totalTime["days"] == 0 else \
+  (str(totalTime["days"]) + " day" + ("s" if totalTime["days"] > 1 else "") + ", ")
+rawHoursClause = str(totalTime["rawHours"]).zfill(2)
+hoursClause = str(totalTime["hours"]).zfill(2)
+minutesClause = str(totalTime["minutes"]).zfill(2)
+secondsClause = str(totalTime["seconds"]).zfill(2)
+
+print(f"Total Seconds: {'{:,}'.format(totalSeconds)}")
+print(f"Total Time: {rawHoursClause}:{minutesClause}:{secondsClause}")
+if daysClause:
+  print(f"Total Days: {daysClause}{hoursClause}:{minutesClause}:{secondsClause}")
