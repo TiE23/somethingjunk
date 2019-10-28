@@ -47,7 +47,7 @@ const _yamlBuildDict = (obj, initialIndentLevel, keepEmpties = true) => {
         // Basic string or number list ([] notation).
         if (key !== '-' && obj[key].every(item => typeof item === 'string' || typeof item === 'number')) {
           lines.push(
-            ...path,
+            ...path.splice(0, path.length),
             `${indent}${key}: [${obj[key]
               .map(value => _escapeReservedWords(value))
               .join(', ')}]`,
@@ -65,16 +65,11 @@ const _yamlBuildDict = (obj, initialIndentLevel, keepEmpties = true) => {
               fn({'-': item}, indentLevel + 1, path, index === 0 ? listLevel + 1 : 1);
             } else if (item !== null || keepEmpties) {
               lines.push(
-                ...path,
+                ...path.splice(0, path.length),
                 `${
                   index === 0 && listLevel > 0 ? listIndent : normalIndent
                 }- ${_escapeReservedWords(item)}`,
               );
-
-              // Clear out path, we've added it to lines.
-              if (path.length > 0) {
-                path.splice(0, path.length);
-              }
             }
           });
         }
@@ -85,7 +80,7 @@ const _yamlBuildDict = (obj, initialIndentLevel, keepEmpties = true) => {
         // Handle empty objects.
         if (keepEmpties && Object.entries(obj[key]).length === 0) {
           path.push(`${indent}${key}: {}`);
-          lines.push(...path);
+          lines.push(...path.splice(0, path.length));
         } else {
           path.push(`${indent}${key}:`);
           fn(obj[key], indentLevel + 1, path);
@@ -97,13 +92,17 @@ const _yamlBuildDict = (obj, initialIndentLevel, keepEmpties = true) => {
           ...path,
           `${indent}${key}: ${_escapeReservedWords(obj[key])}`,
         );
+
+        // Clear out path, we've added it to lines.
+        if (path.length > 0) {
+          path.splice(0, path.length);
+        }
       }
 
-      // Empty the path array, this recursive branch has reached its end.
-      if (indentLevel > 0) {
-        path.splice(0, indentLevel);
-      }
+      // If we reach this point it means we've found nothing to write.
+      path.pop();
 
+      // Switch to normalIndent no matter the starting indent style.
       indent = normalIndent;
     }
   })(obj, initialIndentLevel);
