@@ -1,0 +1,17 @@
+{
+  "version": "0.1.0",
+  "configurations": [
+    {
+      "name": "Launch SayMyName",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "args": ["${workspaceFolder}/src/main.ts"]
+      // "program": "${workspaceFolder}/app.js",
+      // "skipFiles": [
+      //   "<node_internals>/**"
+      // ],
+    }
+  ]
+}
