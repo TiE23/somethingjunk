@@ -18,7 +18,10 @@
   "rules": {
     "indent": [
       "error",
-      2
+      2,
+      {
+        "MemberExpression": "off"
+      }
     ],
     "linebreak-style": [
       "error",
@@ -32,13 +35,26 @@
       "error",
       "always"
     ],
+    "eol-last": 1,
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-            "varsIgnorePattern": "^_",
-            "argsIgnorePattern": "^_"
-        }
+      "warn",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "arrow-body-style": [
+      "error",
+      "as-needed"
     ]
   }
 }

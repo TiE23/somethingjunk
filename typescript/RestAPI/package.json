@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev:debug": "ts-node-dev --respawn --transpile-only --inspect=9229 src/app.ts"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
