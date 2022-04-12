@@ -9,6 +9,9 @@ import logger from "./utils/logger";
 const port = config.get<number>("port");
 const app = express();
 
+// Applies to every route under this call.
+app.use(express.json());
+
 app.listen(port, async () => {
   logger.info(`App is running at http://localhost:${port}`);
 
