@@ -44,6 +44,12 @@ userSchema.pre("save", async function(next) {
   return next();
 });
 
+/**
+ * It's important to define this as a method so we can access `this`. It's a
+ * smart shortcut without having to do anything else odd.
+ * @param candidatePassword
+ * @returns
+ */
 userSchema.methods.comparePassword = async function(
   candidatePassword: string,
 ): Promise<boolean> {

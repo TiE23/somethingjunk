@@ -4,6 +4,7 @@ import { AnyZodObject } from "zod";
 // This is an example of currying where you're creating a function through a function.
 const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
+    // If zod's parse function throws an error, we know something was wrong!
     schema.parse({
       body: req.body,
       query: req.query,

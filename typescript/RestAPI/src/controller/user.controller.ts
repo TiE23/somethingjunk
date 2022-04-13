@@ -6,6 +6,7 @@ import { CreateUserInput } from "../shema/user.schema";
 import logger from "../utils/logger";
 
 export async function createUserHandler(
+  // Here we use zod to help us define a type that will be used to define the req object.
   req: Request<{}, {}, CreateUserInput["body"]>,  // eslint-disable-line @typescript-eslint/ban-types
   res: Response,
 ) {
