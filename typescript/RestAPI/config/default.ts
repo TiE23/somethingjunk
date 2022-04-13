@@ -12,8 +12,8 @@ export default {
    * I think this is a basic style that I never figured out for Metric-Teacher -
    * how to re-issue access tokens.
    */
-  accessTokenTTL: "15m",
-  refreshTokenTTL: "1y",
+  accessTokenTTL: "30s",
+  refreshTokenTTL: "60s",
   publicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDmZ74qH3JqDeGHTPCAR+vrg5RA
 SWQi3hfZ/g0JsxE6mFtNVVFecOWpKx1BoMyfxQuOGi+9XtZjzIL+nL/x71YX9vox

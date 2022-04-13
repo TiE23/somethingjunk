@@ -3,6 +3,9 @@ import { object, string, TypeOf } from "zod";
 
 const minPasswordLength = config.get<number>("minPasswordLength");
 
+/**
+ * The .refine() function is used to provide custom validation logic
+ */
 export const createUserSchema = object({
   body: object({
     name: string({
@@ -11,7 +14,7 @@ export const createUserSchema = object({
     password: string({  // Provided password from user.
       required_error: "Password is required",
     }).min(minPasswordLength, `Password too short - ${minPasswordLength} character minimum`),
-    passwordConfirmation: string({  // Password we have on server.
+    passwordConfirmation: string({  // Provided password from user (again).
       required_error: "passwordConfirmation is required",
     }),
     email: string({

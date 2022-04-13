@@ -8,7 +8,7 @@ export interface UserInput {
   password: string;
 }
 
-// Note: Mongoose recommends that you do not extend mongoose.Document
+// Note: Mongoose recommends that you do not extend mongoose.Document. But we do it anyway.
 export interface UserDocument extends UserInput, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
@@ -24,9 +24,12 @@ const userSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Pre-save hook to our schema
+
+/**
+ * Method pre hook added to our mongoose database schema.
+ */
 userSchema.pre("save", async function(next) {
-  // Renaming this "user" for better clarity.
+  // Renaming "this" to "user" for better clarity.
   const user = this as UserDocument;
 
   // Check if the password has changed. If not, just go.
@@ -43,6 +46,7 @@ userSchema.pre("save", async function(next) {
 
   return next();
 });
+
 
 /**
  * It's important to define this as a method so we can access `this`. It's a

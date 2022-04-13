@@ -5,6 +5,14 @@ import { CreateUserInput } from "../shema/user.schema";
 
 import logger from "../utils/logger";
 
+/**
+ * Creates a new user account with their email, name, and password.
+ * Validation is required as middleware with the route otherwise there is no
+ * checking being performed here.
+ * @param req
+ * @param res
+ * @returns
+ */
 export async function createUserHandler(
   // Here we use zod to help us define a type that will be used to define the req object.
   req: Request<{}, {}, CreateUserInput["body"]>,  // eslint-disable-line @typescript-eslint/ban-types

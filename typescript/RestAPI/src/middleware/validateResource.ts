@@ -12,7 +12,7 @@ const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: N
     });
 
     // Don't forget! It'll just hang otherwise!
-    next();
+    return next();
   } catch (error: any) {  // eslint-disable-line @typescript-eslint/no-explicit-any
     return res.status(400).send(error.errors);
   }

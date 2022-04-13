@@ -6,7 +6,11 @@ import requireUser from "./middleware/requireUser";
 import { createUserSchema } from "./shema/user.schema";
 import { createSessionSchema } from "./shema/session.schema";
 import { createUserHandler } from "./controller/user.controller";
-import { createUserSessionHandler, getUserSessionsHandler } from "./controller/session.controller";
+import {
+  createUserSessionHandler,
+  deleteSessionHandler,
+  getUserSessionsHandler,
+} from "./controller/session.controller";
 
 export default function routes(app: Express) {
   // Arguments for get/post are the path and callbacks. Call next() to continue
@@ -18,4 +22,5 @@ export default function routes(app: Express) {
 
   app.post("/api/sessions", validateResource(createSessionSchema), createUserSessionHandler);
   app.get("/api/sessions", requireUser, getUserSessionsHandler);
+  app.delete("/api/sessions", requireUser, deleteSessionHandler);
 }
