@@ -11,6 +11,18 @@ import {
   deleteSessionHandler,
   getUserSessionsHandler,
 } from "./controller/session.controller";
+import {
+  createProductSchema,
+  deleteProductSchema,
+  getProductSchema,
+  updateProductSchema,
+} from "./shema/product.schema";
+import {
+  createProductHandler,
+  deleteProductHandler,
+  getProductHandler,
+  updateProductHandler,
+} from "./controller/product.controller";
 
 export default function routes(app: Express) {
   // Arguments for get/post are the path and callbacks. Call next() to continue
@@ -23,4 +35,25 @@ export default function routes(app: Express) {
   app.post("/api/sessions", validateResource(createSessionSchema), createUserSessionHandler);
   app.get("/api/sessions", requireUser, getUserSessionsHandler);
   app.delete("/api/sessions", requireUser, deleteSessionHandler);
+
+  app.post(
+    "/api/products",
+    [requireUser, validateResource(createProductSchema)],
+    createProductHandler,
+  );
+  app.put(
+    "/api/products/:productId",
+    [requireUser, validateResource(updateProductSchema)],
+    updateProductHandler,
+  );
+  app.get(
+    "/api/products/:productId",
+    validateResource(getProductSchema),
+    getProductHandler,
+  );
+  app.delete(
+    "/api/products/:productId",
+    [requireUser, validateResource(deleteProductSchema)],
+    deleteProductHandler,
+  );
 }
