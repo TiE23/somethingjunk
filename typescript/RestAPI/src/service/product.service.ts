@@ -1,5 +1,5 @@
 import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
-import ProductModel, { ProductInput } from "../models/product.model";
+import ProductModel, { ProductDocument, ProductInput } from "../models/product.model";
 
 /**
  * Creates a new product and will assign authorship to the user.
@@ -18,14 +18,10 @@ export async function createProduct(input: DocumentDefinition<ProductInput>) {
  * @returns
  */
 export async function findProduct(
-  query: FilterQuery<ProductInput>,
+  query: FilterQuery<ProductDocument>,
   options: QueryOptions = { lean: true },
 ) {
-  return ProductModel.findOne(
-    query,
-    {},
-    options,
-  );
+  return ProductModel.findOne(query, {}, options);
 }
 
 
@@ -40,7 +36,7 @@ export async function findProduct(
  * @returns
  */
 export async function findAndUpdateProduct(
-  query: FilterQuery<ProductInput>,
+  query: FilterQuery<ProductDocument>,
   update: UpdateQuery<ProductInput>,
   options: QueryOptions = { lean: true },
 ) {
@@ -60,6 +56,6 @@ export async function findAndUpdateProduct(
  * @param query
  * @returns
  */
-export async function deleteProduct(query: FilterQuery<ProductInput>) {
+export async function deleteProduct(query: FilterQuery<ProductDocument>) {
   return ProductModel.deleteOne(query);
 }

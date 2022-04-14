@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "dev:debug": "ts-node-dev --respawn --transpile-only --inspect=9229 src/app.ts",
-    "test": "jest"
+    "test": "jest",
+    "testWatch": "jest --watchAll --detectOpenHandles ",
+    "test:debug": "ts-node-dev --transpile-only --inspect=9230 jest --watchAll --detectOpenHandles"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
