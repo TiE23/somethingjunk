@@ -45,3 +45,6 @@ At the start of writing tests I added the following key modules:
 
 And ran the init function with:
 `yarn ts-jest config:init`
+
+With the new script to run jest, remember you can add --watchAll to repeatedly watch tests as changes are made.
+And as well, if you add --detectOpenHandles you'll see hanging handles. If you don't have `forceExit: true` in the jest configuration files you'll really run into this problem.

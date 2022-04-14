@@ -4,6 +4,6 @@ module.exports = {  // eslint-disable-line no-undef
   testEnvironment: "node",
   testMatch: ["**/**/*.test.ts"],
   verbose: true,
-  forceExit: true,
+  forceExit: true,  // Doesn't let hanging handles prevent jest from exiting.
   // clearMocks: true,
 };
