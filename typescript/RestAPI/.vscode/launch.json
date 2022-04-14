@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "name": "Attach to dev:debug (w/ restart)",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "restart": true
+    },
+
+    {
+      "name": "Launch dev:debug",
+      "program": "${workspaceFolder}/src/app.ts",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev:debug"]
+    },
+
+    {
+      "name": "ts-node launch and debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "runtimeExecutable": "node",
+      "args": [
+        "--inspect",
+        "${workspaceFolder}/src/app.ts"
+      ],
+      "cwd": "${workspaceRoot}",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
+    }
+  ]
+}
