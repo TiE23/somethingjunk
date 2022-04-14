@@ -31,24 +31,37 @@ const params = {
   }),
 };
 
+/**
+ * Requires a payload body to create the new product.
+ */
 export const createProductSchema = object({
   ...payload,
 });
 
+/**
+ * Requires a payload body of new data and params to find the product to update.
+ */
 export const updateProductSchema = object({
   ...payload,
   ...params,
 });
 
+/**
+ * Requires params to find the product.
+ */
 export const getProductSchema = object({
   ...params,
 });
 
+/**
+ * Requires params to find the product and the calling user must be the author
+ * to be able to delete.
+ */
 export const deleteProductSchema = object({
   ...params,
 });
 
-// CRUD!
+// Name the input "Read" instead of "Get" just to follow CRUD naming I guess.
 export type CreateProductInput = TypeOf<typeof createProductSchema>;
 export type ReadProductInput = TypeOf<typeof getProductSchema>;
 export type UpdateProductInput = TypeOf<typeof updateProductSchema>;

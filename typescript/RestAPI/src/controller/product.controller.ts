@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 
 import { createProduct, deleteProduct, findAndUpdateProduct, findProduct } from "../service/product.service";
-import { CreateProductInput, DeleteProductInput, ReadProductInput, UpdateProductInput } from "../shema/product.schema";
+import { CreateProductInput, DeleteProductInput, ReadProductInput, UpdateProductInput } from "../schema/product.schema";
 import logger from "../utils/logger";
 
+/**
+ * Takes the body and creates a new product, assigning the user as the author.
+ * @param req
+ * @param res
+ * @returns
+ */
 export async function createProductHandler(
   req: Request<Record<string, unknown>, Record<string, unknown>, CreateProductInput["body"]>,
   res: Response,
@@ -21,6 +27,13 @@ export async function createProductHandler(
   }
 }
 
+
+/**
+ * Updates a product. Requires both parameters and a body to update correctly.
+ * @param req
+ * @param res
+ * @returns
+ */
 export async function updateProductHandler(
   req: Request<UpdateProductInput["params"], Record<string, unknown>, UpdateProductInput["body"]>,
   res: Response,
@@ -50,6 +63,13 @@ export async function updateProductHandler(
   }
 }
 
+
+/**
+ * Gets a product through parameters. Any user can use this.
+ * @param req
+ * @param res
+ * @returns
+ */
 export async function getProductHandler(
   req: Request<ReadProductInput["params"]>,
   res: Response,
@@ -71,6 +91,13 @@ export async function getProductHandler(
   }
 }
 
+
+/**
+ * Deletes a product using params. Only the original author can do this.
+ * @param req
+ * @param res
+ * @returns
+ */
 export async function deleteProductHandler(
   req: Request<DeleteProductInput["params"]>,
   res: Response,

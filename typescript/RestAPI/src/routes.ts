@@ -3,9 +3,9 @@ import { Express, Request, Response } from "express";
 import validateResource from "./middleware/validateResource";
 import requireUser from "./middleware/requireUser";
 
-import { createUserSchema } from "./shema/user.schema";
-import { createSessionSchema } from "./shema/session.schema";
+import { createUserSchema } from "./schema/user.schema";
 import { createUserHandler } from "./controller/user.controller";
+import { createSessionSchema } from "./schema/session.schema";
 import {
   createUserSessionHandler,
   deleteSessionHandler,
@@ -16,7 +16,7 @@ import {
   deleteProductSchema,
   getProductSchema,
   updateProductSchema,
-} from "./shema/product.schema";
+} from "./schema/product.schema";
 import {
   createProductHandler,
   deleteProductHandler,
@@ -38,7 +38,7 @@ export default function routes(app: Express) {
 
   app.post(
     "/api/products",
-    [requireUser, validateResource(createProductSchema)],
+    [requireUser, validateResource(createProductSchema)], // Note: Using an array is optional.
     createProductHandler,
   );
   app.put(

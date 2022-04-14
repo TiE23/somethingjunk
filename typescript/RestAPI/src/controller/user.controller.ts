@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { createUser } from "../service/user.service";
-import { CreateUserInput } from "../shema/user.schema";
+import { CreateUserInput } from "../schema/user.schema";
 
 import logger from "../utils/logger";
 
@@ -15,7 +15,7 @@ import logger from "../utils/logger";
  */
 export async function createUserHandler(
   // Here we use zod to help us define a type that will be used to define the req object.
-  req: Request<{}, {}, CreateUserInput["body"]>,  // eslint-disable-line @typescript-eslint/ban-types
+  req: Request<Record<string, unknown>, Record<string, unknown>, CreateUserInput["body"]>,
   res: Response,
 ) {
   try {

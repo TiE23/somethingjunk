@@ -201,15 +201,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"productId\", jsonData.productId);",
+									"try {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"productId\", jsonData.productId);",
 									"",
+									"    const newAccessToken = responseHeaders['x-access-token']",
 									"",
-									"const newAccessToken = responseHeaders['x-access-token']",
-									"",
-									"if(newAccessToken){",
-									"    console.log('Set new access token')",
-									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"    if(newAccessToken){",
+									"        console.log('Set new access token')",
+									"        pm.collectionVariables.set(\"accessToken\", newAccessToken);",
+									"    }",
+									"} catch (e) {",
+									"    console.log(\"Not JSON\");",
 									"}"
 								],
 								"type": "text/javascript"
@@ -310,7 +313,7 @@
 									"",
 									"if(newAccessToken){",
 									"    console.log('Set new access token')",
-									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"pm.collectionVariables.set(\"accessToken\", newAccessToken);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -370,7 +373,7 @@
 									"",
 									"if(newAccessToken){",
 									"    console.log('Set new access token')",
-									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"pm.collectionVariables.set(\"accessToken\", newAccessToken);",
 									"}"
 								],
 								"type": "text/javascript"

@@ -1,3 +1,4 @@
+# Structure
 The hierarchy works like this...
 ```
               +-2-----------+
@@ -30,3 +31,8 @@ So, take a look at the files.
 
 It's also worth mentioning how Schemas fit into this project. They fit into a special part of our middleware.
 The project uses ZOD, a node module that let's use define shapes that have rules that we can check to make sure they are followed.
+
+# Running
+Run mongoDB with `mongod --config /opt/homebrew/etc/mongod.conf`.
+Run server with `yarn dev:debug`.
+Debug with "Attach to dev:debug".

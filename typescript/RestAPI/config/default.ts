@@ -13,7 +13,7 @@ export default {
    * how to re-issue access tokens.
    */
   accessTokenTTL: "30s",
-  refreshTokenTTL: "60s",
+  refreshTokenTTL: "15m",
   publicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDmZ74qH3JqDeGHTPCAR+vrg5RA
 SWQi3hfZ/g0JsxE6mFtNVVFecOWpKx1BoMyfxQuOGi+9XtZjzIL+nL/x71YX9vox
