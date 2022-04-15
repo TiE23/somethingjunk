@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "name": "Attach to dev:debug (w/ restart)",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "restart": true
+    },
+
+    {
+      "name": "Jest Watch Debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand",
+        "--config",
+        "${workspaceRoot}/jest.config.js",
+        "--coverage",
+        "false",
+        "--watchAll",
+        "--detectOpenHandles"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
