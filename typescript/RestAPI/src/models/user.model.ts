@@ -8,11 +8,14 @@ export interface UserInput {
   password: string;
 }
 
+export interface UserMethods {
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
 // Note: Mongoose recommends that you do not extend mongoose.Document. But we do it anyway.
-export interface UserDocument extends UserInput, mongoose.Document {
+export interface UserDocument extends UserInput, UserMethods, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
-  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 // Schema definition

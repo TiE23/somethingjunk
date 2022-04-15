@@ -14,37 +14,22 @@
     },
 
     {
-      "name": "Launch dev:debug",
-      "program": "${workspaceFolder}/src/app.ts",
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ],
-      "type": "node",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["dev:debug"]
-    },
-
-    {
-      "name": "ts-node launch and debug",
+      "name": "Run Debug Jest Watch",
       "type": "node",
       "request": "launch",
       "runtimeArgs": [
-        "-r",
-        "ts-node/register"
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand",
+        "--config",
+        "${workspaceRoot}/jest.config.js",
+        "--coverage",
+        "false",
+        "--watchAll",
+        "--detectOpenHandles"
       ],
-      "runtimeExecutable": "node",
-      "args": [
-        "--inspect",
-        "${workspaceFolder}/src/app.ts"
-      ],
-      "cwd": "${workspaceRoot}",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ]
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
