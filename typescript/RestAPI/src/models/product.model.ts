@@ -15,6 +15,7 @@ export interface ProductInput {
 
 // Note: Mongoose recommends that you do not extend mongoose.Document
 export interface ProductDocument extends ProductInput, mongoose.Document {
+  productId: string;
   createdAt: Date;
   updatedAt: Date;
 }
