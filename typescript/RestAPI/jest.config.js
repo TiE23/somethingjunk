@@ -5,5 +5,8 @@ module.exports = {  // eslint-disable-line no-undef
   testMatch: ["**/**/*.test.ts"],
   verbose: true,
   forceExit: true,  // Doesn't let hanging handles prevent jest from exiting.
-  // clearMocks: true,
+  // Remember to restart jest watch if you make a change to the following...
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
 };
