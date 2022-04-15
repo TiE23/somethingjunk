@@ -2,29 +2,20 @@
 import supertest from "supertest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
+import { omit } from "lodash";
 
 import createServer from "../utils/server";
-import { createProduct, findProduct } from "../service/product.service";
+import { createProduct } from "../service/product.service";
 import { signJWT } from "../utils/jwt.utils";
+import { userPayload, productPayload } from "./testResources";
 
 const app = createServer();
 
-// Build a test product.
-const userId = new mongoose.Types.ObjectId().toString();
-export const productPayload = {
-  user: userId,
-  title: "Test Title",
-  description: "Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test",
-  price: 1.00,
-  image: "https://google.com/",
-};
-
-export const userPayload = {
-  _id: userId,
-  email: "example@example.com",
-  name: "Exam Pul",
-};
-
+/**
+ * This test file uses an excessive step of generating a temporary MongoDB instance
+ * using MongoMemoryServer. It does this instead of mocking. Which is pretty
+ * hard core, to be honest.
+ */
 describe("product", () => {
   beforeAll(async () => {
     // This launches a temporary testing-only MongoDB. Which is kinda crazy.
@@ -77,10 +68,7 @@ describe("product", () => {
           .then(res => {
             expect(res.body).not.toBeNull();
             expect(res.body).toEqual({
-              title: "Test Title",
-              description: "Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test",
-              price: 1.00,
-              image: "https://google.com/",
+              ...(omit(productPayload, "user")),
               __v: 0,
               _id: expect.any(String),
               createdAt: expect.any(String),
