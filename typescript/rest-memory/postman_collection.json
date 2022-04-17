@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "ac85c594-59de-485d-872c-49f219d99c84",
+		"name": "REST API Memory",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/healthcheck",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CaseChange",
+			"item": [
+				{
+					"name": "Case Change",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"Hello there. I hope you are well!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/casechange/upper",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"casechange",
+								"upper"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Case Change",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/api/casechange/upper/What is going on",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"casechange",
+								"upper",
+								"What is going on"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": "<empty>",
+			"type": "string"
+		},
+		{
+			"key": "endpoint",
+			"value": "http://localhost:1330",
+			"type": "string"
+		}
+	]
+}
