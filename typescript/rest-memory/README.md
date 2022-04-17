@@ -88,7 +88,17 @@ module.exports = {  // eslint-disable-line no-undef
 * [jest getting started](https://jestjs.io/docs/getting-started)
 
 ## Part 2 - API
-1) ...
+1) Under root create directory `config`. Under `src` create directories `controller`, `middleware`, `model`, `schema`, `service`, `utils`, and `__tests__`.
+2) Define `./config/default.ts` and export an object with the API port we want to use as "port".
+3) Define a new file `./routes.ts` (`export default function routes(app: Express) {}`).
+  * Define routes for the app in there.
+
+### References and Resources
+* [Express.js Hello World](https://expressjs.com/en/starter/hello-world.html)
+* [Express.js Basic Routing](https://expressjs.com/en/starter/basic-routing.html)
+* [Pino Logger Usage](https://getpino.io/#/?id=usage)
+* [Pino-HTTP Example](https://getpino.io/#/docs/web?id=pino-with-express)
+
 
 # Structure
 The hierarchy works like this...
@@ -125,3 +135,8 @@ So, take a look at the files.
 
 It's also worth mentioning how Schemas fit into this project. They fit into a special part of our middleware.
 The project uses ZOD, a node module that let's use define shapes that have rules that we can check to make sure they are followed.
+
+# Running
+Run mongoDB with `mongod --config /opt/homebrew/etc/mongod.conf`.
+Run server with `yarn dev:debug`.
+Debug with "Attach to dev:debug".
