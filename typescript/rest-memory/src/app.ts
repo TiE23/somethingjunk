@@ -4,14 +4,9 @@ import config from "config";
 import routes from "./routes";
 import logger from "./utils/logger";
 import connect from "./utils/connect";
+import createServer from "./utils/server";
 
-const app = express();
-
-// Support JSON format input.
-app.use(express.json());
-
-// Provide the routes.
-routes(app);
+const app = createServer();
 
 const port = config.get<number>("port");
 

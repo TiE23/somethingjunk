@@ -86,6 +86,7 @@ module.exports = {  // eslint-disable-line no-undef
 * [ts-node-dev usage](https://github.com/wclr/ts-node-dev#usage)
 * [VSCode Debugging](https://code.visualstudio.com/docs/editor/debugging)
 * [jest getting started](https://jestjs.io/docs/getting-started)
+* [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
 ## Part 2 - API Initialization
 1) Under root create directory `config`. Under `src` create directories `controller`, `middleware`, `model`, `schema`, `service`, `utils`, and `__tests__`.
@@ -157,6 +158,11 @@ module.exports = {  // eslint-disable-line no-undef
 * [Zod Documentation](https://github.com/colinhacks/zod#basic-usage)
   * [.parse()](https://github.com/colinhacks/zod#parse)
   * [nativeEnum()](https://github.com/colinhacks/zod#native-enums)
+
+## Part 4 - Testing
+1) Duplicate `./config/default.ts` to `./config/test.ts`
+2) Create `./__tests__/caseChange.test.ts`
+  * Import supertest, MongoMemoryServer, and mongoose
 
 # Structure
 The hierarchy works like this...
