@@ -9,7 +9,12 @@
     "dev:debug": "ts-node-dev --respawn --transpile-only --inspect=9229 src/helloWorld.ts",
     "test": "jest",
     "testWatch": "jest --watchAll --detectOpenHandles",
-    "testWatch:debug": "ts-node-dev --transpile-only --inspect=9230 jest --watchAll --detectOpenHandles"
+    "testWatch:debug": "ts-node-dev --transpile-only --inspect=9230 jest --watchAll --detectOpenHandles",
+
+    "start:pizza": "nodemon --watch 'src/pizza/**/*.ts' --exec 'ts-node' src/pizza/index.ts",
+    "dev:pizza": "nodemon --watch 'src/pizza/**/*.ts' --exec 'ts-node-dev' src/pizza/index.ts",
+    "debug:pizza": "ts-node-dev --respawn --transpile-only --inspect=9229 src/pizza/index.ts",
+    "build:pizza": "tsc -p ."
   },
   "dependencies": {
     "chalk": "4.1.2",
@@ -21,6 +26,8 @@
   },
   "devDependencies": {
     "@eslint/create-config": "^0.1.2",
+    "@types/clear": "^0.1.2",
+    "@types/figlet": "^1.5.4",
     "@types/lodash": "^4.14.181",
     "@types/node": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
