@@ -2,7 +2,6 @@ import { Game } from "../index";
 
 
 describe("Tic-Tac-Toe Game", () => {
-  console.log(process.env.NODE_ENV);
   it("should work correctly", () => {
     expect(true).toBe(true);
   });
