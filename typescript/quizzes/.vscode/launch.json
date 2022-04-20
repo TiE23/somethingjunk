@@ -1,0 +1,51 @@
+{
+  "configurations": [
+    { // For launching whatever file you have open.
+      "name": "Debug TS Current File",
+      "type": "node",
+      "request": "launch",
+      "args": [
+        "${relativeFile}"
+      ],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+
+    { // Launches debug jest
+      "name": "Jest Watch Debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand",
+        "--config",
+        "${workspaceRoot}/jest.config.js",
+        "--coverage",
+        "false",
+        "--watchAll",
+        "--detectOpenHandles"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+
+    { // For attaching to a running ts-node-dev process.
+      "name": "Attach to dev:debug (w/ restart)",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "restart": true
+    }
+  ]
+}

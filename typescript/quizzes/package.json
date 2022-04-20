@@ -1,0 +1,50 @@
+{
+  "name": "quizzes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "hello": "ts-node ./src/helloWorld.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/helloWorld.ts",
+    "dev:debug": "ts-node-dev --respawn --transpile-only --inspect=9229 src/helloWorld.ts",
+    "test": "jest",
+    "testWatch": "jest --watchAll --detectOpenHandles",
+    "testWatch:debug": "ts-node-dev --transpile-only --inspect=9230 jest --watchAll --detectOpenHandles",
+
+    "start:pizza": "nodemon --watch 'src/pizza/**/*.ts' --exec 'ts-node' src/pizza/index.ts",
+    "dev:pizza": "nodemon --watch 'src/pizza/**/*.ts' --exec 'ts-node-dev' src/pizza/index.ts",
+    "debug:pizza": "ts-node-dev --respawn --transpile-only --inspect=9229 src/pizza/index.ts",
+    "build:pizza": "tsc -p .",
+
+    "start:ttt": "ts-node src/tictactoe/index.ts",
+    "dev:ttt": "ts-node-dev src/tictactoe/index.ts",
+    "debug:ttt": "ts-node-dev --transpile-only --inspect=9229 src/tictactoe/index.ts"
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "clear": "^0.1.0",
+    "commander": "^9.2.0",
+    "figlet": "^1.5.2",
+    "lodash": "^4.17.21",
+    "path": "^0.12.7",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@eslint/create-config": "^0.1.2",
+    "@types/clear": "^0.1.2",
+    "@types/figlet": "^1.5.4",
+    "@types/jest": "^27.4.1",
+    "@types/lodash": "^4.14.181",
+    "@types/node": "^17.0.24",
+    "@types/readline-sync": "^1.4.4",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "eslint": "^8.13.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  }
+}
