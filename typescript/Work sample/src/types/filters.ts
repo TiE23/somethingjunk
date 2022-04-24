@@ -1,4 +1,11 @@
-export type FilterCategory = string;
+export enum FilterCategory {
+  AD_NAME = "Ad Name",
+  BG_COLOR = "Background Color",
+  CAMPAIGN_NAME = "Campaign Name",
+  DEVICE_PLATFORM = "Device Platform",
+  FEATURE_TYPE = "Feature Type",
+  PRODUCT_TYPE = "Product Type",
+}
 export enum FilterRelation {
   IS = "is",
   IS_NOT = "is not",
@@ -10,3 +17,16 @@ export type Filter = {
   relation: FilterRelation,
   option: FilterOption,
 };
+
+export enum FilterCategoryType {
+  TEXT = "text",
+  SELECT = "select",
+  CHECKBOX = "checkbox",
+}
+
+export interface FilterLibraryProperties {
+  categoryType: FilterCategoryType;
+  options: string[];
+}
+
+export type FilterValues = Record<FilterCategory, FilterLibraryProperties>;

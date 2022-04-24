@@ -1,16 +1,16 @@
 // component
-import { Filter as FilterType } from "../types/filters";
-import Filter from "./Filter";
+import { Filter as FilterType } from "../../types/filters";
+import { Filter } from "../Filter";
 
 // style
-import styles from "./Searchbar.module.css";
+import { SearchbarBody } from "./styles";
 
 type SearchBarProps = {
   filters: FilterType[],
   setFilters: (filters: FilterType[]) => void,
 }
 
-export default function Searchbar({ filters, setFilters }: SearchBarProps): JSX.Element {
+export function Searchbar({ filters, setFilters }: SearchBarProps): JSX.Element {
   /*
     filters: [
       [
@@ -32,7 +32,7 @@ export default function Searchbar({ filters, setFilters }: SearchBarProps): JSX.
     )
   */
   return (
-    <div className={styles.Searchbar}>
+    <SearchbarBody>
       {filters.map(filter => (
         <Filter
           filter={filter}
@@ -40,6 +40,6 @@ export default function Searchbar({ filters, setFilters }: SearchBarProps): JSX.
         />
       ))}
       <div>Search or add filters</div>
-    </div>
+    </SearchbarBody>
   );
 }

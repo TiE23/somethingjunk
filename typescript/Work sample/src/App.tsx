@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Filter, FilterRelation } from "./types/filters";
-import Searchbar from "./components/Searchbar";
+
+import { Filter, FilterCategory, FilterRelation } from "./types/filters";
+import { Searchbar } from "./components/Searchbar";
 
 function App(): JSX.Element {
   const [filters, setFilters] = useState(defaultFilters);
@@ -21,15 +22,15 @@ function App(): JSX.Element {
   );
 }
 
-// const defaultFilters: [string, string, string][] = [
-//   ["Ad Name", "is", "viralspace_ad_1"],
-//   ["Background Color", "is not", "black"],
-//   ["Device Platform", "is not", "Desktop, Tablet"],
-// ];
+/**
+ * I'm taking the time to define the state a little more concretely so as to
+ * take advantage of strong typing. Enums, all that stuff. It's what I'd like to
+ * write at my actual job, so, I'm doing it for you here.
+ */
 const defaultFilters: Filter[] = [
-  { category: "Ad Name", relation: FilterRelation.IS, option: "viralspace_ad_1" },
-  { category: "Background Color", relation: FilterRelation.IS_NOT, option: "black" },
-  { category: "Device Platform", relation: FilterRelation.IS_NOT, option: "Desktop, Tablet" },
+  { category: FilterCategory.AD_NAME, relation: FilterRelation.IS, option: "viralspace_ad_1" },
+  { category: FilterCategory.BG_COLOR, relation: FilterRelation.IS_NOT, option: "black" },
+  { category: FilterCategory.DEVICE_PLATFORM, relation: FilterRelation.IS_NOT, option: "Desktop, Tablet" },
 ];
 
 export default App;
