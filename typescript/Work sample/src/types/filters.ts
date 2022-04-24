@@ -1,3 +1,4 @@
+// As one would add new filter categories you'd be defining them here.
 export enum FilterCategory {
   AD_NAME = "Ad Name",
   BG_COLOR = "Background Color",

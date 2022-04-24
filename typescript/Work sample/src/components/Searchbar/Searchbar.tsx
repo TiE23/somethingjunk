@@ -7,10 +7,9 @@ import { SearchbarBody } from "./styles";
 
 type SearchBarProps = {
   filters: FilterType[],
-  setFilters: (filters: FilterType[]) => void,
 }
 
-export function Searchbar({ filters, setFilters }: SearchBarProps): JSX.Element {
+export function Searchbar({ filters }: SearchBarProps): JSX.Element {
   /*
     filters: [
       [
@@ -33,9 +32,10 @@ export function Searchbar({ filters, setFilters }: SearchBarProps): JSX.Element 
   */
   return (
     <SearchbarBody>
-      {filters.map(filter => (
+      {filters.map((filter, filterIndex) => (
         <Filter
           filter={filter}
+          filterIndex={filterIndex}
           key={filter.category}
         />
       ))}
