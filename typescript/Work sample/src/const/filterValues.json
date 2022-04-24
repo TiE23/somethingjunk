@@ -1,0 +1,48 @@
+{
+  "Ad Name": {
+    "categoryType": "text",
+    "options": []
+  },
+  "Background Color": {
+    "categoryType": "select",
+    "options": [
+      "black",
+      "blue",
+      "green",
+      "red",
+      "white"
+    ]
+  },
+  "Campaign Name": {
+    "categoryType": "text",
+    "options": []
+  },
+  "Device Platform": {
+    "categoryType": "checkbox",
+    "options": [
+      "Desktop",
+      "Mobile",
+      "Tablet",
+      "TV"
+    ]
+  },
+  "Feature Type": {
+    "categoryType": "checkbox",
+    "options": [
+      "Image",
+      "Metadata",
+      "Text",
+      "Video"
+    ]
+  },
+  "Product Type": {
+    "categoryType": "select",
+    "options": [
+      "Jacket",
+      "Leggings",
+      "Pant",
+      "Shirt",
+      "Shorts"
+    ]
+  }
+}
