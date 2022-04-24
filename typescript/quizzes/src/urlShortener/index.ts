@@ -10,7 +10,8 @@ export interface FakeDB {
 
 
 /**
- * Create a memory DB. Cool
+ * Create a memory DB. Cool.
+ * https://gitlab.com/-/snippets/2299928
  * @returns
  */
 export function createDB(): FakeDB {
