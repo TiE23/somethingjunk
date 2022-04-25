@@ -20,14 +20,25 @@ const relationList = Object.entries(FilterRelation).map(([_, value]) => value);
 type OnEditFilterProps = {
   filter: FilterType,
   onClose: () => void,
+  filterIndex: number,  // When set to -1 it's a new filter.
 }
-export function OnEditFilter({ filter, onClose }: OnEditFilterProps) {
+export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps) {
   const [draftFilter, setDraftFilter] = useState(filter);
   const { setFilters } = useContext(FiltersContext);
 
-  const handleAddFilter = () => {
+  const handleSaveFilter = () => {
     if (setFilters) {
-      setFilters(prevFilters => prevFilters.concat([draftFilter]));
+      if (filterIndex === -1) {
+        // Create a new filter.
+        setFilters(prevFilters => prevFilters.concat([draftFilter]));
+      } else {
+        // Update an existing filter.
+        setFilters(prevFilters => {
+          const newFilters = [...prevFilters];
+          newFilters[filterIndex] = draftFilter;
+          return newFilters;
+        });
+      }
       onClose();  // Close it, too!
     }
   };
@@ -64,8 +75,10 @@ export function OnEditFilter({ filter, onClose }: OnEditFilterProps) {
           && draftFilter.relation != null
           && draftFilter.option != null)
         }
-        onClick={handleAddFilter}
-      >Add</button>
+        onClick={handleSaveFilter}
+      >
+        {filterIndex === -1 ? "Add" : "Save"}
+      </button>
       <button onClick={onClose}>x</button>
     </div>
   );
@@ -166,9 +179,16 @@ function OptionInput(
       setDraftFilter={setDraftFilter}
     />;
   case FilterCategoryType.TEXT:
-    return <OptionTextInput draftFilter={draftFilter} setDraftFilter={setDraftFilter} />;
+    return <OptionTextInput
+      draftFilter={draftFilter}
+      setDraftFilter={setDraftFilter}
+    />;
   case FilterCategoryType.CHECKBOX:
-    return <span>CHECKBOX</span>;
+    return <OptionCheckboxInput
+      options={options}
+      draftFilter={draftFilter}
+      setDraftFilter={setDraftFilter}
+    />;
   default:
     return null;
   }
@@ -222,4 +242,11 @@ function OptionTextInput({ draftFilter, setDraftFilter }: InputProps) {
       onChange={handleOptionInput}
     />
   );
+}
+
+interface OptionCheckboxInputProps extends InputProps, OptionInputOptionsProps { }
+function OptionCheckboxInput({ options, draftFilter, setDraftFilter }: OptionCheckboxInputProps) {
+  // const handleCheckboxInput = (event: Change)
+
+  return <span>Checkbox</span>;
 }

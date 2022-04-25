@@ -42,6 +42,7 @@ export function Filter({ filter, filterIndex }: FilterProps): JSX.Element {
         <OnEditFilter
           filter={filter}
           onClose={() => setIsOnEdit(false)}
+          filterIndex={filterIndex}
         />
       ) : (
         <ActiveFilter

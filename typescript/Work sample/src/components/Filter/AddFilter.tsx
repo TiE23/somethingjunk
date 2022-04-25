@@ -16,6 +16,7 @@ export function AddFilter() {
             option: null,
           }}
           onClose={() => setIsOnEdit(false)}
+          filterIndex={-1}
         />
       ) : (
         <AddFilterTextButton onClick={() => setIsOnEdit(true)}>
