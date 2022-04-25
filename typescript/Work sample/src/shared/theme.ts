@@ -35,8 +35,6 @@ export const theme = {
 
 export type MainThemeProps = ThemeProps<typeof theme>;
 export const GlobalStyle = createGlobalStyle<MainThemeProps>`
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
-
   body {
     margin: 0;
     font-family: ${p => p.theme.fonts.regular};
