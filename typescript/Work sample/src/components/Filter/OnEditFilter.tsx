@@ -28,7 +28,7 @@ export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps
   const { setFilters } = useContext(FiltersContext);
 
   const handleSaveFilter = () => {
-    if (setFilters) {
+    if (setFilters && draftFilter.option !== "") {
       if (filterIndex === -1) {
         // Create a new filter.
         setFilters(prevFilters => prevFilters.concat([draftFilter]));
@@ -43,8 +43,6 @@ export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps
       onClose();  // Close it, too!
     }
   };
-
-  console.log("draftfilter", draftFilter);
 
 
   return (
@@ -74,7 +72,7 @@ export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps
         disabled={
           !(draftFilter.category != null
           && draftFilter.relation != null
-          && draftFilter.option != null)
+          && !!draftFilter.option?.trim())  // Mega basic input validation.
         }
         onClick={handleSaveFilter}
       >
