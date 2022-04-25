@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 
 import FiltersContext from "context/FiltersContext";
 import {
@@ -34,34 +34,6 @@ export function OnEditFilter({ filter, onClose }: OnEditFilterProps) {
 
   console.log("draftfilter", draftFilter);
 
-  /**
-   * Given there are three different option input types here's a way to create
-   * the appropriate component.
-   * There's a half-dozen ways to do this. If felt like using a switch statement
-   * was a little better than using a chain of ternary statements in the return
-   * statement below.
-   */
-  let OptionComponent: JSX.Element | null = null;
-  if (draftFilter.category != null) {
-    switch(filterValues[draftFilter.category].categoryType) {
-    case FilterCategoryType.SELECT:
-      OptionComponent =
-        <OptionSelectInput
-          options={filterValues[draftFilter.category].options}
-          draftFilter={draftFilter}
-          setDraftFilter={setDraftFilter}
-        />;
-      break;
-    case FilterCategoryType.TEXT:
-      OptionComponent =
-        <OptionTextInput draftFilter={draftFilter} setDraftFilter={setDraftFilter} />;
-      break;
-    case FilterCategoryType.CHECKBOX:
-      OptionComponent = (<span>CHECKBOX</span>);
-      break;
-    }
-  }
-
 
   return (
     <div>
@@ -77,7 +49,15 @@ export function OnEditFilter({ filter, onClose }: OnEditFilterProps) {
           relationList={relationList}
         />
       )}
-      {OptionComponent}
+      {draftFilter.category != null && (
+        <OptionInput
+          categoryType={filterValues[draftFilter.category].categoryType}
+          options={filterValues[draftFilter.category].options}
+          draftFilter={draftFilter}
+          setDraftFilter={setDraftFilter}
+        />
+
+      )}
       <button
         disabled={
           !(draftFilter.category != null
@@ -93,7 +73,6 @@ export function OnEditFilter({ filter, onClose }: OnEditFilterProps) {
 
 
 
-
 /**
  * Below are input components used for editing.
  */
@@ -101,6 +80,7 @@ interface InputProps {
   draftFilter: FilterType;
   setDraftFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 }
+
 
 interface CategorySelectInputProps extends InputProps {
   categoryList: FilterCategory[];
@@ -130,6 +110,7 @@ function CategorySelectInput(
   );
 }
 
+
 interface RelationSelectInputProps extends InputProps {
   relationList: FilterRelation[];
 }
@@ -158,10 +139,53 @@ function RelationSelectInput({ relationList, draftFilter, setDraftFilter }: Rela
 /**
  * The following are the option input components.
  */
-interface OptionSelectInputProps extends InputProps {
-  options: FilterOptions,
+interface OptionInputOptionsProps {
+  options: FilterOptions;
 }
+
+interface OptionInputProps extends InputProps, OptionInputOptionsProps {
+  categoryType: FilterCategoryType;
+}
+/**
+ * Given there are three different option input types here's a way to create
+ * the appropriate component.
+ * There's a half-dozen ways to do this. If felt like using a switch statement
+ * was a little better than using a chain of ternary statements in the return
+ * statement below.
+ * @param OptionInputProps
+ * @returns
+ */
+function OptionInput(
+  { categoryType, options, draftFilter, setDraftFilter }: OptionInputProps,
+) {
+  switch (categoryType) {
+  case FilterCategoryType.SELECT:
+    return <OptionSelectInput
+      options={options}
+      draftFilter={draftFilter}
+      setDraftFilter={setDraftFilter}
+    />;
+  case FilterCategoryType.TEXT:
+    return <OptionTextInput draftFilter={draftFilter} setDraftFilter={setDraftFilter} />;
+  case FilterCategoryType.CHECKBOX:
+    return <span>CHECKBOX</span>;
+  default:
+    return null;
+  }
+
+}
+
+
+interface OptionSelectInputProps extends InputProps, OptionInputOptionsProps {}
 function OptionSelectInput({ options, draftFilter, setDraftFilter }: OptionSelectInputProps) {
+  // Design shows that the first option should be auto-filled.
+  useEffect(() => {
+    setDraftFilter(prevFilter => ({
+      ...prevFilter,
+      option: options[0] ?? null,
+    }));
+  }, [options]);
+
   const handleOptionSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     setDraftFilter(prevFilter => ({
       ...prevFilter,
@@ -180,6 +204,7 @@ function OptionSelectInput({ options, draftFilter, setDraftFilter }: OptionSelec
     </select>
   );
 }
+
 
 function OptionTextInput({ draftFilter, setDraftFilter }: InputProps) {
   const handleOptionInput = (event: ChangeEvent<HTMLInputElement>) => {
