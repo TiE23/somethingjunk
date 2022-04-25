@@ -37,7 +37,7 @@ export function Searchbar({ filters }: SearchBarProps): JSX.Element {
         <Filter
           filter={filter}
           filterIndex={filterIndex}
-          key={filter.category}
+          key={`${filterIndex}_${filter.category}`}
         />
       ))}
       <AddFilter />

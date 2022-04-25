@@ -1,15 +1,12 @@
 import { useContext } from "react";
 
-import { Filter as FilterType, FilterValues } from "../../types/filters";
+import { Filter as FilterType } from "../../types/filters";
 import { ActiveFilter } from "./ActiveFilter";
+import FiltersContext from "context/FiltersContext";
+import { OnEditFilter } from "./OnEditFilter";
 
 // custom hook
 import useHideOnClickOutside from "../../hook/useHideOnClickOutside";
-import FiltersContext from "context/FiltersContext";
-
-// To enforce typing from the json file requires I use require().
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const filterValues: FilterValues = require("../../const/filterValues.json");
 
 type FilterProps = {
   filter: FilterType,
@@ -39,11 +36,13 @@ export function Filter({ filter, filterIndex }: FilterProps): JSX.Element {
     }
   };
 
-
   return (
     <div ref={ref}>
       {isOnEdit ? (
-        <div>Editing {filter.category}</div>
+        <OnEditFilter
+          filter={filter}
+          onClose={() => setIsOnEdit(false)}
+        />
       ) : (
         <ActiveFilter
           filter={filter}

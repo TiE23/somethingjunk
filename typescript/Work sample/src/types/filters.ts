@@ -27,9 +27,11 @@ export enum FilterCategoryType {
   CHECKBOX = "checkbox",
 }
 
+export type FilterOptions = FilterOption[];
+
 export interface FilterLibraryProperties {
   categoryType: FilterCategoryType;
-  options: string[];
+  options: FilterOptions;
 }
 
 export type FilterValues = Record<FilterCategory, FilterLibraryProperties>;

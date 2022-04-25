@@ -9,9 +9,9 @@ export const SearchbarBody = styled.div`
   flex-wrap: wrap;
   margin: 10px;
   padding: 9px 18px;
-  height: 50px;
+  min-height: 50px;
 
-  /* https://caniuse.com/flexbox-gap A little new... */
-  column-gap: 12px;
+  /* https://caniuse.com/flexbox-gap - A little new, but it's quick. */
+  gap: 12px;
 `;
 

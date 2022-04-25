@@ -12,8 +12,8 @@ function App(): JSX.Element {
       <Searchbar filters={filters} />
       <div style={{ marginLeft: "10px" }}>Currently applied filters</div>
       <ul>
-        {filters.map(({ category, relation, option }) => (
-          <li key={category}>{category} {relation} {option}</li>
+        {filters.map(({ category, relation, option }, filterIndex) => (
+          <li key={`${filterIndex}_${category}`}>{category} {relation} {option}</li>
         ))}
       </ul>
     </div>

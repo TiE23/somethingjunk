@@ -15,12 +15,11 @@ export function AddFilter() {
             relation: null,
             option: null,
           }}
+          onClose={() => setIsOnEdit(false)}
         />
       ) : (
-        <AddFilterTextButton
-          onClick={() => setIsOnEdit(true)}
-        >
-        Search or add filters
+        <AddFilterTextButton onClick={() => setIsOnEdit(true)}>
+          Search or add filters
         </AddFilterTextButton>
       )}
     </div>
