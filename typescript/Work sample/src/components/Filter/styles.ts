@@ -44,3 +44,30 @@ export const AddFilterTextButton = styled(FilterButton)`
   color: ${p => p.theme.colors.fonts.faded};
   margin-left: 3px;
 `;
+
+/**
+ * Simple component just to make the on-edit inputs line up in a row.
+ */
+export const InputRow = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export const CheckboxContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export const CheckboxBox = styled.div`
+  position: absolute;
+  top: 32px;
+  border-radius: 6px;
+  padding: 10px 5px;
+  background-color: ${p => p.theme.colors.filter.checkboxBG};
+`;
+
+export const CheckboxLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

@@ -24,6 +24,7 @@ export const theme = {
     },
     filter: {
       bg: "#ffecd8",
+      checkboxBG: "#fefaf6",
     },
   },
   design: {

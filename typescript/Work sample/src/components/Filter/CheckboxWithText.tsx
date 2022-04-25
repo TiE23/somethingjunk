@@ -1,11 +1,11 @@
-import { ChangeEventHandler, memo } from "react";
+import { ChangeEvent, memo } from "react";
 
 // style
 import styles from "./CheckboxWithText.module.css";
 
 type CheckboxWithTextProps = {
   isChecked: boolean,
-  onChange: ChangeEventHandler<HTMLInputElement>,
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void,
   text: string,
 };
 
@@ -24,7 +24,7 @@ export const CheckboxWithText = memo(function CheckboxWithText(props: CheckboxWi
       <input
         checked={props.isChecked}
         name={props.text}
-        onChange={props.onChange}
+        onChange={e => props.onChange(e)}
         type='checkbox'
       />
       <span className={styles.Checkmark} />

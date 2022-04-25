@@ -9,6 +9,7 @@ import {
 } from "types/filters";
 
 import { CategorySelectInput, OptionInput, RelationSelectInput } from "./OnEditFilterInputs";
+import { InputRow } from "./styles";
 
 // To enforce typing from the json file requires I use require().
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -47,7 +48,7 @@ export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps
 
 
   return (
-    <div>
+    <InputRow>
       <CategorySelectInput
         draftFilter={draftFilter}
         setDraftFilter={setDraftFilter}
@@ -80,6 +81,6 @@ export function OnEditFilter({ filter, onClose, filterIndex }: OnEditFilterProps
         {filterIndex === -1 ? "Add" : "Save"}
       </button>
       <button onClick={onClose}>x</button>
-    </div>
+    </InputRow>
   );
 }

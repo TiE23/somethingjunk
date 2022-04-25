@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Filter as FilterType,
   FilterCategory,
@@ -6,6 +6,8 @@ import {
   FilterOptions,
   FilterRelation,
 } from "types/filters";
+import { CheckboxWithText } from "./CheckboxWithText";
+import { CheckboxBox, CheckboxContainer, CheckboxLayout } from "./styles";
 
 interface InputProps {
   draftFilter: FilterType;
@@ -163,7 +165,80 @@ function OptionTextInput({ draftFilter, setDraftFilter }: InputProps) {
 
 interface OptionCheckboxInputProps extends InputProps, OptionInputOptionsProps { }
 function OptionCheckboxInput({ options, draftFilter, setDraftFilter }: OptionCheckboxInputProps) {
-  // const handleCheckboxInput = (event: Change)
+  const [open, setOpen] = useState(false);
+  const openArrow = open ? "▼" : "▲";
 
-  return <span>Checkbox</span>;
+  /**
+   * To avoid issues with populating two states with references to the same array
+   * I provide a function to build a new "initial state".
+   * @returns
+   */
+  const buildInitialState = () => options.map(option => ({
+    option,
+    checked: draftFilter?.option?.split(", ").includes(option) ?? false,
+  }));
+
+  /**
+   * This is "a bit extra" but it's my quick solution to emulate the design
+   * document where the list of checked options requires two steps. First one
+   * must click and update button - which will update the UI.
+   */
+  const [uiOptions, setUiOptions] = useState(buildInitialState());
+  const [draftOptions, setDraftOptions] = useState(buildInitialState());
+
+  // Reset the UI state when closing the checkbox box.
+  useEffect(() => {
+    if (!open) {
+      setUiOptions(buildInitialState());
+    }
+  }, [open]);
+
+
+  const handleUiOptionsInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setUiOptions(prevChecked => {
+      const newChecked = [...prevChecked];
+      const changeIndex = prevChecked.findIndex(check => check.option === event.target.name);
+      if (changeIndex !== -1) {
+        newChecked[changeIndex].checked = event.target.checked;
+      }
+      return newChecked;
+    });
+  };
+
+  const handleUpdate = () => {
+    setDraftOptions(uiOptions);
+    setOpen(false);
+  };
+
+  const checkedDraftOptions = draftOptions.filter(check => check.checked);
+
+  return (
+    <CheckboxContainer>
+      <button
+        onClick={() => setOpen(!open)}
+      >
+        {checkedDraftOptions.length !== 0 ? checkedDraftOptions.map(check => check.option).join(", ") : "(None)"}
+        {" "}
+        {openArrow}
+      </button>
+
+      {open && (
+        <CheckboxBox>
+          <CheckboxLayout>
+            {options.map((option, optionIndex) => (
+              <CheckboxWithText
+                key={`${optionIndex}_${option}`}
+                isChecked={uiOptions[optionIndex].checked}
+                text={option}
+                onChange={handleUiOptionsInput}
+              />
+            ))}
+            <button onClick={handleUpdate}>
+              Update
+            </button>
+          </CheckboxLayout>
+        </CheckboxBox>
+      )}
+    </CheckboxContainer>
+  );
 }
