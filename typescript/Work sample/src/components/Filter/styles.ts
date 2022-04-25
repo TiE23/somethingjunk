@@ -14,18 +14,18 @@ export const ActiveFilterBubble = styled.div`
  * This is a parent styling that can provide default stylings for other child
  * styled components. Note that I don't export it.
  */
-const ActiveFilterButton = styled.button`
+const FilterButton = styled.button`
   background: none;
   border: none;
   padding: 0;
 
   cursor: pointer;
 
-  font-size: 16px;  /* The design doc said "16pt" but the size didn't match. */
+  font-size: ${p => p.theme.design.searchbar.fontSize};
   color: ${p => p.theme.colors.fonts.regular};
 `;
 
-export const ActiveFilterTitleButton = styled(ActiveFilterButton)`
+export const ActiveFilterTitleButton = styled(FilterButton)`
   ${p => p.theme.fonts.regular};
   margin-left: 12px;
 `;
@@ -34,8 +34,13 @@ export const ActiveFilterTitleBoldSpan = styled.span`
   ${p => p.theme.fonts.bold};
 `;
 
-export const ActiveFilterDeleteButton = styled(ActiveFilterButton)`
+export const ActiveFilterDeleteButton = styled(FilterButton)`
   ${p => p.theme.fonts.regular};
   color: ${p => p.theme.colors.fonts.dim};
   margin: 0 10px;
+`;
+
+export const AddFilterTextButton = styled(FilterButton)`
+  color: ${p => p.theme.colors.fonts.faded};
+  margin-left: 3px;
 `;

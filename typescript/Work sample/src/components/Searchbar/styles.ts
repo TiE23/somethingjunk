@@ -15,4 +15,3 @@ export const SearchbarBody = styled.div`
   column-gap: 12px;
 `;
 
-// export const

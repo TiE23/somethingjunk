@@ -26,6 +26,11 @@ export const theme = {
       bg: "#ffecd8",
     },
   },
+  design: {
+    searchbar: {
+      fontSize: "16px", // The design doc said "16pt" but the size didn't match.
+    },
+  },
 };
 
 export type MainThemeProps = ThemeProps<typeof theme>;

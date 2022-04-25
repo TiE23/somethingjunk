@@ -1,4 +1,5 @@
 // component
+import { AddFilter } from "components/Filter/AddFilter";
 import { Filter as FilterType } from "../../types/filters";
 import { Filter } from "../Filter";
 
@@ -39,7 +40,7 @@ export function Searchbar({ filters }: SearchBarProps): JSX.Element {
           key={filter.category}
         />
       ))}
-      <div>Search or add filters</div>
+      <AddFilter />
     </SearchbarBody>
   );
 }

@@ -1,3 +1,5 @@
+import { Optional } from "./common";
+
 // As one would add new filter categories you'd be defining them here.
 export enum FilterCategory {
   AD_NAME = "Ad Name",
@@ -14,9 +16,9 @@ export enum FilterRelation {
 export type FilterOption = string;
 
 export type Filter = {
-  category: FilterCategory,
-  relation: FilterRelation,
-  option: FilterOption,
+  category: Optional<FilterCategory>,
+  relation: Optional<FilterRelation>,
+  option: Optional<FilterOption>,
 };
 
 export enum FilterCategoryType {
