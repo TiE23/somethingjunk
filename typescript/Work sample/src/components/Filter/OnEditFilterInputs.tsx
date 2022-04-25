@@ -164,18 +164,21 @@ function OptionTextInput({ draftFilter, setDraftFilter }: InputProps) {
 }
 
 interface OptionCheckboxInputProps extends InputProps, OptionInputOptionsProps { }
-function OptionCheckboxInput({ options, draftFilter, setDraftFilter }: OptionCheckboxInputProps) {
+function OptionCheckboxInput(
+  { options, draftFilter: { option: draftOption }, setDraftFilter }: OptionCheckboxInputProps,
+) {
   const [open, setOpen] = useState(false);
   const openArrow = open ? "▼" : "▲";
 
   /**
-   * To avoid issues with populating two states with references to the same array
-   * I provide a function to build a new "initial state".
+   * To avoid issues with array references causing issues when resetting the
+   * UI state we have a little helper function that generated an entirely new
+   * array when called.
    * @returns
    */
   const buildInitialState = () => options.map(option => ({
     option,
-    checked: draftFilter?.option?.split(", ").includes(option) ?? false,
+    checked: draftOption?.split(", ").includes(option) ?? false,
   }));
 
   /**
@@ -184,7 +187,6 @@ function OptionCheckboxInput({ options, draftFilter, setDraftFilter }: OptionChe
    * must click and update button - which will update the UI.
    */
   const [uiOptions, setUiOptions] = useState(buildInitialState());
-  const [draftOptions, setDraftOptions] = useState(buildInitialState());
 
   // Reset the UI state when closing the checkbox box.
   useEffect(() => {
@@ -206,18 +208,20 @@ function OptionCheckboxInput({ options, draftFilter, setDraftFilter }: OptionChe
   };
 
   const handleUpdate = () => {
-    setDraftOptions(uiOptions);
+    setDraftFilter(prevFilter => ({
+      ...prevFilter,
+      option: uiOptions.filter(check => check.checked).map(({ option }) => option).join(", "),
+    }));
     setOpen(false);
   };
 
-  const checkedDraftOptions = draftOptions.filter(check => check.checked);
 
   return (
     <CheckboxContainer>
       <button
         onClick={() => setOpen(!open)}
       >
-        {checkedDraftOptions.length !== 0 ? checkedDraftOptions.map(check => check.option).join(", ") : "(None)"}
+        {draftOption || "(None)"}
         {" "}
         {openArrow}
       </button>
