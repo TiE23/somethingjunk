@@ -3,6 +3,8 @@ import { Express, Request, Response } from "express";
 import validate from "./middleware/validateResource";
 import { caseChangeGetHandler, caseChangePostHandler } from "./controller/caseChange.controller";
 import { createCaseChangeGetSchema, createCaseChangePostSchema } from "./schema/caseChange.schema";
+import { createToUpperSchema } from "./schema/toUpper.schema";
+import { toUpperHandler } from "./controller/toUpper.controller";
 
 import logger from "./utils/logger";
 
@@ -21,6 +23,12 @@ export default function routes(app: Express) {
     "/api/casechange/:mode/:input",
     validate(createCaseChangeGetSchema),
     caseChangeGetHandler,
+  );
+
+  app.get(
+    "/api/toupper",
+    validate(createToUpperSchema),
+    toUpperHandler,
   );
 
 }
