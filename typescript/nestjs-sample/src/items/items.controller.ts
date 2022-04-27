@@ -22,14 +22,14 @@ export class ItemsController {
 
   // This creates a GET endpoint for {{endpoint}}/items that returns what's in findAll().
   @Get()
-  findAll(): Item[] {
+  findAll(): Promise<Item[]> {
     // Injected dependency is accessible, and we can grab the data with findAll() method.
     return this.itemsService.findAll();
   }
 
   // Example of using route params. Here we have :id and retrieve it with another decorator.
   @Get(':id')
-  findOne(@Param() param: { id: string }): Item {
+  findOne(@Param() param: { id: string }): Promise<Item> {
     return this.itemsService.findOne(param.id);
   }
 
@@ -44,21 +44,21 @@ export class ItemsController {
   // Using the DTO we now get to define the Body of the post request as taking
   // the form of the DTO
   @Post()
-  create(@Body() createItemDto: CreateItemDto): string {
-    return `Name: "${createItemDto.name}" Desc: "${createItemDto.desc}" Quantity: ${createItemDto.qty}`;
+  create(@Body() createItemDto: CreateItemDto): Promise<Item> {
+    return this.itemsService.create(createItemDto);
   }
 
   // Here we demonstrate how we can retrieve a param directly.
   @Delete(':id')
-  delete(@Param('id') id: string): string {
-    return `Delete ${id}`;
+  delete(@Param('id') id: string): Promise<Item> {
+    return this.itemsService.delete(id);
   }
 
   @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateItemDto: CreateItemDto,
-  ): string {
-    return `Update ${id} - Name: "${updateItemDto.name}"`;
+  ): Promise<Item> {
+    return this.itemsService.update(id, updateItemDto);
   }
 }
