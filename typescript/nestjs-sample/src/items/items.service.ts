@@ -26,4 +26,8 @@ export class ItemsService {
   findAll(): Item[] {
     return this.items;
   }
+
+  findOne(id: string): Item {
+    return this.items.find((item) => item.id === id);
+  }
 }

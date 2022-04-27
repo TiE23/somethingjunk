@@ -10,20 +10,27 @@ import {
 // import { Req, Res } from '@nestjs/common';
 // import { Request, Response } from 'express';
 
+import { Item } from './interfaces/item.interface';
+
 import { CreateItemDto } from './dto/create-item.dto';
+import { ItemsService } from './items.service';
 
 @Controller('items')
 export class ItemsController {
+  // Here we inject our dependencies
+  constructor(private readonly itemsService: ItemsService) {}
+
   // This creates a GET endpoint for {{endpoint}}/items that returns what's in findAll().
   @Get()
-  findAll(): string {
-    return 'Get all items';
+  findAll(): Item[] {
+    // Injected dependency is accessible, and we can grab the data with findAll() method.
+    return this.itemsService.findAll();
   }
 
   // Example of using route params. Here we have :id and retrieve it with another decorator.
   @Get(':id')
-  findOne(@Param() param: { id: string }): string {
-    return `Item ${param.id}`;
+  findOne(@Param() param: { id: string }): Item {
+    return this.itemsService.findOne(param.id);
   }
 
   // "This is not really the NestJS way to do this..."
