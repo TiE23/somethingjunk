@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 // import { Req, Res } from '@nestjs/common';
 // import { Request, Response } from 'express';
 
@@ -14,7 +22,7 @@ export class ItemsController {
 
   // Example of using route params. Here we have :id and retrieve it with another decorator.
   @Get(':id')
-  findOne(@Param() param): string {
+  findOne(@Param() param: { id: string }): string {
     return `Item ${param.id}`;
   }
 
@@ -31,5 +39,19 @@ export class ItemsController {
   @Post()
   create(@Body() createItemDto: CreateItemDto): string {
     return `Name: "${createItemDto.name}" Desc: "${createItemDto.desc}" Quantity: ${createItemDto.qty}`;
+  }
+
+  // Here we demonstrate how we can retrieve a param directly.
+  @Delete(':id')
+  delete(@Param('id') id: string): string {
+    return `Delete ${id}`;
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateItemDto: CreateItemDto,
+  ): string {
+    return `Update ${id} - Name: "${updateItemDto.name}"`;
   }
 }
