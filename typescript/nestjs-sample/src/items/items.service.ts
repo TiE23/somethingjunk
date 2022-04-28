@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+// import { Model } from 'mongoose';
+// import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { Item } from './interfaces/item.interface';
-import { Item as ItemClass, ItemDocument } from './schemas/item.schema';
+// import { Item } from './interfaces/item.interface';
+// import { Item as ItemClass, ItemDocument } from './schemas/item.schema';
+
+import { Item } from './entity/item.entity';
+import { Repository } from 'typeorm';
 
 // Generated with `nest generate service items`
 
@@ -11,34 +15,30 @@ import { Item as ItemClass, ItemDocument } from './schemas/item.schema';
 @Injectable()
 export class ItemsService {
   constructor(
-    @InjectModel(ItemClass.name) private itemModel: Model<ItemDocument>,
+    @InjectRepository(Item)
+    private itemsRepository: Repository<Item>,
   ) {}
 
   async findAll(): Promise<Item[]> {
-    return await this.itemModel.find();
+    return await this.itemsRepository.find();
   }
 
-  async findOne(id: string): Promise<Item> {
-    return await this.itemModel.findOne({ _id: id });
+  async findOne(id: number): Promise<Item> {
+    return await this.itemsRepository.findOne({ where: { id } });
   }
 
-  async create(item: Item): Promise<Item> {
-    const newItem = new this.itemModel(item);
-    return await newItem.save();
+  create(item: Item): Item {
+    return this.itemsRepository.create(item);
   }
 
-  async delete(id: string): Promise<Item> {
-    /**
-     * Hard to find anyone talking about the reason to use delete or remove...
-     * https://mongoosejs.com/docs/api.html#model_Model.findByIdAndDelete
-     * https://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove
-     */
-    // return await this.itemModel.findByIdAndDelete(id);
-    return await this.itemModel.findByIdAndRemove(id);
+  async delete(id: number): Promise<Item> {
+    const itemToDelete = await this.itemsRepository.findOne({ where: { id } });
+    await this.itemsRepository.delete({ id });
+    return itemToDelete;
   }
 
-  async update(id: string, item: Item): Promise<Item> {
-    // query option "new: true" returns the updated data. Else it returns old data.
-    return await this.itemModel.findByIdAndUpdate(id, item, { new: true });
+  async update(id: number, item: Item): Promise<Item> {
+    await this.itemsRepository.update({ id }, item);
+    return await this.itemsRepository.findOne({ where: { id } });
   }
 }

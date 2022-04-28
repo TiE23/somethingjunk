@@ -10,9 +10,11 @@ import {
 // import { Req, Res } from '@nestjs/common';
 // import { Request, Response } from 'express';
 
-import { Item } from './interfaces/item.interface';
+// import { Item } from './interfaces/item.interface';
 
-import { CreateItemDto } from './dto/create-item.dto';
+import { Item } from './entity/item.entity';
+
+// import { CreateItemDto } from './dto/create-item.dto';
 import { ItemsService } from './items.service';
 
 @Controller('items')
@@ -29,7 +31,7 @@ export class ItemsController {
 
   // Example of using route params. Here we have :id and retrieve it with another decorator.
   @Get(':id')
-  findOne(@Param() param: { id: string }): Promise<Item> {
+  findOne(@Param() param: { id: number }): Promise<Item> {
     return this.itemsService.findOne(param.id);
   }
 
@@ -44,21 +46,18 @@ export class ItemsController {
   // Using the DTO we now get to define the Body of the post request as taking
   // the form of the DTO
   @Post()
-  create(@Body() createItemDto: CreateItemDto): Promise<Item> {
-    return this.itemsService.create(createItemDto);
+  create(@Body() item: Item): Item {
+    return this.itemsService.create(item);
   }
 
   // Here we demonstrate how we can retrieve a param directly.
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<Item> {
+  delete(@Param('id') id: number): Promise<Item> {
     return this.itemsService.delete(id);
   }
 
   @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateItemDto: CreateItemDto,
-  ): Promise<Item> {
-    return this.itemsService.update(id, updateItemDto);
+  update(@Param('id') id: number, @Body() updateItem: Item): Promise<Item> {
+    return this.itemsService.update(id, updateItem);
   }
 }

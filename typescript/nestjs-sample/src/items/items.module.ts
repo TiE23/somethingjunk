@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ItemsController } from './items.controller';
 import { ItemsService } from './items.service';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Item, ItemSchema } from './schemas/item.schema';
+// import { Item, ItemSchema } from './schemas/item.schema';
+import { Item } from './entity/item.entity';
 
 /**
  * Defining a module here allows us to use it as an import for app.module.
@@ -14,7 +16,8 @@ import { Item, ItemSchema } from './schemas/item.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Item.name, schema: ItemSchema }]),
+    // MongooseModule.forFeature([{ name: Item.name, schema: ItemSchema }]),
+    TypeOrmModule.forFeature([Item]),
   ],
   controllers: [ItemsController],
   providers: [ItemsService],
