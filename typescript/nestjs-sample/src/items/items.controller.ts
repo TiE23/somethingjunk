@@ -46,7 +46,7 @@ export class ItemsController {
   // Using the DTO we now get to define the Body of the post request as taking
   // the form of the DTO
   @Post()
-  create(@Body() item: Item): Item {
+  create(@Body() item: Item): Promise<Item> {
     return this.itemsService.create(item);
   }
 

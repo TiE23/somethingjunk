@@ -27,8 +27,8 @@ export class ItemsService {
     return await this.itemsRepository.findOne({ where: { id } });
   }
 
-  create(item: Item): Item {
-    return this.itemsRepository.create(item);
+  create(item: Item): Promise<Item> {
+    return this.itemsRepository.save(item);
   }
 
   async delete(id: number): Promise<Item> {
